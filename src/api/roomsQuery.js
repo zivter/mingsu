@@ -62,3 +62,14 @@ export function GetIdleDatesByDateRange(data) {
         params: data
     })
 }
+
+/**
+ * 入离实见
+ */
+export function GetCommonSettings() {
+    return request({
+        url: '/api/services/app/Configuration/GetCommonSettings',
+        headers: headers,
+        method: 'GET'
+    })
+}

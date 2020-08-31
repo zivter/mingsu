@@ -52,11 +52,14 @@ export default {
       });
     },
     onConfirm(type){
-      var positionId = type == 1 ? null : this.positionId
-      this.$emit('positionChange', positionId)
+      if(type === 1) {
+        this.positionId = null;
+        this.activeIndex = 0;
+        this.activeId = 1;
+      }
+      this.$emit('positionChange', this.positionId)
     },
     handleNavClick(val){
-      this.positionId = val
     },
     handleItemClick(val){
       this.positionId = val.id

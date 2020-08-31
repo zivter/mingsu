@@ -43,3 +43,17 @@ export function GetOrderQuery() {
         method: 'GET'
     })
 }
+
+/**
+ * H5订单详情
+ */
+export function GetOrderDetail(orderNumber) {
+    return request({
+        url: BASE_ORDERQUERY_API_PATH + '/Get',
+        headers: headers,
+        method: 'GET',
+        params: {
+            orderNumber: orderNumber
+        }
+    })
+}

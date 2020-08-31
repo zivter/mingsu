@@ -1,5 +1,11 @@
 <template>
   <div class="occupant">
+    <van-nav-bar
+      title="入住人信息"
+      left-text=""
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <van-button type="default" size="large" icon="plus" @click="addOccupant">入住信息</van-button>
     <div class="overflow occupantCard" v-for="item in occupantList" :key="item.id" @click='occupantEdit(item)'>
       <div class="float-left">
@@ -55,7 +61,10 @@ export default {
           id:val.id
         }
       })
-    }
+    },
+    onClickLeft(){
+      this.$router.go(-1)
+    },
   }
 }
 </script>

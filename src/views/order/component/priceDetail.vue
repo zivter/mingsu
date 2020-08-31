@@ -8,7 +8,7 @@
     <van-divider />
 
     <div class="overflow detail2" v-for="(item,index) in paymentDetail.details" :key="index">
-      <div class="overflow" v-if="item.type == 'Deposit' || item.type == 'CleaningCost'">
+      <div class="overflow" v-if="item.type == 'Deposit' || item.type == 'CleaningCost' || item.type == 'coupon'">
         <p class="float-left">{{ item.itemName }}</p>
         <p class="float-right">￥{{ item.unitPrice }}</p>
       </div>

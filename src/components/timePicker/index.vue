@@ -31,22 +31,26 @@
 
 <script>
 import moment from 'moment'
-import { GetIdleDates } from '@/api/roomsQuery'
-
+import { GetIdleDatesByDateRange } from '@/api/roomsQuery'
 export default {
   name: 'timePicker',
   props: {
     timeRange:{
       type: String,
       required: false
+    },
+    roomId:{
+      type: String,
+      required: false
     }
   },
   data(){
     return{
-      data:'',
-      totalDay:1,
-      endDay:moment().day(+1).format('MM月DD日'),
-      startDay:moment().format('MM月DD日')
+      data: '',
+      totalDay: 1,
+      endDay: moment().add(1,'d').format('MM-DD'),
+      startDay: moment().format('MM-DD'),
+      dateList: []
     }
   },
   filters:{
@@ -69,7 +73,7 @@ export default {
 
   },
   mounted(){
-    this.GetIdleDates()
+    this.GetIdleDatesByDateRange()
   },
   methods:{
     formatDate(date) {
@@ -86,51 +90,71 @@ export default {
       this.$emit('saveTimeRange', timeRange)
     },
     formatter(day) {
-      const month = day.date.getMonth() + 1;
-      const date = day.date.getDate();
+      // const month = day.date.getMonth() + 1;
+      // const date = day.date.getDate();
 
-      if (month === 1) {
-        if (date === 22) {
-          day.type = 'disabled';
-        } else if (date === 4) {
-          day.topInfo = '五四青年节';
-        }
+      // if (month === 1) {
+      //   if (date === 22) {
+      //     day.type = 'disabled';
+      //   } else if (date === 4) {
+      //     day.topInfo = '五四青年节';
+      //   }
+      // }
+
+      
+      
+      // this.dateList.forEach(element => {
+      //   if(moment(day.date).format() == moment(element).format()){
+      //     day.type = undefined;
+      //   }
+      // });
+      if(this.dateList.indexOf(moment(day.date).format()) == -1){
+        day.type = 'disabled';
       }
-
       if (day.type === 'start') {
         day.bottomInfo = '入住';
+
       } else if (day.type === 'end') {
         day.bottomInfo = '离店';
       }
-
       return day;
+    },
+    /**获取可选择日期 */
+    GetIdleDatesByDateRange(){
+      const param = {
+        Id: this.roomId,
+        from: moment().format('YYYY-MM-DD'),
+        to: moment().add(6, 'M').format('YYYY-MM-DD'),
+      }
+      GetIdleDatesByDateRange(param).then((result) => {
+        this.dateList = result.result.items
+      }).catch((err) => {
+        
+      });
     },
     reset(){
       this.$refs.calendar.reset()
       this.totalDay = 1
-      this.endDay = moment().day(+1).format('MM月DD日'),
-      this.startDay = moment().format('MM月DD日')
+      this.endDay = moment().add(1,'d').format('MM-DD'),
+      this.startDay = moment().format('MM-DD')
     },
     onSelect(date){
       const [start, end] = date;
+      if(end){
+        for(var i = 0;i<moment(end-start).date()-1;i++){
+          if(this.dateList.indexOf(moment(start).add(i,'d').format()) == -1){
+            this.$notify({type:'warning',message:'请选择正确日期'})
+            this.reset()
+          }
+        }
+      }
       if(date[1]){
         this.totalDay = moment(end-start).date()-1
-        this.endDay = moment(end).format('MM月DD日')
+        this.endDay = moment(end).format('MM-DD')
       }else{
-        this.startDay = moment(start).format('MM月DD日')
+        this.startDay = moment(start).format('MM-DD')
       }
     },
-    GetIdleDates(){
-      const param = {
-        id: this.$route.query.id,
-        atMonth:'2020-01'
-      }
-      GetIdleDates(param).then((result) => {
-        
-      }).catch((err) => {
-        
-      });
-    }
   }
 }
 </script>
@@ -183,5 +207,10 @@ export default {
 }
 .picker /deep/ .van-calendar__day{
   font-size: 14px;
+}
+</style>
+<style lang="scss">
+.van-submit-bar__suffix-label{
+  color: #666;
 }
 </style>

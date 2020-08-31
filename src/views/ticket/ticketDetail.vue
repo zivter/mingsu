@@ -12,13 +12,13 @@
     <div class="dBody">
       <!-- 标题简介 -->
       <p class="title1">{{ ticketDetail.title }}</p>
-      <p class='detailPrice'>￥{{ ticketDetail.minPrice }}220 <span class='detailPricespan'> / 起</span></p>
+      <p class='detailPrice'>￥{{ ticketDetail.minPrice }} <span class='detailPricespan'> / 起</span></p>
       <div class='overflow detailRefer'>
-        <p class='float-left'>参考门市价¥{{ ticketDetail.tickets[1] ? ticketDetail.tickets[1].price : 0 }}</p>
-        <p class='float-right'>已售123245件</p>
+        <p class='float-left'>参考门市价¥{{ ticketDetail.suggestPrice }}</p>
+        <p class='float-right'>已售{{ ticketDetail.salesCount }}件</p>
       </div>
       <div class="overflow detailCondition">
-        <div class='float-left'><van-icon color='#DA4F53' :name="ticketDetail.needReservation ? 'passed' : 'close'" />随买随用</div>
+        <div class='float-left'><van-icon color='#DA4F53' name="passed" />{{ ticketDetail.needReservation ? '需要预定' : '随买随用' }}</div>
         <div class='float-left'><van-icon color='#DA4F53' :name="ticketDetail.ticketReturnSupport ? 'close' : 'passed'" />不可退</div>
         <div class='float-left'><van-icon color='#DA4F53' :name="ticketDetail.needPrint ? 'close' : 'passed'" />无需取票</div>
       </div>
@@ -28,12 +28,12 @@
         <p class="contentTitle" style="margin-bottom:16px;">预定说明</p>
         <cell-components cell-name='在线押金'>
           <template slot='right'>
-            <p class='dangerInfo'>随买随用</p>
-            <p class="dangerBtm">最晚需在<span style='color:#DA4F53'>出行当天20:00</span>前购买</p>
+            <p class='dangerInfo'>{{ ticketDetail.needReservation ? '需要预定' : '随买随用' }}</p>
+            <p class="dangerBtm">最晚需在<span style='color:#DA4F53'>出行当天{{ ticketDetail.usageTime ? ticketDetail.usageTime.split('-')[1] : '' }}</span>前购买</p>
           </template>
         </cell-components>
         <cell-components cell-name='有效时间' cell-value='选择的使用日期当天有效' cell-color='#000' />
-        <cell-components cell-name='出票速度' cell-value='平均23秒出票' cell-color='#000' />
+        <cell-components cell-name='出票速度' cell-value='平均20秒出票' cell-color='#000' />
         <cell-components cell-name='适用条件' cell-value='身高：1.4米（不含）以上' cell-color='#000' />
         <cell-components cell-name='限购政策' cell-value='每单最多可购5份' cell-color='#000' />
       </div>
@@ -41,7 +41,7 @@
       <!-- 费用说明 -->
       <div class="notice2">
         <p class="contentTitle" style="margin-bottom:16px;">费用说明</p>
-        <cell-components cell-name='费用说明' cell-value='上海迪士尼乐园1日成人票1张不包含《美女与野兽》音乐剧演出票' cell-color='#000' />
+        <cell-components cell-name='费用说明' :cell-value='ticketDetail.feeRemark' cell-color='#000' />
       </div>
       <van-divider :style="{borderColor: '#dcdcdc'}" />
       <!-- 使用说明 -->
@@ -49,13 +49,12 @@
         <p class="contentTitle" style="margin-bottom:16px;">使用说明</p>
         <cell-components cell-name='使用方法' cell-color='#000' >
           <template slot='right'>
-            <p class='dangerInfo'>无需取票，快速入园</p>
-            <p class="dangerBtm">凭有效证件直接验证入园</p>
+            <p class='dangerInfo'>{{ ticketDetail.usageRemark }}</p>
           </template>
         </cell-components>
-        <cell-components cell-name='入园时间' cell-value='09:00-20:00' cell-color='#DA4F53' />
-        <cell-components cell-name='入园地址' cell-value='上海浦东新区迪士尼乐园-入口' cell-color='#DA4F53' />
-        <cell-components cell-name='补充说明' cell-value='入园时，购票时登记的有效证件持有人本人必须在场，且需与该订单上的所有同行游客一同入园' cell-color='#000' />
+        <cell-components cell-name='入园时间' :cell-value='ticketDetail.usageTime' cell-color='#DA4F53' />
+        <cell-components cell-name='入园地址' :cell-value='ticketDetail.regionFullName' cell-color='#DA4F53' />
+        <cell-components cell-name='补充说明' :cell-value='ticketDetail.usageRemark' cell-color='#000' />
       </div>
       <van-divider :style="{borderColor: '#dcdcdc'}"/>
       <!-- 退改说明 -->
@@ -63,8 +62,8 @@
         <p class="contentTitle" style="margin-bottom:16px;">退改说明</p>
         <cell-components cell-name='退改规则' cell-color='#000' >
           <template slot='right'>
-            <p class='dangerInfo'>不可退</p>
-            <p class="dangerBtm">该产品一经预定成功，不支持退改，敬请谅解。</p>
+            <p class='dangerInfo'>{{ ticketDetail.ticketReturnSupport ? '可退' : '不可退' }}</p>
+            <p class="dangerBtm" v-if="!ticketDetail.ticketReturnSupport">该产品一经预定成功，不支持退改，敬请谅解。</p>
           </template>
         </cell-components>
       </div>
@@ -75,75 +74,78 @@
         <cell-components cell-name='发票说明' cell-value='如需发票，请在游玩结束次日登录最新版本的携程旅行手机客户端，或点击携程确认短信中的查看订单详情链接，在订单详情页中申请，发票金额不含优惠券或礼品卡支付部分。' cell-color='#000' />
         <cell-components cell-name='其他须知' cell-color='#000' >
           <template slot='right'>
-            <p>1、入园时请出示您的门票，每票只限一人当日一次入园使用。</p>
-            <p>2、享受相关优惠时，请出示相关证明文件和有效证件，持儿童票的游客应当至少由一名持成人票的游客监护入园。</p>
+            <p>{{ ticketDetail.otherRemark }}</p>
           </template>
         </cell-components>
         <cell-components cell-name='供应商' cell-color='#000' >
           <template slot='right'>
-            <p>万程（上海）旅行社有限公司</p>
-            <p>许可证编号：L-SH-WZ00016</p>
+            <p>{{ ticketDetail.supplier }}</p>
           </template>
         </cell-components>
       </div>
       <!-- 底部 -->
-      <van-submit-bar :price="130*100" label=' ' style="z-index:1000;box-shadow:0px 16px 10px 16px #ddd;" suffix-label='/晚' button-text="立即预定" @submit="chooseType">
-        <div slot="default" class="defaultC">
+      <van-submit-bar :price="ticketDetail.minPrice*100" label=' ' style="z-index:1000;box-shadow:0px 16px 10px 16px #ddd;" suffix-label='/晚' button-text="立即预定" @submit="chooseType">
+        <!-- <div slot="default" class="defaultC">
           <svg-icon icon-class='#icon-dianhua' class="defaultIcon" font-size="24px" />
           <span class="defaultSpan">客服热线</span>
-        </div>
+        </div> -->
       </van-submit-bar>
       <!-- 价格 -->
       <van-popup
         v-model="priceShow"
         position="bottom"
-        class="pricePop"
-        :style="{ height: '34%' }">
+        class="pricePop">
         <van-radio-group v-model="priceRadio">
           <van-cell-group>
-            <van-cell clickable @click="priceRadio = '1'" class="priceCell">
+            <!-- <van-cell v-for="item,index in ticketDetail.tickets" clickable  @click="priceRadio = item.ticketSpecId" class="priceCell"> -->
+            <van-cell v-for="(item,index) in ticketDetail.tickets" clickable :key="index"  @click="ticketSelect(item)" class="priceCell">
               <div slot="title">
-                <span>平日价格</span><span><span style='font-size:12px;'>￥</span>288</span>
+                <span>{{ item.ticketSpecName }}</span><span><span style='font-size:12px;'>￥</span>{{ item.price }}</span>
               </div>
-              <van-radio slot="right-icon" name="1" />
+              <van-radio slot="right-icon" :name='item.ticketSpecId' />
             </van-cell>
-            <van-cell clickable @click="priceRadio = '2'" class="priceCell">
+            <!-- <van-cell clickable @click="priceRadio = '2'" class="priceCell">
               <div slot="title">
                 <span>周末价格</span><span><span style='font-size:12px;'>￥</span>388</span>
               </div>
               <van-radio slot="right-icon" name="2" />
-            </van-cell>
+            </van-cell> -->
           </van-cell-group>
         </van-radio-group>
-        <van-button color="#DA4F53" round style='width:100%;margin-top:16px;'>确定</van-button>
+        <div class="payQrCode">
+          <img :src="GLOBAL.imgSrc+payQrCode" alt="">
+        </div>
       </van-popup>
     </div>
   </div>
 </template>
 
 <script>
-  import svgIcon from '@/components/SvgIcon/index'
   import cellComponents from '@/components/cellComponents/index'
   import { TouristAttractionQueryGetDetail } from '@/api/ticket'
+  import tokenAuth from '@/utils/tokenAuth';
+  import share from '@/utils/share';
 
   export default {
     name: 'detail',
     props: {},
     components: {
-      svgIcon,
       cellComponents
     },
     data() {
       return {
         ticketDetail: {},
         priceShow: false,
-        priceRadio:null
+        priceRadio:null,
+        payQrCode:''
       }
     },
     computed: {},
     watch: {},
     filters: {},
     created() {
+      share.share(this.$route.meta.title);
+      tokenAuth.getAuth(this.$route.query, 'ticket');
       this.TouristAttractionQueryGetDetail()
     },
     mounted() {},
@@ -162,6 +164,13 @@
         TouristAttractionQueryGetDetail(param).then((result) => {
           this.ticketDetail = result.result
         }).catch((err) => {}).finally(() => {});
+      },
+      priceRadioChoose(item){
+        this.priceRadio = item.ticketSpecId
+      },
+      ticketSelect(item){
+        this.priceRadio = item.ticketSpecId
+        this.payQrCode = item.payQrCode
       }
     }
   }
@@ -334,6 +343,16 @@
     span:nth-child(2){
       color:#DA4F53;
       margin-left:10px;
+    }
+  }
+  .payQrCode{
+    height: 200px;
+    img{
+      margin: 0 auto;
+      width: 160px;
+      height: 160px;
+      margin-top: 20px;
+      display: block;
     }
   }
 }

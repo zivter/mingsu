@@ -3,7 +3,7 @@ const BASE_ROOM_API_PATH = '/api/services/app/Room'
 const headers = window.localStorage.getItem('accessToken') ? { Authorization: 'Bearer ' + window.localStorage.getItem('accessToken') } : {}
 
 /**
- * 所有基础设施的key
+ * 所有居家设施
  */
 export function LoadAllBaseSupportings(data) {
     return request({
@@ -15,7 +15,7 @@ export function LoadAllBaseSupportings(data) {
 }
 
 /**
- * 所有洗浴设施key
+ * 所有清洗用品
  */
 export function LoadAllBathSupportings(data) {
     return request({
@@ -27,7 +27,7 @@ export function LoadAllBathSupportings(data) {
 }
 
 /**
- * 所有厨房设施key
+ * 所有厨房用品
  */
 export function LoadAllKitchenSupportings(data) {
     return request({
@@ -39,11 +39,23 @@ export function LoadAllKitchenSupportings(data) {
 }
 
 /**
- * 所有入住服务key
+ * 所有周边配套
  */
 export function LoadAllCheckInSupportings(data) {
     return request({
         url: BASE_ROOM_API_PATH + '/LoadAllCheckInSupportings',
+        headers: headers,
+        method: 'POST',
+        data
+    })
+}
+
+/**
+ * 所有娱乐设施
+ */
+export function LoadAllEntertainmentSupportings(data) {
+    return request({
+        url: BASE_ROOM_API_PATH + '/LoadAllEntertainmentSupportings',
         headers: headers,
         method: 'POST',
         data

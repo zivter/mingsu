@@ -1,5 +1,11 @@
 <template>
   <div class="orderCenter">
+    <van-nav-bar
+      title="我的订单"
+      left-text=""
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <van-tabs
     v-model="activeName"
     class="orderNav"
@@ -39,11 +45,13 @@ export default {
   },
   mounted() {
     if(this.$route.query.type){
-      console.log(this.$route.query.type)
       this.activeName = this.$route.query.type
     }
   },
   methods:{
+    onClickLeft(){
+      this.$router.go(-1)
+    },
   }
 }
 </script>

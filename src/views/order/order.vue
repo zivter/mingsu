@@ -1,11 +1,11 @@
 <template>
   <div class="order">
-    <!-- <van-nav-bar
+    <van-nav-bar
       title="订单填写"
       left-text=""
       left-arrow
       @click-left="onClickLeft"
-    /> -->
+    />
     <div class="main">
       <div class="dateTop">
         <p class="float-left">入离时间</p>
@@ -22,7 +22,7 @@
         </van-col>
         <van-col span="9" class="right">
           <p class="dateTime dateEnd">{{ timeRangeInfo.to }}</p>
-          <p class="dateExplain">{{ timeRangeInfo.toWeek | weekFilter }}14:00后入住</p>
+          <p class="dateExplain">{{ timeRangeInfo.toWeek | weekFilter }}12:00后离店</p>
         </van-col>
       </van-row>
 
@@ -41,6 +41,15 @@
         <p class="float-right"><van-field input-align='right' v-model="buyerPhone" class="cellInp" placeholder="用于接收订单信息" /></p>
       </div>
     </div>
+    <!-- 优惠券单元格 -->
+    <div class='couponCell'>
+      <van-coupon-cell
+        :coupons="couponListTrue"
+        :chosen-coupon="chosenCoupon"
+        @click="showList = true"
+      />
+    </div>
+
     <!-- 红包 -->
     <div class="redbag">
       <i class="redbagIcon float-left"></i>
@@ -65,12 +74,14 @@
     <!-- 预定须知 -->
     <div class='notice'>
       <p class="noticeTitle">预定须知</p>
-      <p class="noticep noticep1">退订规则</p>
-      <p class="noticep noticep2">取消订单，扣除全部房费作为违约金支付给房东，如提前离店，扣除 全部剩余房费作为违约金支付给房东。</p>
-      <p class="noticep noticep1">入住提示</p>
-      <p class="noticep noticep2">房东确认后可向房东索要入住指南，方便您自主入住：平台提供7*24小时客服服务，确保您入住无忧。</p>
-      <p class="noticep noticep1">押金提示</p>
-      <p class="noticep noticep2">在线支付押金500元，到店后无需再支付，住房押金离店后，如无需扣款，将原方式退还。</p>
+      <p class="noticep noticep2">1、每套小屋都是我们用心设计的家，希望大家保持整洁卫生，若损坏物品需要照价赔偿的呢 </p>
+      <p class="noticep noticep2">2、我们【提供免费】的拖鞋及洗漱用品，拖鞋数量按房间固定标准，牙刷及毛巾我们会按订单人数准备，请准确填写入住信息，如有特殊需求可以联系我们；</p>
+      <p class="noticep noticep2">3、四件套我们保证一客一换，但如果您发现床品上存在不整洁，可以告知我们私人客服，我们将第一时间给你安排新的床品。另外在您入住期间我们不提供额外的打扫和更换服务，如有特殊需求请提前告知；</p>
+      <p class="noticep noticep2">4、【入住退房时间】正常退房时间为中午12:00前，超过半小时额外按一小时30元收费，正常入住时间为下午15:00以后，中间是保洁打扫时间，如需要提供寄存服务请提前告知私人客服；</p>
+      <p class="noticep noticep2">5、有做的不好的地方请告知我们私人客服或其他相关工作人员，我们将努力改进，给你一个满意的答复，希望小伙伴们有一次愉快的入住体验，并给予我们一个五星好评，我们将万分感谢。</p>
+      <p class="noticeTitle">备注</p>
+      <p class="noticep noticep2">做饭：可做饭（厨房及餐具为免费试用品，But使用后厨具和餐具需要自行清洁，若确实没有时间清理又需要使用，需要额外收取50元的厨房清理费哦）。</p>
+      <p class="noticep noticep2">聚会：小屋允许聚会（聚会中需要对房间进行简单的布置，如放置气球，贴贴纸，切蛋糕等是需要额外收取100元附加费，如因聚会布置造成小屋损坏是需要照价赔偿哦，那么如让小屋特别的脏乱，我们也会酌情加收清洁费用的）。</p>
     </div>
 
     <!-- 提交订单兰 -->
@@ -82,8 +93,8 @@
       <van-row slot="default" class="defaultC">
         <van-col span="18">
           <div class="defaultCTop">
-            <span class="price">￥{{ paymentDetail.payment }}</span>
-            <span class="perNight">/晚</span>
+            <span class="price">￥{{ payment }}</span>
+            <span class="perNight"> </span>
             <!-- <span class="discount">已减131</span> -->
           </div>
           <p class="announce">{{ paymentDetail.details | DepositFilter }}</p>
@@ -109,7 +120,7 @@
     close-icon-position="top-left"
     position="bottom"
     :style="{ height: '100%' }">
-      <time-picker :timeRange='timeRange' @saveTimeRange='saveTimeRange'/>
+      <time-picker :timeRange='timeRange' @saveTimeRange='saveTimeRange'  :room-id='this.$route.query.id'/>
     </van-popup>
 
     <!-- 添加入住入 -->
@@ -129,7 +140,24 @@
     close-icon-position="top-left"
     position="bottom"
     :style="{ height: '100%' }">
-      <coupon-get v-if="couponPopupshow" />
+      <coupon-get v-if="couponPopupshow" @GetMyCoupons='GetMyCoupons'/>
+    </van-popup>
+
+
+    <!-- 优惠券列表 -->
+    <van-popup
+      v-model="showList"
+      round
+      position="bottom"
+      style="height: 90%; padding-top: 4px;"
+    >
+      <van-coupon-list
+        :coupons="couponListTrue"
+        :chosen-coupon="chosenCoupon"
+        :disabled-coupons="couponListFalse"
+        :show-exchange-bar='false'
+        @change="onChange"
+        @exchange="onExchange"/>
     </van-popup>
 
 
@@ -140,11 +168,25 @@
 import priceDetail from './component/priceDetail'
 import timePicker from '@/components/timePicker/index'
 import { orderReserve, orderReserveConfirm, orderPayRequest } from '@/api/order'
-import { GetAvailableList } from '@/api/coupon'
+import { GetAvailableList, GetMyCoupons } from '@/api/coupon'
 
 import personPicker from './component/selectOccupant';
 import couponGet from './component/couponGet';
 import moment from 'moment';
+import share from '@/utils/share';
+import tokenAuth from '@/utils/tokenAuth';
+import Cookies from 'js-cookie'
+
+const coupon = {
+  condition: '无使用门槛\n最多优惠12元',
+  reason: '',
+  value: 150,
+  name: '优惠券名称',
+  startAt: 1489104000,
+  endAt: 1514592000,
+  valueDesc: '1.5',
+  unitDesc: '元'
+};
 
 export default {
   name: '',
@@ -173,7 +215,15 @@ export default {
       },
       paymentDetail:{},
       orderNumber:'',
-      couponAvailableList:[]
+      couponAvailableList:[],
+      chosenCoupon: -1,
+      coupons: [coupon],
+      disabledCoupons: [coupon],
+      showList:false,
+      couponListFalse:[],
+      couponListTrue:[],
+      payment: '',
+      paymentwithoutDeposit: ''
     }
   },
   computed: {
@@ -196,13 +246,16 @@ export default {
         });
         return Deposit
       }
-      
+    },
+    dateFormate(val) {
+      return moment(val).format('MM-DD')
     }
   },
   created() {
+    share.share(this.$route.meta.title);
+    tokenAuth.getAuth(this.$route.query);
     this.timeRange = this.$route.query.timeRange
     this.timeFomate()
-    this.GetAvailableList()
   },
   mounted() {},
   methods:{
@@ -222,13 +275,19 @@ export default {
       this.userLodgerIdList.forEach(item => {
          userLodgerIdList.push(item.id)
       })
+      var couponId = this.chosenCoupon == -1 ? '' : this.couponListTrue[this.chosenCoupon].id
       const param = {
         roomId: this.$route.query.id,
         from: this.timeRangeInfo.from,
         to: this.timeRangeInfo.toL,
         userLodgerIdList: userLodgerIdList,
         buyerPhone: this.buyerPhone,
-        remark: this.remark
+        remark: this.remark,
+        couponId: couponId,
+      }
+      const ctag = Cookies.get('ctag');
+      if (ctag) {
+        param.channelTag = ctag;
       }
       orderReserve(param).then((result) => {
         this.orderNumber = result.result.orderNumber
@@ -261,12 +320,20 @@ export default {
     },
     /**调用微信支付api */
     onBridgeReady(jsApiParameters){
+      var that = this
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', JSON.parse(jsApiParameters),
         function(res){
           if(res.err_msg == "get_brand_wcpay_request:ok" ){
           // 使用以上方式判断前端返回,微信团队郑重提示：
-                //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+            const ctag = Cookies.get('ctag');
+            if (ctag) {
+              Cookies.remove('ctag')
+            }
+            that.$router.push({
+              path: 'orderSuccess'
+            })
           } 
         }
       ); 
@@ -294,21 +361,33 @@ export default {
         to: this.timeRangeInfo.toL,
       }
       orderReserveConfirm(param).then((result) => {
-        this.paymentDetail = result.result
+        this.paymentDetail = result.result;
+        this.paymentDetail.payment1 = result.result.payment;
+        this.payment = result.result.payment;
+        this.paymentwithoutDeposit = result.result.payment;
+        result.result.details.forEach(element => {
+          if(element.type === 'Deposit') {
+            this.paymentwithoutDeposit = this.paymentwithoutDeposit - element.unitPrice;
+          }
+        });
+        this.chosenCoupon = -1;
+        this.couponListTrue = [];
+        this.couponListFalse = [];
+        this.GetMyCoupons(true)
+        this.GetMyCoupons(false)
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
       });
     },
     timeFomate(){
-      console.log(this.timeRange)
       if(this.timeRange){
         this.timeRangeInfo = {
-          from: moment(this.timeRange.split(',')[0]).format('MM月DD日'),
-          to: moment(this.timeRange.split(',')[1]).format('MM月DD日'),
-          toL: moment(this.timeRange.split(',')[1]).subtract(1,'d').format('MM月DD日'),
+          from: moment(this.timeRange.split(',')[0]).format('MM-DD'),
+          to: moment(this.timeRange.split(',')[1]).format('MM-DD'),
+          toL: moment(this.timeRange.split(',')[1]).subtract(1,'d').format('MM-DD'),
           fromWeek:moment(this.timeRange.split(',')[0]).weekday(),
           toWeek:moment(this.timeRange.split(',')[1]).weekday(),
-          total:moment(this.timeRange.split(',')[1]).day()-moment(this.timeRange.split(',')[0]).day()
+          total:moment(this.timeRange.split(',')[1]).diff(moment(this.timeRange.split(',')[0]),'day')
         }
         this.orderReserveConfirm()
       }
@@ -329,9 +408,74 @@ export default {
       }
       GetAvailableList(param).then((result) => {
         this.couponAvailableList = result.result.items
+        this.GetMyCoupons('Unused')
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
       });
+    },
+    /**
+     * 获取优惠券列表
+     */
+    GetMyCoupons(type){
+      const param = {
+        SkipCount: 0,
+        MaxResultCount: 100,
+        CanUse: type,
+        TotalRoomReserveTargetAmount: this.paymentwithoutDeposit
+      }
+      const that = this;
+      GetMyCoupons(param).then((result) => {
+        result.result.items.forEach(element => {
+          if(element.type === 'Amount') {
+            element.condition = element.targetAmount == 0 ? '无门槛优惠券' : '满'+element.targetAmount+'使用';
+            element.unitDesc = '元';
+            element.value = element.reducedAmount * 100;
+            element.valueDesc = element.reducedAmount;
+          }else{
+            element.condition = element.targetAmount == 0 ? '无门槛优惠券' : '满'+element.targetAmount+'使用';
+            element.unitDesc = '折';
+            element.value = 100 - element.discounts;
+            element.valueDesc = 100 - element.discounts;
+          }
+          element.name = element.title;
+          element.startAt = moment(element.startTime).format('X');
+          element.endAt = moment(element.endTime).format('X');
+          element.reason = '';
+        });
+        if(type == true){
+          result.result.items.forEach(element => {
+            if(element.satisfied == true){
+              that.couponListTrue.push(element);
+            }else{
+              that.couponListFalse.push(element);
+            }
+          });
+        }else{
+          that.couponListFalse = result.result.items
+        }
+      }).catch((err) => {
+        this.$notify({type:'warning',message:err})
+      });
+    },
+    onChange(index) {
+      this.showList = false;
+      this.chosenCoupon = index;
+      this.payment = this.paymentDetail.payment1;
+      this.paymentDetail.payment = this.paymentDetail.payment1;
+      let spliceIndex = this.paymentDetail.details.findIndex(item => item.type === 'coupon');
+      spliceIndex == -1 ? '' : this.paymentDetail.details.splice(spliceIndex, 1)
+      if(index !== -1){
+        this.payment = parseFloat((this.paymentDetail.payment - this.couponListTrue[index].reducedAmount).toPrecision(12));
+        this.paymentDetail.payment = parseFloat((this.paymentDetail.payment - this.couponListTrue[index].reducedAmount).toPrecision(12));
+        this.paymentDetail.details.push({
+          itemName: '优惠券',
+          unitPrice: this.couponListTrue[index].reducedAmount,
+          type: 'coupon'
+        })
+      }
+    },
+    onExchange(code) {
+      this.coupons.push(coupon);
     }
   }
 }
@@ -501,6 +645,12 @@ export default {
     font-size: 11px;
     color: #B4B4B4;
   }
-
+  
+}
+.couponCell{
+  margin: 20px;
+  border-radius: 5px;
+  overflow: hidden;
+;
 }
 </style>

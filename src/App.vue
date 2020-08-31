@@ -1,14 +1,35 @@
 <template>
   <div>
     <router-view/>
+    <van-tabbar v-model="active" route>
+      <van-tabbar-item replace to="/" name="home" icon="home-o">客房</van-tabbar-item>
+      <!-- <van-tabbar-item replace to="/ticket" name="friends" icon="credit-pay">门票</van-tabbar-item> -->
+      <van-tabbar-item replace to="/center" name="setting" icon="user-o">个人中心</van-tabbar-item>
+    </van-tabbar>
   </div>
 </template>
 
 <script>
-
+import moment from 'moment';
 export default {
   name: 'app',
-  components: {}
+  components: {},
+  data() {
+    return {
+      active: 'home'
+    }
+  },
+  filters: {
+    dateFormate(val) {
+      return moment(val).format('MM月DD日')
+    }
+  },
+  created() {
+  },
+  mounted() {
+  },
+  methods: {
+  }
 }
 </script>
 

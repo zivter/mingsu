@@ -1,7 +1,6 @@
 <template>
   <div class="center">
     <div class="topBG">
-      <van-icon name="share" class="shareBtn"/>
       <div class="avator" @click="gotoProfile()">
         <van-image
           round
@@ -15,22 +14,26 @@
     </div>
     <div class="centerBtm">
       <van-row type="flex" justify="space-around" class="centermenu">
-        <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'paid'}})"><p>{{ statusCounts.success }}</p><p>已支付订单</p></van-col>
         <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'pending'}})"><p>{{ statusCounts.pending }}</p><p>待支付订单</p></van-col>
-        <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'cancel'}})"><p>{{ statusCounts.fail }}</p><p>失败订单</p></van-col>
+        <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'paid'}})"><p>{{ statusCounts.success }}</p><p>已支付订单</p></van-col>
+        <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'cancel'}})"><p>{{ statusCounts.fail }}</p><p>全部订单</p></van-col>
       </van-row>
       <div class="centerList">
         <van-cell title="我的优惠券" icon="location-o" is-link
         @click="$router.push({path:'/coupon'})" >
           <i slot='icon' class="centerIcon centerIcon1"></i>
         </van-cell>
-        <van-cell title="我的收藏" icon="location-o" is-link
+        <!-- <van-cell title="我的收藏" icon="location-o" is-link
         @click="$router.push({path:'/collect'})" >
           <i slot='icon' class="centerIcon centerIcon2"></i>
-        </van-cell>
+        </van-cell> -->
         <van-cell title="入住人信息" icon="location-o" is-link
         @click="$router.push({path:'/occupant'})" >
           <i slot='icon' class="centerIcon centerIcon3"></i>
+        </van-cell>
+        <van-cell title="个人资料" icon="location-o" is-link
+        @click="$router.push({path:'/profile'})" >
+          <i slot='icon' class="centerIcon centerIcon4"></i>
         </van-cell>
       </div>
     </div>
@@ -42,7 +45,8 @@ import Vue from 'vue'
 import { GetWechatProfile } from '@/api/account'
 import { GetStatusCounts } from '@/api/orderQuery'
 import { GetProfile } from '@/api/memberUser'
-import { WechatH5Auth, ExternalAuthenticate } from '@/api/tokenAuth'
+import share from '@/utils/share';
+import tokenAuth from '@/utils/tokenAuth';
 
 export default {
   name: 'Center',
@@ -61,23 +65,11 @@ export default {
   watch: {},
   filters: {},
   created() {
-    const that = this;
-    that.$store.dispatch('tokenAuth/getAuth', {
-      exist: function (token) {
-        that.GetWechatProfile()
-        that.GetStatusCounts()
-        that.GetProfile()
-      },
-      none: function () {
-        console.log(that.$router)
-        if (that.$route.query.encryptedCode) {
-          that.ExternalAuthenticate(that.$route.query.encryptedCode)
-        }
-        else {
-          that.getWechatH5Auth()
-        }
-      }
-    })
+    share.share(this.$route.meta.title);
+    tokenAuth.getAuth(this.$route.query, 'center');
+    this.GetWechatProfile();
+    this.GetStatusCounts();
+    this.GetProfile();
   },
   mounted() {},
   methods:{
@@ -113,28 +105,7 @@ export default {
       GetProfile().then((result) => {
         this.nickName = result.result.nickName
       }).catch((err) => {
-        
-      });
-    },
-    
-    //获取encryptedCode
-    getWechatH5Auth(){
-      WechatH5Auth(Vue.prototype.url)
-    },
-    
-    //微信认证cb
-    ExternalAuthenticate (encryptedCode){
-      const param = {
-        "authProvider": "WechatH5",
-        "providerKey": new Date().getTime(),
-        "providerAccessCode": encryptedCode
-      }
-      ExternalAuthenticate(param).then((result) => {
-        result.result.recordTime = new Date().getTime();//记录时间
-        this.$store.dispatch('tokenAuth/setToken', result.result)
-        this.$router.go(0)
-      }).catch((err) => {
-        
+        this.$notify({type:'warning',message:err})
       });
     },
   }
@@ -215,11 +186,17 @@ export default {
     .centerIcon3{
       background: url('../../assets/img/centerIcon3.png') no-repeat center;
     }
+    .centerIcon4{
+      background: url('../../assets/img/profile.png') no-repeat center;
+      width:24px!important;
+      height:24px!important;
+      margin-right: 14px!important;
+    }
     .centerIcon{
       width: 18px;
       height: 18px;
       background-size: 100%;
-      margin-right: 10px;
+      margin-right: 20px;
     }
   }
 

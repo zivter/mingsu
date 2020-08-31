@@ -9,13 +9,19 @@ const mingsuRouter = new Router({
             path: '/',
             name: 'home',
             component: () =>
-                import ('@/views/home/home')
+                import ('@/views/home/home'),
+            meta: {
+                title: '首页'
+            }
         },
         {
             path: '/detail',
             name: 'detail',
             component: () =>
-                import ('@/views/detail/detail')
+                import ('@/views/detail/detail'),
+            meta: {
+                title: '客房详情'
+            }
         },
         {
             path: '/order',
@@ -69,6 +75,15 @@ const mingsuRouter = new Router({
                 import ('@/views/center/orderCenter'),
             meta: {
                 title: '我的订单'
+            }
+        },
+        {
+            path: '/orderDetail',
+            name: 'orderDetail',
+            component: () =>
+                import ('@/views/center/orderDetail'),
+            meta: {
+                title: '订单详情'
             }
         },
         {
@@ -138,6 +153,33 @@ const mingsuRouter = new Router({
                 import ('@/views/coupon/index'),
             meta: {
                 title: '领取优惠券'
+            }
+        },
+        {
+            path: '/serveRoot',
+            name: 'serveRoot',
+            component: () =>
+                import ('@/views/serveRoot/serveRoot'),
+            meta: {
+                title: '绑定微信'
+            }
+        },
+        {
+            path: '/aboutUs',
+            name: 'aboutUs',
+            component: () =>
+                import ('@/views/aboutUs/index'),
+            meta: {
+                title: '关于我们'
+            }
+        },
+        {
+            path: '/orderSuccess',
+            name: 'orderSuccess',
+            component: () =>
+                import ('@/views/order/orderSuccess'),
+            meta: {
+                title: '支付成功'
             }
         },
         // {

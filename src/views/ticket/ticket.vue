@@ -2,19 +2,13 @@
   <div class="ticket">
     <van-search
       placeholder="关键词搜索"
-      v-model="ticketSearch"
+      v-model="searchForm.Keyword"
       class="searchContent"
       @input='onLoad'>
       <van-icon slot="left-icon" name="search" color="#DA4F53"/>
     </van-search>
     <van-list
-      v-model="ticketListLoading"
-      :finished="ticketListFinished"
-      class="ticketList"
-      :error.sync="ticketListError"
-      error-text="请求失败，点击重新加载"
-      finished-text="滑动加载更多"
-      @load="onLoad">
+      class="ticketList">
       <div
         v-for="(item,index) in ticketList"
         :key='index'
@@ -24,17 +18,25 @@
         <p class="ticketLable">{{ item.regionFullName | regionFullNameFilter }}</p>
         <div class="ticketListInfo overflow">
           <p class="ticketTitle float-left">{{ item.title }}</p>
-          <p class="ticketPrice float-right"><span class="ticketPriceNum"><span style="font-size:13px;">￥</span>{{ item.minPrice }} 32</span> / 起</p>
+          <p class="ticketPrice float-right"><span class="ticketPriceNum"><span style="font-size:13px;">￥</span>{{ item.minPrice }}</span> / 起</p>
         </div>
       </div>
     </van-list>
+
+    <!-- 无线滚动 -->
+    <infinite-loading @infinite="infiniteHandler">
+      <div slot="no-more" style='color:#999;font-size:13px;margin-top:10px;padding-bottom:20px;'>没有更多门票了...</div>
+      <div slot="no-results" style='color:#666;font-size:13px;margin-top:10px;'>暂无门票...</div>
+    </infinite-loading>
+
   </div>
 </template>
 
 <script>
-import { WechatH5Auth, ExternalAuthenticate } from '@/api/tokenAuth'
 import { TouristAttractionQueryGetAll } from '@/api/ticket'
+import tokenAuth from '@/utils/tokenAuth';
 import Vue from 'vue'
+import share from '@/utils/share';
 
 export default {
   name: 'ticket',
@@ -56,25 +58,17 @@ export default {
       ticketListFinished: false,
       ticketList:[],
       total:0,
-      ticketSearch:''
+      ticketSearch:'',
+      searchForm:{
+        SkipCount:0,
+        MaxResultCount:20,
+        Keyword:''
+      }
     }
   },
   created(){
-    // const that = this;
-    // that.$store.dispatch('tokenAuth/getAuth', {
-    //   exist: function (token) {
-    //     console.log(token)
-    //   },
-    //   none: function () {
-    //     console.log(that.$router)
-    //     if (that.$route.query.encryptedCode) {
-    //       that.ExternalAuthenticate(that.$route.query.encryptedCode)
-    //     }
-    //     else {
-    //       that.getWechatH5Auth()
-    //     }
-    //   }
-    // })
+    share.share(this.$route.meta.title);
+    tokenAuth.getAuth(this.$route.query, 'ticket');
   },
   filters:{
     regionFullNameFilter(val){
@@ -82,24 +76,11 @@ export default {
     }
   },
   methods:{
-    onLoad(val) {
-      console.log(111)
-      const param = {
-        Keyword:val,
-        SkipCount:0,
-        MaxResultCount:1
-      }
-      TouristAttractionQueryGetAll(param).then((result) => {
-        if(result){
-          this.ticketList = result.result.items
-          this.total = result.result.totalCount
-        }
-      }).catch((err) => {
-        this.ticketListError = true
-      }).finally(()=>{
-        this.ticketListFinished = true;
-        this.ticketListLoading = false;
-      });
+    onLoad(){
+      this.searchForm.SkipCount = 0
+      this.searchForm.MaxResultCount = 20
+      this.ticketList = []
+      this.infiniteHandler()
     },
     /**
      * 点击详情
@@ -112,28 +93,20 @@ export default {
         }
       })
     },
-
-    //获取encryptedCode
-    getWechatH5Auth(){
-      WechatH5Auth(Vue.prototype.url)
-    },
-    
-    //微信认证cb
-    ExternalAuthenticate (encryptedCode){
-      const param = {
-        "authProvider": "WechatH5",
-        "providerKey": new Date().getTime(),
-        "providerAccessCode": encryptedCode
-      }
-      ExternalAuthenticate(param).then((result) => {
-        console.log(result.result)
-        result.result.recordTime = new Date().getTime();//记录时间
-        this.$store.dispatch('tokenAuth/setToken', result.result)
-        this.$router.go(0)
+    /**无线滚动 */
+    infiniteHandler($state) {
+      TouristAttractionQueryGetAll(this.searchForm).then((result) => {
+        this.ticketList.push(...result.result.items)
+        if (result.result.items.length) {
+          this.searchForm.SkipCount += 20;
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
       }).catch((err) => {
-        
-      });
+      })
     },
+
   }
 }
 </script>

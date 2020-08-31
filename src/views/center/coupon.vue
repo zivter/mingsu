@@ -1,5 +1,11 @@
 <template>
   <div class="orderCenter">
+    <van-nav-bar
+      title="我的优惠券"
+      left-text=""
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <van-tabs
     v-model="active"
     class="orderNav"
@@ -9,9 +15,8 @@
     line-height='2px'
     color="#DA4F53"
     :border='false'>
-      <van-tab title="未使用"><couponList couponType='Unused'/></van-tab>
-      <van-tab title="已使用"><couponList couponType='Used'/></van-tab>
-      <van-tab title="已失效"><couponList couponType='Expired'/></van-tab>
+      <van-tab title="未使用"><couponList couponType='true'/></van-tab>
+      <van-tab title="不可用"><couponList couponType='false'/></van-tab>
     </van-tabs>
   </div>
 </template>
@@ -36,6 +41,9 @@ export default {
   },
   mounted() {},
   methods:{
+    onClickLeft(){
+      this.$router.go(-1)
+    },
   }
 }
 </script>

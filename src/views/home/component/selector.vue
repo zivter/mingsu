@@ -5,7 +5,7 @@
     </div>
 
     <p class="priceTitle">价格范围</p>
-    <p class="priceRange">￥0 - ￥5000+</p>
+    <p class="priceRange">￥{{ value[0] }} - ￥{{ value[1] }}</p>
     <vue-slider
     :min='0'
     :max='5000'
@@ -80,7 +80,6 @@ export default {
     this.BedroomCount = 0
   },
    onConfirm(){
-     console.log(this.value)
      const param = {
        PriceFrom: this.value[0],
        PriceTo: this.value[1],

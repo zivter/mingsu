@@ -15,36 +15,41 @@
     </van-row>
 
     <div class="banner">
-      <P class="bannerP1">自营名宿</P>
-      <p class="bannerP2">自营优质资源，星级保洁，管家专属服务。</p>
+      <!-- <P class="bannerP1">自营名宿</P> -->
+      <p class="bannerP2"><span class="blank1">优质名宿</span> <span class="blank1">星级保洁</span> <span class="blank1">管家服务</span></p>
     </div>
 
     <van-list
-      v-model="loading"
-      :finished="finished"
       class="homeList"
       :error.sync="error"
       error-text="请求失败，点击重新加载"
-      finished-text="没有更多了"
-      @load="onLoad">
+      finished-text="没有更多了">
       <div
       v-for="(item,index) in roomList"
       :key='index'
       class="homeCard"
       @click="handleListClick(item,index)">
         <van-swipe indicator-color="white" class="homeListImg">
-          <van-swipe-item v-for="(imgItem,index) in item.images" :key="index">
-            <img :src="GLOBAL.imgSrc+imgItem.imageUrl" alt="">
+          <van-swipe-item>
+            <img v-lazy="GLOBAL.imgSrc+item.cover" alt="">
           </van-swipe-item>
-
+          <van-swipe-item v-for="(imgItem,index) in item.images" :key="index">
+            <img v-lazy="GLOBAL.imgSrc+imgItem.imageUrl" alt="">
+          </van-swipe-item>
         </van-swipe>
         <div class="homeListInfo">
           <p class="homeLable">{{ item.roomStyleName }}</p>
           <p class="homeTitle">{{ item.title }}</p>
-          <p class="homePrice">￥{{ item.price }} /晚</p>
+          <p class="homePrice">￥{{ item.startPrice }} /晚 <span class='linePrice'>￥{{ item.linePrice }} /晚</span></p>
         </div>
       </div>
     </van-list>
+
+    <!-- 无线滚动 -->
+    <infinite-loading @infinite="infiniteHandler">
+      <div slot="no-more" style='color:#999;font-size:13px;margin-top:10px;padding-bottom:20px;'>没有更多房源了...</div>
+      <div slot="no-results" style='color:#666;font-size:13px;margin-top:10px;'>暂无房源...</div>
+    </infinite-loading>
 
     <!-- 日期弹出框 -->
     <van-popup
@@ -72,16 +77,18 @@
 </template>
 
 <script>
-import { WechatH5Auth, ExternalAuthenticate } from '@/api/tokenAuth'
 import { GetRoomList } from '@/api/roomsQuery'
 
+import share from '@/utils/share';
+import tokenAuth from '@/utils/tokenAuth';
 import Vue from 'vue'
 import moment from 'moment';
-
 import timePicker from './component/calendar'
 import postionPicker from './component/position'
 import selectorPicker from './component/selector'
+import { Lazyload } from 'vant';
 
+Vue.use(Lazyload);
 export default {
   name: 'home',
   props: {
@@ -89,9 +96,7 @@ export default {
   components:{ timePicker, postionPicker, selectorPicker},
   data() {
     return {
-      loading: false,
       error: false,
-      finished: false,
       roomList:[],
       timePickerShow:false,
       positionPickerShow:false,
@@ -126,40 +131,12 @@ export default {
     }
   },
   created(){
-    const that = this;
-    that.$store.dispatch('tokenAuth/getAuth', {
-      exist: function (token) {},
-      none: function () {
-        console.log(that.$router)
-        if (that.$route.query.encryptedCode) {
-          that.ExternalAuthenticate(that.$route.query.encryptedCode)
-        }
-        else {
-          that.getWechatH5Auth()
-        }
-      }
-    })
+    share.share(this.$route.meta.title);
+    tokenAuth.getAuth(this.$route.query);
   },
   methods:{
     onConfirm() {
       this.$refs.item.toggle();
-    },
-    onLoad() {
-      const that = this;
-      that.$store.dispatch('tokenAuth/getAuth', {
-        exist: function (token) {
-          GetRoomList(that.roomListForm).then((result) => {
-            that.roomList.push(...result.result.items)
-          }).catch((err) => {
-            this.$notify({type:'warning',message:err})
-          }).finally(() => {
-            // 加载状态结束
-            that.loading = false;
-            that.finished = true;
-          });
-        },
-        none: function () {}
-      })
     },
     /**
      * 点击详情
@@ -173,43 +150,27 @@ export default {
         }
       })
     },
-
-    //获取encryptedCode
-    getWechatH5Auth(){
-      WechatH5Auth(Vue.prototype.url)
-    },
-    
-    //微信认证cb
-    ExternalAuthenticate (encryptedCode){
-      const param = {
-        "authProvider": "WechatH5",
-        "providerKey": new Date().getTime(),
-        "providerAccessCode": encryptedCode
-      }
-      ExternalAuthenticate(param).then((result) => {
-        result.result.recordTime = new Date().getTime();//记录时间
-        this.$store.dispatch('tokenAuth/setToken', result.result)
-        this.$router.go(0)
-      }).catch((err) => {
-        this.$notify({type:'warning',message:err})
-      });
-    },
-
     timeChange(data){
+      this.roomListForm.SkipCount = 0;
+      this.roomListForm.MaxResultCount = 20;
       this.roomListForm.from = data.from
       this.roomListForm.to = data.to
       this.timeRange = moment(data.from).format('YYYY-MM-DD') + ',' + moment(data.to).format('YYYY-MM-DD')
       this.timePickerShow = false
       this.roomList = []
-      this.onLoad()
+      this.infiniteHandler()
     },
     positionChange(data){
+      this.roomListForm.SkipCount = 0;
+      this.roomListForm.MaxResultCount = 20;
       this.roomListForm.CategoryId = data
       this.positionPickerShow = false
       this.roomList = []
-      this.onLoad()
+      this.infiniteHandler()
     },
     selectorChange(data){
+      this.roomListForm.SkipCount = 0;
+      this.roomListForm.MaxResultCount = 20;
       this.roomListForm.PriceFrom = data.PriceFrom
       this.roomListForm.PriceTo = data.PriceTo
       this.roomListForm.LodgerCount = data.LodgerCount
@@ -217,8 +178,23 @@ export default {
       this.roomListForm.BedroomCount = data.BedroomCount
       this.selectorPickerShow = false
       this.roomList = []
-      this.onLoad()    }
-  }
+      this.infiniteHandler()    
+    },
+    /**无线滚动 */
+    infiniteHandler($state) {
+      GetRoomList(this.roomListForm).then((result) => {
+        this.roomList.push(...result.result.items)
+        if (result.result.items.length) {
+          this.roomListForm.SkipCount += 20;
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      }).catch((err) => {
+      })
+    },
+  },
+ 
 }
 </script>
 
@@ -245,17 +221,23 @@ export default {
   }
 }
 .banner{
-  background: url('../../assets/img/banner.jpg') no-repeat center;
+  background: url('../../assets/img/banner2.png') no-repeat center;
   width: 100%;
   height: 260px;
   background-size: 100% 100%;
   color: #fff;
   line-height: 30px;
-  padding-left: 20px;
-  .bannerP1{
-    font-size: 30px;
-    padding-top: 170px;
-    margin-bottom: 6px;
+  letter-spacing: 3px;
+  .blank1{
+    margin-left: 5px;
+  }
+  .bannerP2{
+    padding-top: 224px;
+    margin-bottom: 4px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 4rem;
   }
 }
 .dropdownMenu{
@@ -308,6 +290,12 @@ export default {
     .homePrice{
       font-size: 16px;
       line-height: 36px;
+    }
+    .linePrice{
+      text-decoration:line-through;
+      color:#999;
+      font-size:14px;
+      margin-left:10px;
     }
   }
 }

@@ -39,8 +39,8 @@ export default {
     return{
       data:'',
       totalDay:1,
-      endDay:moment().add(1,'d').format('MM月DD日'),
-      startDay:moment().format('MM月DD日')
+      endDay:moment().add(1,'d').format('MM-DD'),
+      startDay:moment().format('MM-DD')
     }
   },
   computed: {
@@ -48,7 +48,6 @@ export default {
   },
   filters:{
     startDayFilter(val){
-      console.log(val)
       if(!val){
         return '入店时间'
       }else{
@@ -71,9 +70,9 @@ export default {
       const [start, end] = date;
       if(date[1]){
         this.totalDay = moment(end-start).date()-1
-        this.endDay = moment(end).format('MM月DD日')
+        this.endDay = moment(end).format('MM-DD')
       }else{
-        this.startDay = moment(start).format('MM月DD日')
+        this.startDay = moment(start).format('MM-DD')
       }
 
     },
@@ -99,8 +98,8 @@ export default {
     reset(){
       this.$refs.calendar.reset()
       this.totalDay = 1
-      this.endDay = moment().add(1,'d').format('MM月DD日'),
-      this.startDay = moment().format('MM月DD日')
+      this.endDay = moment().add(1,'d').format('MM-DD'),
+      this.startDay = moment().format('MM-DD')
     }
   }
 }

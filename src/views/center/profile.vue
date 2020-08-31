@@ -1,9 +1,9 @@
 <template>
   <div class="profile">
-    <!-- <van-nav-bar
+    <van-nav-bar
       title="个人资料"
       left-arrow
-      @click-left="back"/> -->
+      @click-left="back"/>
     <van-field
       label="昵称"
       placeholder="请输入您的昵称"
@@ -153,7 +153,6 @@ export default {
       this.$router.go(-1)
     },
     confirm(val){
-      console.log(val)
       if(this.showCityPickerType == 1){
         this.fieldForm.hometownName = val.map(item => item.name).join()
         if(val[2]){
@@ -179,7 +178,6 @@ export default {
       this.showSexPicker = false
     },
     birthdayConfirm(val){
-      console.log(moment(val).format())
       this.fieldForm.birthday = moment(val).format()
       this.fieldForm.birthdayFormat = moment(val).format('YYYY-MM-DD')
       this.numKeyShow = false
@@ -192,6 +190,9 @@ export default {
       this.loading = true
       GetProfile().then((result) => {
         this.fieldForm = result.result
+        if(result.result.birthday){
+          this.fieldForm.birthdayFormat = moment(result.result.birthday).format('YYYY-MM-DD')
+        }
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
       }).finally(() => {

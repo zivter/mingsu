@@ -1,44 +1,38 @@
 <template>
   <div class="coupon">
     <div class="couponT couponContent">
-      <p class="title">名宿优惠券</p>
+      <p class="title">{{ couponAvailable.title || '名宿优惠券' }}</p>
       <van-divider dashed class="vdivider"></van-divider>
-      <p class="couponName">{{ couponAvailable.title }}</p>
-      <p class="description">{{ couponAvailable.description }}</p>
-      <van-button round type="danger" :disabled="isGet?true:false" class="saveBtn" @click="takeCouponTaken">领取</van-button>
+      <p class="couponName">{{ couponAvailable.title | titleFilter }}</p>
+      <p class="description" v-if="couponAvailable.type==='Amount'">满{{ couponAvailable.targetAmount }}减{{ couponAvailable.reducedAmount }}元</p>
+      <p class="description" v-if="couponAvailable.type==='Discount'">满{{ couponAvailable.targetAmount }}元{{ couponAvailable.discounts }}折</p>
+      <van-row type="flex" justify="space-around">
+        <van-col span="20" v-if="!isGet"><van-button round type="danger" :disabled="isGet" class="saveBtn" @click="takeCouponTaken">领取</van-button></van-col>
+        <van-col span="20" v-if="isGet"><van-button round type="primary" class="saveBtn" @click="getOrder">已领取,即刻下单</van-button></van-col>
+      </van-row>
       <cell-components
         cell-name='使用时间'
-        :cell-value='couponAvailable.startTime +  " 至 " +  couponAvailable.endTime'
-        cell-color='#000'/>
-      <van-divider dashed></van-divider>
-      <cell-components
-        cell-name='使用条件'
-        :cell-value='couponAvailable.description'
+        style="padding-left:12px"
+        :cell-value='couponAvailable.startTime +  " 至 " +   couponAvailable.endTime'
         cell-color='#000'/>
       <van-divider dashed></van-divider>
       <cell-components
         cell-name='使用须知'
+        style="padding-left:12px"
         :cell-value='couponAvailable.description'
-        cell-color='#000'/>
-    </div>
-    <div class="couponB couponContent">
-      <cell-components
-        cell-name='联系地址'
-        cell-value='test'
-        cell-color='#000'/>
-      <van-divider dashed></van-divider>
-      <cell-components
-        cell-name='联系电话'
-        cell-value='test'
         cell-color='#000'/>
     </div>
   </div>
 </template>
 
 <script>
-import { GetAvailableList, takeCouponTaken } from '@/api/coupon'
+import { GetDetailCoupon, takeCouponTaken } from '@/api/coupon'
+import tokenAuth from '@/utils/tokenAuth';
 import moment from 'moment'
+import Vue from 'vue'
 import cellComponents from '@/components/cellComponents/index'
+import share from '@/utils/share';
+import Cookies from 'js-cookie'
 
 export default {
   name: 'Coupon',
@@ -47,7 +41,10 @@ export default {
   components:{ cellComponents },
   data() {
     return {
-      couponAvailable: [],
+      couponAvailable: {
+        startTime:'',
+        endTime:''
+      },
       isGet: false
     }
   },
@@ -56,33 +53,54 @@ export default {
   watch: {},
   filters: {
     timeFilter(val){
-      return moment(val).format('YYYY.MM.DD')
+      if(val){
+        return moment(val).format('YYYY.MM.DD')
+      }else{
+        return ''
+      }
+    },
+    titleFilter(val){
+      if(!val){
+        return '暂无优惠券'
+      }
     }
   },
   created() {
-    this.GetAvailableList()
+    if (this.$route.query.id) {
+      Cookies.set('couponId', this.$route.query.id)
+    }
+    share.share(this.$route.meta.title);
+    tokenAuth.getAuth(this.$route.query, 'couponGet');
+    this.GetDetailCoupon()
   },
   mounted() {},
   methods:{
     /**
      * 获取优惠券列表
      */
-    GetAvailableList(){
+    GetDetailCoupon(){
+      const couponId = Cookies.get('couponId');
       const param = {
-        SkipCount:0,
-        MaxResultCount:20
+        id: couponId
       }
-      GetAvailableList(param).then((result) => {
-        if(result.result.items.length > 0){
-          this.couponAvailable = result.result.items[0]
+      GetDetailCoupon(param).then((result) => {
+        Cookies.remove('couponId')
+        if(result.result){
+          this.couponAvailable = result.result;
           this.couponAvailable.startTime = moment(this.couponAvailable.startTime).format('YYYY.MM.DD')
-          this.couponAvailable.endTime = moment(this.couponAvailable.startTime).format('YYYY.MM.DD')
-          if(this.couponAvailable.takeCount>0){
+          this.couponAvailable.endTime = moment(this.couponAvailable.endTime).format('YYYY.MM.DD')
+          if(this.couponAvailable.canTake === true && this.couponAvailable.hasTaken === false && moment(this.couponAvailable.takeEndTime).isAfter(moment().format())) {
+            this.isGet = false
+          } else {
             this.isGet = true
           }
+        }else{
+          this.couponAvailable.startTime = ''
+          this.couponAvailable.endTime = ''
         }
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
+      }).finally(() => {
       });
     },
     /* 领取优惠券 */
@@ -102,6 +120,11 @@ export default {
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
       });
+    },
+    getOrder() {
+      this.$router.push({
+        path:'./'
+      })
     }
   }
 }
@@ -128,6 +151,8 @@ export default {
 .title{
   margin-left: 20px;
   padding-top: 10px;
+  text-align: center;
+  color: #444;
 }
 .couponName{
   text-align: center;
@@ -136,18 +161,14 @@ export default {
 .description{
   text-align: center;
   line-height: 48px;
+  color: #444;
+  font-weight: 700;
+  font-size: 24px;
 }
 .saveBtn{
   width: 150px;
   display: block;
   margin: 30px auto 20px;
   line-height: 10px;
-}
-/deep/ .van-button{
-  height: 36px;
-  line-height: 36px;
-}
-/deep/ .cellComponents{
-  margin-left: 16px!important;
 }
 </style>

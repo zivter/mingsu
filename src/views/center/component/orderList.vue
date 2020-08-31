@@ -1,10 +1,10 @@
 <template>
   <div class="orderList">
-    <van-row type="flex" justify="space-around" class="orderCard" v-for="(item,index) in allOrderQuery" :key="index">
+    <van-row type="flex" justify="space-around" class="orderCard" v-for="(item,index) in allOrderQuery" :key="index" @click="goDetail(item.orderNumber,item.roomId)">
       <van-col span="12" class="orderCardLeft">
-        <p>{{ item.roomTitle }}</p>
+        <p class=‘ordername’>{{ item.roomTitle }}</p>
         <p>{{ item.from | timeFilter }}-{{ item.to | timeFilter }}    {{ item.lodgerCount }}位</p>
-        <p>{{ item.status | statusFilter }} .  ¥{{ item.payment }}</p>
+        <p>{{ item.status | statusFilter }}¥{{ item.payment }}</p>
       </van-col>
       <van-col span="8"><img class="cardListImg" :src="GLOBAL.imgSrc+item.roomCover" alt=""></van-col>
     </van-row>
@@ -39,7 +39,6 @@ export default {
         paid:'订单已完成',
         cancel:'订单已取消'
       }
-      console.log(val)
       return status[val]
     },
     timeFilter(val){
@@ -66,12 +65,24 @@ export default {
       }).catch((err) => {
         
       });
+    },
+    goDetail(id,roomId){
+      this.$router.push({
+        path:'orderDetail',
+        query:{
+          id: id,
+          roomId: roomId
+        }
+      })
     }
   }
 }
 </script>
 
 <style scoped lang='scss'>
+.ordername{
+
+}
 .cardListImg{
   width: 125px;
   height: 85px;
@@ -93,6 +104,11 @@ export default {
     font-size: 15px;
     color: #000;
     font-weight: 700;
+    overflow:hidden; 
+    text-overflow:ellipsis;
+    display:-webkit-box; 
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2; 
   }
 }
 </style>

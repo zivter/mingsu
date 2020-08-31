@@ -2,7 +2,7 @@
   <div class="service">
     <p class="serviceTitle">设施服务</p>
 
-    <p class="contentTitle">基础设施</p>
+    <p class="contentTitle">居家设施</p>
     <van-grid
     :gutter="10"
     :border='false'
@@ -20,7 +20,7 @@
       </van-grid-item>
     </van-grid>
 
-    <p class="contentTitle">洗浴设施</p>
+    <p class="contentTitle">清洗用品</p>
     <van-grid
     :gutter="10"
     :border='false'
@@ -38,7 +38,7 @@
       </van-grid-item>
     </van-grid>
 
-    <p class="contentTitle">厨房设施</p>
+    <p class="contentTitle">厨房用品</p>
     <van-grid
     :gutter="10"
     :border='false'
@@ -56,13 +56,31 @@
       </van-grid-item>
     </van-grid>
 
-    <p class="contentTitle">入住服务</p>
+    <p class="contentTitle">周边配套</p>
     <van-grid
     :gutter="10"
     :border='false'
     style="margin-top:10px;">
       <van-grid-item
         v-for="(item) in allCheckIn"
+        :key="item.icon_id"
+        :text="item.name">
+        <template slot="icon">
+          <svg-icon
+          :icon-class="'#icon-' + item.font_class"
+          font-size="22px"
+          style="margin-bottom:10px;"/>
+        </template>
+      </van-grid-item>
+    </van-grid>
+
+    <p class="contentTitle">娱乐设施</p>
+    <van-grid
+    :gutter="10"
+    :border='false'
+    style="margin-top:10px;">
+      <van-grid-item
+        v-for="(item) in Entertainment"
         :key="item.icon_id"
         :text="item.name">
         <template slot="icon">
@@ -83,12 +101,16 @@
 
 <script>
 import svgIcon from '@/components/SvgIcon/index'
-import { LoadAllBaseSupportings, LoadAllBathSupportings, LoadAllKitchenSupportings, LoadAllCheckInSupportings } from '@/api/room'
+import { LoadAllBaseSupportings, LoadAllBathSupportings, LoadAllKitchenSupportings, LoadAllCheckInSupportings, LoadAllEntertainmentSupportings } from '@/api/room'
 import nameJson from '../../icons/iconfont.json'
 
 export default {
   name: '',
   props:  {
+    facilitiesList:{
+      type: Array,
+      default: () => []
+    }
   },
   components:{ svgIcon },
   data() {
@@ -99,7 +121,8 @@ export default {
       allBase:[],
       allBath:[],
       allKitchen:[],
-      allCheckIn:[]
+      allCheckIn:[],
+      Entertainment:[]
     }
   },
   computed: {
@@ -113,38 +136,47 @@ export default {
     this.LoadAllBathSupportings()
     this.LoadAllKitchenSupportings()
     this.LoadAllCheckInSupportings()
+    this.LoadAllEntertainmentSupportings()
   },
   methods:{
-    //所有基础设施的key
+    //所有居家设施
     LoadAllBaseSupportings(){
       this.overlayShow = true
       LoadAllBaseSupportings().then(data=>{
-         this.getIconCnName(data.result,this.allBase)
+        this.filterIcon(data.result,this.allBase)
       }).catch(e => {
       }).finally(() => {
         this.overlayShow = false
       })
     },
-    //所有洗浴设施key
+    //所有清洗用品
     LoadAllBathSupportings(){
       LoadAllBathSupportings().then(data=>{
-        this.getIconCnName(data.result,this.allBath)
+        this.filterIcon(data.result,this.allBath)
       }).catch(e => {
       }).finally(() => {
       })
     },
-    //所有厨房设施key
+    //所有厨房用品
     LoadAllKitchenSupportings(){
       LoadAllKitchenSupportings().then(data=>{
-        this.getIconCnName(data.result,this.allKitchen)
+        this.filterIcon(data.result,this.allKitchen)
       }).catch(e => {
       }).finally(() => {
       })
     },
-    //所有入住服务key
+    //所有周边配套
     LoadAllCheckInSupportings(){
       LoadAllCheckInSupportings().then(data=>{
-        this.getIconCnName(data.result,this.allCheckIn)
+        this.filterIcon(data.result,this.allCheckIn)
+      }).catch(e => {
+      }).finally(() => {
+      })
+    },
+    //所有娱乐设施
+    LoadAllEntertainmentSupportings(){
+      LoadAllEntertainmentSupportings().then(data=>{
+        this.filterIcon(data.result,this.Entertainment)
       }).catch(e => {
       }).finally(() => {
       })
@@ -159,6 +191,15 @@ export default {
           }
         }
       });
+    },
+    filterIcon(data,name){
+      this.facilitiesList.forEach(element1 => {
+        data.forEach(element2 => {
+          if(element1.font_class == element2){
+            name.push(element1)
+          }
+        });
+      });
     }
   }
 }
@@ -170,9 +211,9 @@ export default {
   font-size: 20px;
 }
 .service{
-  height: 100%;
   margin-top: 50px;
   padding: 0 24px;
+  padding-bottom: 50px;
 }
 .contentTitle{
   margin-top: 16px;

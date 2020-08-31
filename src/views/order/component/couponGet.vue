@@ -2,9 +2,10 @@
   <div class="coupon">
     <p class="title">优惠券领取</p>
       <div class="couponCard" v-if="couponAvailableList.length > 0" @click="takeCouponTaken">
+        <!-- <div :class="isGet==true?'couponLeft1 couponLeft':'couponLeft2 couponLeft'"> -->
         <div :class="isGet==true?'couponLeft1 couponLeft':'couponLeft2 couponLeft'">
           <p class="type" v-if="couponAvailableList[0].type == 'Amount'"><span class="count">{{ couponAvailableList[0].reducedAmount }}</span>元</p>
-          <p class="type" v-else-if="couponAvailableList[0].type == 'Discount'"><span class="count">{{ couponAvailableList[0].discounts * 10 }}</span>折</p>
+          <p class="type" v-else-if="couponAvailableList[0].type == 'Discount'"><span class="count">{{ 100 - couponAvailableList[0].discounts}}</span>折</p>
           <p class="targetAmount">满{{ couponAvailableList[0].targetAmount }}元可用</p>
         </div>
         <div class="couponRight">
@@ -14,7 +15,7 @@
           <p class="time">{{ couponAvailableList[0].startTime | timeFilter }} - {{ couponAvailableList[0].endTime | timeFilter }}</p>
         </div>
       </div>
-      <p v-if="couponAvailableList.length == 0">暂无更多优惠券...</p>
+      <p v-if="couponAvailableList.length == 0" class='nomoreCoupon'>暂无更多优惠券...</p>
   </div>
 </template>
 
@@ -53,9 +54,9 @@ export default {
       }
       GetAvailableList(param).then((result) => {
         this.couponAvailableList = result.result.items
-        if(this.couponAvailableList[0].takeCount>0){
-          this.isGet = true
-        }
+        // if(this.couponAvailableList[0].takeCount>0){
+        //   this.isGet = true
+        // }
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
       });
@@ -73,6 +74,7 @@ export default {
         if(result.success == true){
           this.$notify({type:'success',message:'领取成功'})
           this.isGet = true
+          this.$emit('GetMyCoupons', true)
         }
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
@@ -135,6 +137,10 @@ export default {
         font-size: 12px;
       }
     }
+  }
+  .nomoreCoupon{
+    margin-top:30px;
+    text-align:center;
   }
 }
 </style>

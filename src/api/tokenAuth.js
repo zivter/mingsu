@@ -42,3 +42,25 @@ export function ExternalAuthenticate(data) {
         data
     })
 }
+
+/**
+ * 微信绑定
+ */
+export function WechatH5Bind(data) {
+    return request({
+        url: BASE_TOKEN_API_PATH + '/WechatH5Bind',
+        method: 'POST',
+        data
+    })
+}
+
+/**
+ * 微信绑定
+ */
+export function GetShareParams(data) {
+    return request({
+        url: BASE_TOKEN_API_PATH + '/GetShareParams',
+        method: 'GET',
+        params: data
+    })
+}

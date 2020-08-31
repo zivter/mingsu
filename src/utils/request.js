@@ -86,7 +86,7 @@ service.interceptors.response.use(
             // } else if (error.response.status === 750) {
             //   msg = error.message || '服务器发生未知错误，请稍后重试'
             // } else {
-        msg = error.message
+        msg = error.response.data.error.message
             // }
             // Message.error(msg)
         return Promise.reject(msg)

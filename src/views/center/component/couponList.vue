@@ -28,7 +28,7 @@ export default {
   name: '',
   props:  {
     couponType:{
-      type: String,
+      type: Boolean,
       required: false
     }
   },
@@ -54,7 +54,7 @@ export default {
   methods:{
     GetMyCoupons(){
       var param = {
-        CouponStatus:this.couponType,
+        CanUse:this.couponType,
         SkipCount:0,
         MaxResultCount:20
       }

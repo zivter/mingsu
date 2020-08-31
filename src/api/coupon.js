@@ -37,3 +37,15 @@ export function GetAvailableList(data) {
         params: data
     })
 }
+
+/**
+ * H5 优惠券详情
+ */
+export function GetDetailCoupon(data) {
+    return request({
+        url: BASE_COUPON_API_PATH + '/CouponTemplateQuery/GetDetail',
+        headers: headers,
+        method: 'GET',
+        params: data
+    })
+}

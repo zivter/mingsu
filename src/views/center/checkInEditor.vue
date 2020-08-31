@@ -1,74 +1,81 @@
 <template>
-  <div class="checkInEditor">
-    <van-cell-group>
-      <van-field
-        v-model="form.name"
-        required
-        clearable
-        label="姓名"
-        placeholder="请输入您的姓名"
-        @click-right-icon="$toast('question')"/>
-      <van-field
-        label="性别"
-        placeholder="请选择您的性别"
-        @click="showSexPicker = true" >
-        <p slot="input">{{ form.gender | sexFilters }}</p>
-        <van-icon slot="right-icon" name="arrow" />
-      </van-field>
-      <!--性别选择器-->
-      <van-popup v-model="showSexPicker" position="bottom">
-        <van-picker
-        :columns="sexColumns"
-        value-key='text'
-        show-toolbar
-        @confirm="sexOnConfirm"
-        @cancel='showSexPicker = false'/>
-      </van-popup>
-    </van-cell-group>
-
-    <van-cell-group>
-      <van-field
-        readonly
-        clickable
-        required
-        right-icon="arrow"
-        label="证件类型"
-        :value="form.identityNumberType"
-        placeholder="请选择"
-        @click="showcredTypePicker = true"/>
-      <van-popup v-model="showcredTypePicker" position="bottom">
-        <van-picker
-          show-toolbar
-          :columns="credTypecolumns"
+  <div class="checkInEdit">
+    <van-nav-bar
+      title="入住人信息"
+      left-text=""
+      left-arrow
+      @click-left="onClickLeft"
+    />
+    <div class="checkInEditor">
+      <van-cell-group>
+        <van-field
+          v-model="form.name"
+          required
+          clearable
+          label="姓名"
+          placeholder="请输入您的姓名"
+          @click-right-icon="$toast('question')"/>
+        <van-field
+          label="性别"
+          placeholder="请选择您的性别"
+          @click="showSexPicker = true" >
+          <p slot="input">{{ form.gender | sexFilters }}</p>
+          <van-icon slot="right-icon" name="arrow" />
+        </van-field>
+        <!--性别选择器-->
+        <van-popup v-model="showSexPicker" position="bottom">
+          <van-picker
+          :columns="sexColumns"
           value-key='text'
-          @cancel="showcredTypePicker = false"
-          @confirm='getcredTypeConfirm'/>
-      </van-popup>
-      <van-field
-        v-model="form.identityNumber"
-        clearable
-        label="证件号码"
-        placeholder="请输入"
-        required/>
+          show-toolbar
+          @confirm="sexOnConfirm"
+          @cancel='showSexPicker = false'/>
+        </van-popup>
+      </van-cell-group>
+
+      <van-cell-group>
+        <van-field
+          readonly
+          clickable
+          required
+          right-icon="arrow"
+          label="证件类型"
+          :value="form.identityNumberType"
+          placeholder="请选择"
+          @click="showcredTypePicker = true"/>
+        <van-popup v-model="showcredTypePicker" position="bottom">
+          <van-picker
+            show-toolbar
+            :columns="credTypecolumns"
+            value-key='text'
+            @cancel="showcredTypePicker = false"
+            @confirm='getcredTypeConfirm'/>
+        </van-popup>
+        <van-field
+          v-model="form.identityNumber"
+          clearable
+          label="证件号码"
+          placeholder="请输入"
+          required/>
+        
+      </van-cell-group>
+
+      <van-cell-group>
+        <van-field
+          v-model="form.phoneNumber"
+          required
+          clearable
+          label="手机号码"
+          placeholder="请输入手机号码"
+          @click-right-icon="$toast('question')"/>
+      </van-cell-group>
       
-    </van-cell-group>
+      <van-button type="default" size="large" class="deletebtn" v-if="form.id" @click="DeleteUserLodger">删除</van-button>
 
-    <van-cell-group>
-      <van-field
-        v-model="form.phoneNumber"
-        required
-        clearable
-        label="手机号码"
-        placeholder="请输入手机号码"
-        @click-right-icon="$toast('question')"/>
-    </van-cell-group>
-    
-    <van-button type="default" size="large" class="deletebtn" v-if="form.id" @click="DeleteUserLodger">删除</van-button>
-
-    <van-button type="danger" round class="saveBtn" @click='save'>保存</van-button>
-    
-    <van-button type="default" round class="closeEditor" v-if="editorType" @click='closeEditor'>返回</van-button>
-
+      <van-button type="danger" round class="saveBtn" @click='save'>保存</van-button>
+      
+      <van-button type="default" round class="closeEditor" v-if="editorType" @click='closeEditor'>返回</van-button>
+    </div>
   </div>
 </template>
 
@@ -123,7 +130,6 @@ export default {
      * 获取个人信息
      */
     GetUserLodger(){
-      console.log(this.$route.query.id)
       if(this.$route.query.id){
         const param = {
           id: this.$route.query.id
@@ -213,7 +219,10 @@ export default {
     },
     closeEditor(){
       this.$emit('closeEditor')
-    }
+    },
+    onClickLeft(){
+      this.$router.go(-1)
+    },
   }
 }
 </script>
@@ -233,7 +242,7 @@ export default {
 .checkInEditor{
   background: #F8F9FB;
   min-height: 100vh;
-  padding-top: 10px;
+  padding-top:10px;
 }
 .van-cell-group{
   margin-bottom: 10px;

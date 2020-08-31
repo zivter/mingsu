@@ -1,6 +1,6 @@
 <template>
   <div class="occupant">
-    <van-button type="default" size="large" icon="plus" @click="personPopupshow = true">入住信息</van-button>
+    <van-button type="default" size="large" icon="edit" @click="tooccupant">入住人管理</van-button>
 
     <van-checkbox-group v-model="result">
       <div class="overflow occupantCard" v-for="(item,index) in occupantList" :key="item.id" @click="cardClick(index)">
@@ -53,7 +53,6 @@ export default {
   created() {
   },
   mounted() {
-    console.log(this.userLodgerIdList)
     this.GetAllUserLodger()
   },
   methods:{
@@ -92,17 +91,20 @@ export default {
       this.$refs.checkboxes[item].toggle();
     },
     save(){
-      
       var list = []
       this.result.forEach(item => {
         list.push(this.occupantList[item])
       })
-      console.log(list)
       this.$emit('saveOccupant',list)
     },
     closeEditor(){
       this.personPopupshow = false
       this.GetAllUserLodger()
+    },
+    tooccupant(){
+      this.$router.push({
+        path:'./occupant',
+      })
     }
   }
 }
@@ -145,7 +147,7 @@ export default {
   width: 80%;
   display: block;
   position: fixed;
-  bottom: 30px;
+  bottom: 80px;
   left: 0;
   right: 0;
   margin: auto;

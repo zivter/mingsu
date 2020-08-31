@@ -7,16 +7,19 @@
         size="32px"
         class='backBtn'
         @click="$router.go(-1)"/>
-      <van-icon
+      <!-- <van-icon
         :name="likeHeart==false?'like-o':'like'"
         :color="likeHeart==false?'#fff':'red'"
         size="32px"
         class="heartBtn"
-        @click="likeHeartClick"/>
+        @click="likeHeartClick"/> -->
     </div>
     <van-swipe :autoplay="3000" indicator-color="white" class="dSwiper">
+      <van-swipe-item>
+        <img v-lazy="GLOBAL.imgSrc+detailData.cover" alt="">
+      </van-swipe-item>
       <van-swipe-item v-for="item in detailData.images" :key="item.id">
-        <img :src="GLOBAL.imgSrc+item.imageUrl" alt="">
+        <img v-lazy="GLOBAL.imgSrc+item.imageUrl" alt="">
       </van-swipe-item>
     </van-swipe>
     <div class="dBody">
@@ -30,7 +33,7 @@
         <van-col span="16"><svg-icon icon-class='#icon-Toilet'/>{{ detailData.bathroomCount }}间卫生间</van-col>
       </van-row>
       <!-- 框框 -->
-      <van-row type="flex" justify="space-between" class="infoBox">
+      <!-- <van-row type="flex" justify="space-between" class="infoBox">
         <van-col span='11'>
           <svg-icon icon-class='#icon-Bed' class="float-left"/>
           <div class="float-left">
@@ -45,7 +48,7 @@
             <p>1张沙发</p>
           </div>
         </van-col>
-      </van-row>
+      </van-row> -->
       <van-divider :style="{borderColor: '#dcdcdc'}"/>
       <!-- 入住时间 -->
       <van-row type="flex" justify="space-between" class="timeRange" @click="handleTimePickerClick()">  
@@ -73,10 +76,12 @@
         <div class="amap-wrapper">
           <el-amap
           class="amap-box"
-          :vid="'amap-vue'"
+          vid="amap-vue"
           :center="detailData.locationMap | mapFilter"
           :position="center"
-          :zoom="zoom"></el-amap>
+          :zoom="zoom">
+            <el-amap-marker v-for="marker in markers" :position="marker.position" :key="marker.positon" ></el-amap-marker>
+          </el-amap>
         </div>
       </div>
       <van-divider :style="{borderColor: '#dcdcdc'}"/>
@@ -89,12 +94,22 @@
         style="margin-top:10px;">
           <van-grid-item
             v-for="(item,index) in facilitiesList"
-            :key="item.iconName"
-            :text="item.label"
-            @click="handleServiceClick(index)">
+            :key="item.name"
+            v-show='index<7'
+            :text="item.name">
             <template slot="icon">
               <svg-icon
-              :icon-class='item.iconName'
+              :icon-class="'#icon-' + item.font_class"
+              font-size="22px"
+              style="margin-bottom:10px;"/>
+            </template>
+          </van-grid-item>
+          <van-grid-item
+            text="更多"
+            @click="handleServiceClick()">
+            <template slot="icon">
+              <svg-icon
+              icon-class='#icon-xinzeng'
               font-size="22px"
               style="margin-bottom:10px;"/>
             </template>
@@ -115,7 +130,7 @@
         cell-color='#000'/>
         <cell-components
         cell-name='退订规则'
-        cell-value='取消订单，收取定金的100%作为违约金支付给 房东（由房东制定）'
+        :cell-value='detailData.refundRule '
         cell-color='#DA4F53'/>
       </div>
       <van-divider :style="{borderColor: '#dcdcdc'}"/>
@@ -123,12 +138,12 @@
       <div class="notice2">
         <p class="contentTitle" style="margin-bottom:16px;">入住须知</p>
         <cell-components
-        cell-name='入住时间'
-        cell-value='14:00后入住，12:00前退房'
+        cell-name='入离时间'
+        :cell-value='rulishijian'
         cell-color='#000'/>
         <cell-components
         cell-name='接待时间'
-        cell-value='08:00-22:00'
+        :cell-value='wordTime'
         cell-color='#000'/>
         <cell-components
         cell-name='卫生打扫'
@@ -137,19 +152,12 @@
       </div>
       <!-- 提交订单兰 -->
       <van-submit-bar
-        :price="roomSelectPrice*100"
-        label=' '
+        :price='roomSelectPrice*100'
+        label=" "
         style="z-index:1000;box-shadow:0px 16px 10px 16px #ddd;"
-        suffix-label='/晚'
+        :suffix-label='"/晚 (原价¥"+detailData.linePrice+"/晚)"'
         button-text="立即预定"
         @submit="skipToOrder">
-        <div slot="default" class="defaultC">
-          <svg-icon icon-class='#icon-dianhua' class="defaultIcon" font-size="24px"/>
-          <span class="defaultSpan">客服热线</span>
-        </div>
-        <span slot="tip" v-if="btnError">
-          你的收货地址不支持同城送, <span>修改地址</span>
-        </span>
       </van-submit-bar>
     </div>
     <!-- 设施服务 -->
@@ -159,7 +167,7 @@
     close-icon-position="top-left"
     position="bottom"
     :style="{ height: '100%' }">
-      <service/>
+      <service :facilities-list='facilitiesList'/>
     </van-popup>
 
     <!-- 房源介绍 -->
@@ -169,7 +177,7 @@
     close-icon-position="top-left"
     position="bottom"
     :style="{ height: '100%' }">
-      <intro/>
+      <intro :intro-data='detailData.description'/>
     </van-popup>
 
     <!-- 时间 -->
@@ -179,7 +187,7 @@
     close-icon-position="top-left"
     position="bottom"
     :style="{ height: '100%' }">
-      <time-picker @saveTimeRange='saveTimeRange'/>
+      <time-picker @saveTimeRange='saveTimeRange' :room-id='this.$route.query.id'/>
     </van-popup>
 
 
@@ -195,9 +203,14 @@ import intro from './intro'
 import VueAMap from 'vue-amap'
 import Vue from 'vue'
 import moment from 'moment'
-import { GetDetail, GetIdleDatesByDateRange } from '@/api/roomsQuery'
+import nameJson from '../../icons/iconfont.json'
+import share from '@/utils/share';
+import { GetDetail, GetIdleDatesByDateRang, GetCommonSettings,GetIdleDatesByDateRange } from '@/api/roomsQuery'
 import { GetPrices } from '@/api/room'
+import tokenAuth from '@/utils/tokenAuth';
+import { Lazyload } from 'vant';
 
+Vue.use(Lazyload);
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: 'f0c98a84e1c9266ebb51ee5316ee74b5',
@@ -215,19 +228,11 @@ export default {
   data() {
     return {
       detailData:{},
-      facilitiesList:[
-        {label:'床',iconName:'#icon-Bed'},
-        {label:'热水',iconName:'#icon-HotWater'},
-        {label:'沙发',iconName:'#icon-sofa'},
-        {label:'电视',iconName:'#icon-TV'},
-        {label:'洗浴用品',iconName:'#icon-BathroomAmenities'},
-        {label:'无线网络',iconName:'#icon-Wifi'},
-        {label:'空调',iconName:'#icon-AirConditioner'},
-        {label:'更多',iconName:'#icon-xinzeng'},
-      ],
+      facilitiesList:[],
       likeHeart: false,
-      zoom: 12,
-      center: [121.555509, 29.869503],
+      zoom: 13,
+      center: [],
+      markers: [],
       address: '',
       btnError: false,
       servicePopupshow: false,
@@ -241,7 +246,9 @@ export default {
         total:''
       },
       timePopupshow:false,
-      roomSelectPrice:''
+      roomSelectPrice:'',
+      rulishijian:'',
+      wordTime:''
     }
   },
   computed: {},
@@ -265,10 +272,12 @@ export default {
     }
   },
   created() {
+    tokenAuth.getAuth(this.$route.query);
     this.GetDetail()
     this.timeRange = this.$route.query.timeRange
     this.timeFomate()
     this.GetPrices(1)
+    this.GetCommonSettings()
   },
  mounted() {
   },
@@ -280,6 +289,14 @@ export default {
       GetDetail(this.$route.query.id).then((result) => {
         if(result.success == true){
           this.detailData = result.result
+          this.getIconCnName(result.result.supporting.split(','),this.facilitiesList)
+          let o = {
+            position:[this.detailData.locationMap.split(',')[1],this.detailData.locationMap.split(',')[0]],
+            visible:true
+          }
+          this.markers.push(o)
+          const title = `浙拾光-酒店公寓（${result.result.bedroomCount}卧${result.result.bedCount}床${result.result.bathroomCount}卫适合${result.result.lodgerCount}人入住）`;
+          share.share(result.result.title.split('】')[0].concat('】'), this.GLOBAL.imgSrc+result.result.cover, title);
         }
       }).catch((err) => {
         this.$notify({ type: 'danger', message: err });
@@ -298,9 +315,7 @@ export default {
      * 打开设施服务
      */
     handleServiceClick(index){
-      if(index == 7){
-        this.servicePopupshow = true;
-      }
+      this.servicePopupshow = true;
     },
     // 打开房源介绍
     handleIntroClick(){
@@ -310,7 +325,6 @@ export default {
      * 跳转到订单页
      */
     skipToOrder(data){
-
       this.$router.push({
         path:'order',
         query:{
@@ -335,7 +349,6 @@ export default {
         to: moment().month(+6).format('YYYY-MM-DD'),
       }
       GetIdleDatesByDateRange(param).then((result) => {
-        
       }).catch((err) => {
         
       });
@@ -344,13 +357,21 @@ export default {
     GetPrices(type){
       const param = {
         RoomId: this.$route.query.id,
-        From: type == 1 ? this.timeRangeInfo.from : moment().format('YYYY-MM-DD'),
-        To: type == 1 ? this.timeRangeInfo.to : moment().month(+6).format('YYYY-MM-DD')
+        From: this.timeRangeInfo.from,
+        To: this.timeRangeInfo.to
       }
       GetPrices(param).then((result) => {
         if(result.success){
           if(type == 1){
             this.roomSelectPrice = this.get_object_first_attribute(result.result.prices)
+          }else if(type == 0){
+            // this.roomSelectPrice = result.result.prices[0]
+            // result.result.prices.each()
+            var pricedata = result.result.prices
+            for (var i in pricedata){
+              this.roomSelectPrice = pricedata[i]
+              break
+            }
           }
         }
       }).catch((err) => {
@@ -359,17 +380,16 @@ export default {
     },
     get_object_first_attribute(data){
       for (var item in data)
-      console.log(data[item])
         return data[item]
     },
     timeFomate(){
       if(this.timeRange){
         this.timeRangeInfo = {
-          from: moment(this.timeRange.split(',')[0]).format('MM月DD日'),
-          to: moment(this.timeRange.split(',')[1]).format('MM月DD日'),
+          from: moment(this.timeRange.split(',')[0]).format('MM-DD'),
+          to: moment(this.timeRange.split(',')[1]).format('MM-DD'),
           fromWeek:moment(this.timeRange.split(',')[0]).weekday(),
           toWeek:moment(this.timeRange.split(',')[1]).weekday(),
-          total:moment(this.timeRange.split(',')[1]).day()-moment(this.timeRange.split(',')[0]).day()
+          total:moment(this.timeRange.split(',')[1]).diff(moment(this.timeRange.split(',')[0]),'day')
         }
         this.GetPrices(0)
       }
@@ -379,7 +399,27 @@ export default {
       this.timeRange = val
       this.timeFomate()
       this.timePopupshow = false
-    }
+    },
+    //获取中文名
+    getIconCnName(data,name){
+      data.forEach(element => {
+        element=element.replace(/^\s+|\s+$/g,'');
+        for(var item of nameJson.glyphs){
+          if(element == item.font_class){
+            name.push(item)
+            break
+          }
+        }
+      });
+    },
+    GetCommonSettings(){
+      GetCommonSettings().then((result) => {
+        this.rulishijian = result.result.checkInTime+'后入住,'+result.result.checkOutTime+'前退房'
+        this.wordTime = result.result.workTimeFrom+' - '+result.result.workTimeTo
+      }).catch((err) => {
+        
+      });
+    },
   }
 }
 </script>
@@ -496,12 +536,13 @@ export default {
       overflow : hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
-      -webkit-line-clamp: 4;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       font-size: 13px;
       color: #000;
       line-height: 24px;
       margin-top: 10px;
+      word-break:break-all;
     }
     .detailHandleClick{
       color: #DA4F53;
@@ -513,7 +554,7 @@ export default {
   .amap-wrapper {
     margin: 20px 0;
     width: 100%;
-    height: 120px;
+    height: 220px;
   }
   .defaultC{
     margin-left: 16px;

@@ -1,5 +1,11 @@
 <template>
   <div class="collect">
+    <van-nav-bar
+      title="我的收藏"
+      left-text=""
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <van-row type="flex" justify="space-around" class="collectCard" v-for="item in Math.round(Math.random()*10)" :key="item">
       <van-col span="12" class="collectCardLeft">
         <p>厦门市的整套房子/公寓</p>
@@ -28,6 +34,9 @@ export default {
   },
   mounted() {},
   methods:{
+    onClickLeft(){
+      this.$router.go(-1)
+    },
   }
 }
 </script>
@@ -36,7 +45,6 @@ export default {
 .collect{
   background: #F8F9FB;
   min-height: 100vh;
-  padding: 10px 0;
 }
 .cardListImg{
   width: 125px;
@@ -47,6 +55,7 @@ export default {
   background: #fff;
   margin-bottom: 10px;
   height: 120px;
+  padding: 10px 0;
 }
 .collectCardLeft{
   padding: 20px 0 0 12px;
