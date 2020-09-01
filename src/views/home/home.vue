@@ -15,8 +15,6 @@
     </van-row>
 
     <div class="banner">
-      <!-- <P class="bannerP1">自营名宿</P> -->
-      <p class="bannerP2"><span class="blank1">优质名宿</span> <span class="blank1">星级保洁</span> <span class="blank1">管家服务</span></p>
     </div>
 
     <van-list
@@ -24,25 +22,19 @@
       :error.sync="error"
       error-text="请求失败，点击重新加载"
       finished-text="没有更多了">
-      <div
-      v-for="(item,index) in roomList"
-      :key='index'
-      class="homeCard"
-      @click="handleListClick(item,index)">
-        <van-swipe indicator-color="white" class="homeListImg">
-          <van-swipe-item>
-            <img v-lazy="GLOBAL.imgSrc+item.cover" alt="">
-          </van-swipe-item>
-          <van-swipe-item v-for="(imgItem,index) in item.images" :key="index">
-            <img v-lazy="GLOBAL.imgSrc+imgItem.imageUrl" alt="">
-          </van-swipe-item>
-        </van-swipe>
-        <div class="homeListInfo">
-          <p class="homeLable">{{ item.roomStyleName }}</p>
-          <p class="homeTitle">{{ item.title }}</p>
-          <p class="homePrice">￥{{ item.startPrice }} /晚 <span class='linePrice'>￥{{ item.linePrice }} /晚</span></p>
-        </div>
-      </div>
+      <van-row>
+        <van-col span="12"
+        v-for="(item,index) in roomList"
+        @click="handleListClick(item,index)"
+        class="homeCard"
+        :key='index'>
+          <img v-lazy="GLOBAL.imgSrc+item.images[0].imageUrl" alt=""  class="homeListImg">
+          <div class="homeListInfo">
+            <p class="homeTitle">{{ item.title }}</p>
+            <p class="homePrice">￥{{ item.startPrice }} /晚 </p>
+          </div>
+        </van-col>
+      </van-row>
     </van-list>
 
     <!-- 无线滚动 -->
@@ -221,24 +213,13 @@ export default {
   }
 }
 .banner{
-  background: url('../../assets/img/banner2.png') no-repeat center;
+  background: url('../../assets/img/banner.png') no-repeat center;
   width: 100%;
-  height: 260px;
+  height: 45vh;
   background-size: 100% 100%;
   color: #fff;
   line-height: 30px;
   letter-spacing: 3px;
-  .blank1{
-    margin-left: 5px;
-  }
-  .bannerP2{
-    padding-top: 224px;
-    margin-bottom: 4px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 600;
-    margin-left: 4rem;
-  }
 }
 .dropdownMenu{
   background: rgba($color: #000000, $alpha: 0.8);
@@ -250,45 +231,38 @@ export default {
 }
 .homeList{
   background: #f4f4f4;
+  padding: 0 0 0 3%;
 }
 .homeCard{
-  margin: 20px 16px;
-  border-radius: 8px;
   overflow: hidden;
   background: #fff;
   position: relative;
-  .booked{
-    background: url("../../assets/img/booked.png") no-repeat center;
-    background-position: 50% 30%;
-    background-color: rgba($color: #fff, $alpha: 0.5);
-    width:100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+  width: 47%;
+  margin: 3% 3% 0 0;
+  border-radius: 2%;
   .homeListImg{
-    width: 100%;
-    height: 230px;
+    max-width: 100%;
+    height: 180px;
     img{
       width:100%;
       height: 100%;
     }
   }
   .homeListInfo{
-    padding: 10px 20px;
+    padding: 0px 6px;
     font-weight: 700;
-    .homeLable{
-      color: #542813;
-      font-size: 14px;
-    }
     .homeTitle{
-      font-size: 16px;
+      font-size: 12px;
       border-bottom: 1px solid #eee;
-      line-height: 36px;
+      line-height: 24px;
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
+      overflow:hidden;
+      padding-bottom: 5px;
     }
     .homePrice{
-      font-size: 16px;
+      font-size: 15px;
       line-height: 36px;
     }
     .linePrice{
