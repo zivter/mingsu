@@ -1,22 +1,11 @@
 <template>
   <div class="home">
-    <!-- <van-dropdown-menu
-    :overlay='false'
-    class='dropdownMenu'>
-      <van-dropdown-item title="日期" ref="item" @open='timePickerShow = true'/>
-      <van-dropdown-item title="位置" ref="item" @open='positionPickerShow = true'/>
-      <van-dropdown-item title="筛选" ref="item" @open='selectorPickerShow = true'/>
-    </van-dropdown-menu> -->
-
     <van-row type="flex" justify="space-around" class="fixedSelect">
       <van-col span="8" @click="timePickerShow = true">{{ timeRange | timeRangeFilter }}<van-icon name="play"/></van-col>
       <van-col span="8" @click="positionPickerShow = true">位置<van-icon name="play"/></van-col>
       <van-col span="8" @click="selectorPickerShow = true">筛选<van-icon name="play"/></van-col>
     </van-row>
-
-    <div class="banner">
-    </div>
-
+    <div class="banner"></div>
     <van-list
       class="homeList"
       :error.sync="error"
@@ -31,7 +20,13 @@
           <img v-lazy="GLOBAL.imgSrc+item.images[0].imageUrl" alt=""  class="homeListImg">
           <div class="homeListInfo">
             <p class="homeTitle">{{ item.title }}</p>
-            <p class="homePrice">￥{{ item.startPrice }} /晚 </p>
+            <div class="homePrice overflow">
+              <p class="float-left">￥{{ item.startPrice }} /晚</p>
+              <div class="float-right">
+                <img src="@/assets/img/favourYes.png" alt="" class="favourIcon">
+                <p class="favourCount">520赞</p>
+              </div>
+            </div>
           </div>
         </van-col>
       </van-row>
@@ -248,6 +243,19 @@ export default {
       height: 100%;
     }
   }
+  .favourIcon{
+    width: 16px;
+    height: 16px;
+    display: block;
+    margin: 5px auto 0;
+  }
+  .favourCount{
+    padding: 0;
+    font-size: 10px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 20px;
+  }
   .homeListInfo{
     padding: 0px 6px;
     font-weight: 700;
@@ -264,6 +272,7 @@ export default {
     .homePrice{
       font-size: 15px;
       line-height: 36px;
+      color: #542713;
     }
     .linePrice{
       text-decoration:line-through;

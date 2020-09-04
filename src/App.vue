@@ -2,9 +2,19 @@
   <div>
     <router-view/>
     <van-tabbar v-model="active" route>
-      <van-tabbar-item replace to="/" name="home" icon="home-o">客房</van-tabbar-item>
+      <van-tabbar-item replace to="/" name="home" icon="home-o">
+      <span>客房</span>
+        <template #icon="props">
+          <img :src="props.active ? './assets/img/centerOn.png' : './assets/img/centerOff.png' " />
+        </template>
+      </van-tabbar-item>
       <!-- <van-tabbar-item replace to="/ticket" name="friends" icon="credit-pay">门票</van-tabbar-item> -->
-      <van-tabbar-item replace to="/center" name="setting" icon="user-o">个人中心</van-tabbar-item>
+      <van-tabbar-item replace to="/center" name="setting" icon="user-o">
+        <span>个人中心</span>
+        <template #icon="props">
+          <img :src="props.active ? '@/assets/img/centerOn.png' : '@/assets/img/centerOff.png' "/>
+        </template>
+      </van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
