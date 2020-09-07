@@ -13,27 +13,62 @@
       </div>
     </div>
     <div class="centerBtm">
-      <van-row type="flex" justify="space-around" class="centermenu">
+      <!-- <van-row type="flex" justify="space-around" class="centermenu">
         <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'pending'}})"><p>{{ statusCounts.pending }}</p><p>待支付订单</p></van-col>
         <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'paid'}})"><p>{{ statusCounts.success }}</p><p>已支付订单</p></van-col>
         <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'cancel'}})"><p>{{ statusCounts.fail }}</p><p>全部订单</p></van-col>
+      </van-row> -->
+      <van-row type="flex" justify="space-around" class="centermenu">
+        <van-col span="12" @click="$router.push({path:'/coupon',query:{type:'pending'}})" style="border-right:1px solid #aaa;">
+          <p>优惠券</p>
+        </van-col>
+        <van-col span="12" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
+          <p>钱包</p>
+        </van-col>
       </van-row>
+
+      <div class="centerOrder">
+        <p class="orderTitle">名宿订单</p>
+        <van-row type="flex" justify="space-around">
+          <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'pending'}})">
+            <i class="centerSpirt Spirt1"></i>
+            <p class="orderName">代付款</p>
+          </van-col>
+          <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
+            <i class="centerSpirt Spirt2"></i>
+            <p class="orderName">已支付</p>
+          </van-col>
+          <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
+            <i class="centerSpirt Spirt3"></i>
+            <p class="orderName">未成功</p>
+          </van-col>
+          <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
+            <i class="centerSpirt Spirt4"></i>
+            <p class="orderName">全部</p>
+          </van-col>
+        </van-row>
+      </div>
+      
       <div class="centerList">
-        <van-cell title="我的优惠券" icon="location-o" is-link
+        <van-cell title="租房订单" icon="location-o" is-link
         @click="$router.push({path:'/coupon'})" >
-          <i slot='icon' class="centerIcon centerIcon1"></i>
+          <i slot='icon' class="centerSpirt centerSpirt5"></i>
         </van-cell>
-        <!-- <van-cell title="我的收藏" icon="location-o" is-link
-        @click="$router.push({path:'/collect'})" >
-          <i slot='icon' class="centerIcon centerIcon2"></i>
-        </van-cell> -->
-        <van-cell title="入住人信息" icon="location-o" is-link
+        <van-cell title="消息中心" icon="location-o" is-link
         @click="$router.push({path:'/occupant'})" >
-          <i slot='icon' class="centerIcon centerIcon3"></i>
+          <i slot='icon' class="centerSpirt centerSpirt6"></i>
         </van-cell>
-        <van-cell title="个人资料" icon="location-o" is-link
+        <van-cell title="营销中心" icon="location-o" is-link
         @click="$router.push({path:'/profile'})" >
-          <i slot='icon' class="centerIcon centerIcon4"></i>
+          <i slot='icon' class="centerSpirt centerSpirt7"></i>
+        </van-cell>
+        <van-cell title="入住人信息" icon="location-o" is-link
+        @click="$router.push({path:'/profile'})" >
+          <i slot='icon' class="centerSpirt centerSpirt8"></i>
+        </van-cell>
+        <van-cell title="我的资料" icon="location-o" is-link
+        @click="$router.push({path:'/profile'})" >
+          <i slot='icon' class="centerSpirt centerSpirt9"></i>
         </van-cell>
       </div>
     </div>
@@ -115,11 +150,12 @@ export default {
 <style scoped lang='scss'>
 .center{
   height: 100vh;
-  background: #F8F9FB;
+  background: #F5F5F5;
 }
 .topBG{
-  background: linear-gradient(to bottom left, rgb(243, 53, 66), rgb(243, 203, 93));
-  height: 209px;
+  background: url('../../assets/img/centerBG.png') no-repeat center;
+  background-size: 100% 100%;
+  height: 174px;
   position: relative;
   .shareBtn{
     position: absolute;
@@ -129,7 +165,7 @@ export default {
     color: #fff;
   }
   .avator{
-    padding-top: 50px;
+    padding-top: 20px;
     .avatorImg{
       margin: 0 auto;
       display: block;
@@ -137,7 +173,7 @@ export default {
     .avatorP{
       text-align: center;
       color: #fff;
-      font-size: 15px;
+      font-size: 22px;
       line-height: 40px;
     }
   }
@@ -146,7 +182,7 @@ export default {
   .centermenu{
     background: #fff;
     position: relative;
-    top: -30px;
+    top: -40px;
     margin: 0 14px;
     padding: 12px 14px;
     border-radius: 6px;
@@ -154,49 +190,103 @@ export default {
       text-align: center;
     }
     p:nth-child(1){
-      color: #DA4F53;
-      font-size: 20px;
-    }
-    p:nth-child(2){
-      font-size: 13px;
+      font-size: 16px;
       line-height: 36px;
       font-weight: 700;
-      color: #444;
+      color: #666;
+    }
+  }
+  .centerOrder{
+    margin: -15px 14px 16px;
+    background: #fff;
+    margin-top: -18px;
+    border-radius: 6px;
+    .orderTitle{
+      font-weight: 800;
+      font-size: 12px;
+      font-size: 15px;
+      color: #000;
+      line-height: 40px;
+      margin-left: 24px;
+      margin-bottom: 10px;
+    }
+    .orderName{
+      font-size: 12px;
+      text-align: center;
+      line-height: 40px;
+      color: #000;
+    }
+    .centerSpirt{
+      display: block;
+      background: url('../../assets/img/centerSp.png') no-repeat center;
+      zoom: 0.25;
+      margin: 0 auto;
+    }
+    .Spirt1{
+      height: 88px;
+      width: 96px;
+      background-position: 0 0;
+    }
+    .Spirt2{
+      height: 96px;
+      width: 96px;
+      background-position: 0 -88px;
+    }
+    .Spirt3{
+      height: 96px;
+      width: 96px;
+      background-position: 0 -184px;
+    }
+    .Spirt4{
+      height: 96px;
+      width: 81px;
+      background-position: 0 -280px;
     }
   }
   .centerList{
-    padding: 16px 16px;
+    margin: 0 14px;
+    padding: 10px 12px;
     background: #fff;
     font-weight: 700;
-    margin-top: -18px;
+    border-radius: 6px;
     .van-cell{
       margin: 5px 0;
       color: #444;
       font-size: 13px;
     }
-    .van-cell:not(:last-child)::after{
-      border-bottom: 0;
+    .centerSpirt{
+      display: block;
+      background: url('../../assets/img/centerSp.png') no-repeat center;
+      zoom: 0.25;
+      margin: 0 auto;
     }
-    .centerIcon1{
-      background: url('../../assets/img/centerIcon1.png') no-repeat center;
+    .van-cell__title{
+      margin-left: 10px;
     }
-    .centerIcon2{
-      background: url('../../assets/img/centerIcon2.png') no-repeat center;
+    .centerSpirt5{
+      height: 76px;
+      width: 76px;
+      background-position: 0 -376px;
     }
-    .centerIcon3{
-      background: url('../../assets/img/centerIcon3.png') no-repeat center;
+    .centerSpirt6{
+      height: 72px;
+      width: 72px;
+      background-position: 0 -452px;
     }
-    .centerIcon4{
-      background: url('../../assets/img/profile.png') no-repeat center;
-      width:24px!important;
-      height:24px!important;
-      margin-right: 14px!important;
+    .centerSpirt7{
+      height: 72px;
+      width: 72px;
+      background-position: 0 -524px;
     }
-    .centerIcon{
-      width: 18px;
-      height: 18px;
-      background-size: 100%;
-      margin-right: 20px;
+    .centerSpirt8{
+      height: 64px;
+      width: 80px;
+      background-position: 0 -596px;
+    }
+    .centerSpirt9{
+      height: 72px;
+      width: 81px;
+      background-position: 0 -660px;
     }
   }
 

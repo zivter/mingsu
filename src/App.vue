@@ -1,18 +1,20 @@
 <template>
   <div>
     <router-view/>
-    <van-tabbar v-model="active" route>
+    <van-tabbar v-model="active" route active-color="#000" inactive-color="#000">
       <van-tabbar-item replace to="/" name="home" icon="home-o">
       <span>客房</span>
         <template #icon="props">
-          <img :src="props.active ? './assets/img/centerOn.png' : './assets/img/centerOff.png' " />
+          <!-- <img :src="props.active ? homeOn : homeOff "/> -->
+          <van-icon :name="props.active ? 'wap-home' : 'wap-home-o'" />
         </template>
       </van-tabbar-item>
       <!-- <van-tabbar-item replace to="/ticket" name="friends" icon="credit-pay">门票</van-tabbar-item> -->
       <van-tabbar-item replace to="/center" name="setting" icon="user-o">
         <span>个人中心</span>
         <template #icon="props">
-          <img :src="props.active ? '@/assets/img/centerOn.png' : '@/assets/img/centerOff.png' "/>
+          <!-- <img :src="props.active ? centerOn : centerOff "/> -->
+          <van-icon :name="props.active ? 'manager' : 'manager-o'" />
         </template>
       </van-tabbar-item>
     </van-tabbar>
@@ -21,11 +23,15 @@
 
 <script>
 import moment from 'moment';
+import centerOff from '@/assets/img/centerOff.png';
+import centerOn from '@/assets/img/centerOn.png';
 export default {
   name: 'app',
   components: {},
   data() {
     return {
+      centerOff,
+      centerOn,
       active: 'home'
     }
   },
