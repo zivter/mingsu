@@ -118,6 +118,6 @@ export default {
 }
 .orderMoney{
   color: #DA4F53;
-  margin-left: 6px;
+  margin-left: 5px;
 }
 </style>
