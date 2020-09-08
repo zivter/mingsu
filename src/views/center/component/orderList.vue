@@ -1,12 +1,13 @@
 <template>
   <div class="orderList">
-    <van-row type="flex" justify="space-around" class="orderCard" v-for="(item,index) in allOrderQuery" :key="index" @click="goDetail(item.orderNumber,item.roomId)">
+    <van-row type="flex" justify="space-around" class="orderCard"
+    v-for="(item,index) in allOrderQuery" :key="index" @click="goDetail(item.orderNumber,item.roomId)">
       <van-col span="12" class="orderCardLeft">
         <p class=‘ordername’>{{ item.roomTitle }}</p>
-        <p>{{ item.from | timeFilter }}-{{ item.to | timeFilter }}    {{ item.lodgerCount }}位</p>
-        <p>{{ item.status | statusFilter }}¥{{ item.payment }}</p>
+        <p>{{ item.from | timeFilter }}-{{ item.to | timeFilter }}<span style="margin-left:8px">{{ item.lodgerCount }}位</span></p>
+        <p>{{ item.status | statusFilter }}<span class='orderMoney'>¥{{ item.payment }}</span></p>
       </van-col>
-      <van-col span="8"><img class="cardListImg" :src="GLOBAL.imgSrc+item.roomCover" alt=""></van-col>
+      <van-col span="8"><img class="cardListImg" :src="GLOBAL.imgSrc+item.roomCover"></van-col>
     </van-row>
   </div>
 </template>
@@ -37,12 +38,15 @@ export default {
       const status = {
         Pending:'订单待支付',
         paid:'订单已完成',
-        cancel:'订单已取消'
+        Refund: '订单已退款',
+        Cancel:'订单已取消',
+        Closed: '订单已关闭',
+        Expired: '订单已失效'
       }
       return status[val]
     },
     timeFilter(val){
-      return moment(val).format('YYYY/MM/DD')
+      return moment(val).format('YYYY.MM.DD')
     }
   },
   created() {
@@ -58,7 +62,7 @@ export default {
         from:'',
         to:'',
         SkipCount:0,
-        MaxResultCount:20
+        MaxResultCount:50
       }
       GetAllOrderQuery(param).then((result) => {
         this.allOrderQuery = result.result.items
@@ -87,6 +91,7 @@ export default {
   width: 125px;
   height: 85px;
   margin-top: 16px;
+  border-radius: 6px;
 }
 .orderCard{
   background: #fff;
@@ -108,7 +113,11 @@ export default {
     text-overflow:ellipsis;
     display:-webkit-box; 
     -webkit-box-orient:vertical;
-    -webkit-line-clamp:2; 
+    -webkit-line-clamp:1; 
   }
+}
+.orderMoney{
+  color: #DA4F53;
+  margin-left: 6px;
 }
 </style>

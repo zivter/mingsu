@@ -1,75 +1,77 @@
 <template>
   <div class="center">
-    <div class="topBG">
-      <div class="avator" @click="gotoProfile()">
-        <van-image
-          round
-          fit='cover'
-          width="72px"
-          height="72px"
-          class="avatorImg"
-          :src="proFileData.headLogo"/>
-        <p class="avatorP">{{ nickName }}</p>
+    <div class="centerContent">
+      <div class="topBG">
+        <div class="avator" @click="gotoProfile()">
+          <van-image
+            round
+            fit='cover'
+            width="72px"
+            height="72px"
+            class="avatorImg"
+            :src="proFileData.headLogo"/>
+          <p class="avatorP">{{ nickName }}</p>
+        </div>
       </div>
-    </div>
-    <div class="centerBtm">
-      <!-- <van-row type="flex" justify="space-around" class="centermenu">
-        <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'pending'}})"><p>{{ statusCounts.pending }}</p><p>待支付订单</p></van-col>
-        <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'paid'}})"><p>{{ statusCounts.success }}</p><p>已支付订单</p></van-col>
-        <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'cancel'}})"><p>{{ statusCounts.fail }}</p><p>全部订单</p></van-col>
-      </van-row> -->
-      <van-row type="flex" justify="space-around" class="centermenu">
-        <van-col span="12" @click="$router.push({path:'/coupon',query:{type:'pending'}})" style="border-right:1px solid #aaa;">
-          <p>优惠券</p>
-        </van-col>
-        <van-col span="12" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
-          <p>钱包</p>
-        </van-col>
-      </van-row>
-
-      <div class="centerOrder">
-        <p class="orderTitle">名宿订单</p>
-        <van-row type="flex" justify="space-around">
-          <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'pending'}})">
-            <i class="centerSpirt Spirt1"></i>
-            <p class="orderName">代付款</p>
+      <div class="centerBtm">
+        <!-- <van-row type="flex" justify="space-around" class="centermenu">
+          <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'pending'}})"><p>{{ statusCounts.pending }}</p><p>待支付订单</p></van-col>
+          <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'paid'}})"><p>{{ statusCounts.success }}</p><p>已支付订单</p></van-col>
+          <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'cancel'}})"><p>{{ statusCounts.fail }}</p><p>全部订单</p></van-col>
+        </van-row> -->
+        <van-row type="flex" justify="space-around" class="centermenu">
+          <van-col span="12" @click="$router.push({path:'/coupon',query:{type:'pending'}})" style="border-right:1px solid #aaa;">
+            <p>优惠券</p>
           </van-col>
-          <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
-            <i class="centerSpirt Spirt2"></i>
-            <p class="orderName">已支付</p>
-          </van-col>
-          <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
-            <i class="centerSpirt Spirt3"></i>
-            <p class="orderName">未成功</p>
-          </van-col>
-          <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
-            <i class="centerSpirt Spirt4"></i>
-            <p class="orderName">全部</p>
+          <van-col span="12" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
+            <p>钱包</p>
           </van-col>
         </van-row>
-      </div>
-      
-      <div class="centerList">
-        <van-cell title="租房订单" icon="location-o" is-link
-        @click="$router.push({path:'/coupon'})" >
-          <i slot='icon' class="centerSpirt centerSpirt5"></i>
-        </van-cell>
-        <van-cell title="消息中心" icon="location-o" is-link
-        @click="$router.push({path:'/occupant'})" >
-          <i slot='icon' class="centerSpirt centerSpirt6"></i>
-        </van-cell>
-        <van-cell title="营销中心" icon="location-o" is-link
-        @click="$router.push({path:'/profile'})" >
-          <i slot='icon' class="centerSpirt centerSpirt7"></i>
-        </van-cell>
-        <van-cell title="入住人信息" icon="location-o" is-link
-        @click="$router.push({path:'/profile'})" >
-          <i slot='icon' class="centerSpirt centerSpirt8"></i>
-        </van-cell>
-        <van-cell title="我的资料" icon="location-o" is-link
-        @click="$router.push({path:'/profile'})" >
-          <i slot='icon' class="centerSpirt centerSpirt9"></i>
-        </van-cell>
+
+        <div class="centerOrder">
+          <p class="orderTitle">名宿订单</p>
+          <van-row type="flex" justify="space-around">
+            <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'pending'}})">
+              <i class="centerSpirt Spirt1"></i>
+              <p class="orderName">代付款</p>
+            </van-col>
+            <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
+              <i class="centerSpirt Spirt2"></i>
+              <p class="orderName">已支付</p>
+            </van-col>
+            <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
+              <i class="centerSpirt Spirt3"></i>
+              <p class="orderName">未成功</p>
+            </van-col>
+            <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'cancel'}})">
+              <i class="centerSpirt Spirt4"></i>
+              <p class="orderName">全部</p>
+            </van-col>
+          </van-row>
+        </div>
+        
+        <div class="centerList">
+          <van-cell title="租房订单" icon="location-o" is-link
+          @click="$router.push({path:'/coupon'})" >
+            <i slot='icon' class="centerSpirt centerSpirt5"></i>
+          </van-cell>
+          <van-cell title="消息中心" icon="location-o" is-link
+          @click="$router.push({path:'/occupant'})" >
+            <i slot='icon' class="centerSpirt centerSpirt6"></i>
+          </van-cell>
+          <van-cell title="营销中心" icon="location-o" is-link
+          @click="$router.push({path:'/profile'})" >
+            <i slot='icon' class="centerSpirt centerSpirt7"></i>
+          </van-cell>
+          <van-cell title="入住人信息" icon="location-o" is-link
+          @click="$router.push({path:'/profile'})" >
+            <i slot='icon' class="centerSpirt centerSpirt8"></i>
+          </van-cell>
+          <van-cell title="我的资料" icon="location-o" is-link
+          @click="$router.push({path:'/profile'})" >
+            <i slot='icon' class="centerSpirt centerSpirt9"></i>
+          </van-cell>
+        </div>
       </div>
     </div>
   </div>
@@ -149,8 +151,12 @@ export default {
 
 <style scoped lang='scss'>
 .center{
-  height: 100vh;
+  height: calc(100vh - 50px);
   background: #F5F5F5;
+}
+.centerContent{
+  background: #F5F5F5;
+  padding-bottom: 10px;
 }
 .topBG{
   background: url('../../assets/img/centerBG.png') no-repeat center;

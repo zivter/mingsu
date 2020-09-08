@@ -14,44 +14,30 @@
         class="heartBtn"
         @click="likeHeartClick"/> -->
     </div>
-    <van-swipe :autoplay="3000" indicator-color="white" class="dSwiper">
+    <van-swipe indicator-color="white" class="dSwiper" @change="onChange">
       <van-swipe-item>
         <img v-lazy="GLOBAL.imgSrc+detailData.cover" alt="">
       </van-swipe-item>
       <van-swipe-item v-for="item in detailData.images" :key="item.id">
         <img v-lazy="GLOBAL.imgSrc+item.imageUrl" alt="">
       </van-swipe-item>
+      <template #indicator>
+      <div class="custom-indicator" style="color:#fff;font-size:10px">
+        <van-icon name="photo-o" size="12" style="top:2px;right:2px"/>{{ current + 1 }}/{{detailData.images.length}}
+      </div>
+    </template>
     </van-swipe>
     <div class="dBody">
       <!-- 标题简介 -->
-      <p class="title1">{{ detailData.roomStyleName }}</p>
-      <p class="title2">{{ detailData.title }}</p>
-      <van-row gutter="20" class="info">
-        <van-col span="8"><svg-icon icon-class='#icon-ren'/>{{ detailData.lodgerCount }}位房客</van-col>
-        <van-col span="16"><svg-icon icon-class='#icon-men'/>{{ detailData.bedroomCount }}间卧室</van-col>
-        <van-col span="8"><svg-icon icon-class='#icon-Bed'/>{{ detailData.bedCount }}张床</van-col>
-        <van-col span="16"><svg-icon icon-class='#icon-Toilet'/>{{ detailData.bathroomCount }}间卫生间</van-col>
-      </van-row>
-      <!-- 框框 -->
-      <!-- <van-row type="flex" justify="space-between" class="infoBox">
-        <van-col span='11'>
-          <svg-icon icon-class='#icon-Bed' class="float-left"/>
-          <div class="float-left">
-            <p class="p1">卧室1</p>
-            <p>1张特大号床</p>
-          </div>
-        </van-col>
-        <van-col span='11'>
-          <svg-icon icon-class='#icon-sofa' class="float-left"/>
-          <div class="float-left">
-            <p class="p1">客厅/公共区域</p>
-            <p>1张沙发</p>
-          </div>
-        </van-col>
-      </van-row> -->
-      <van-divider :style="{borderColor: '#dcdcdc'}"/>
+      <p class="title1">{{ detailData.title }}</p>
+      <p class="title2">近地铁 | 拎包入住 | 近地铁 | 朝南</p>
+      <div class="infoBox">
+        <span class="infoBoxPrice">{{ roomSelectPrice }}<span style="font-size:14px;">/晚</span></span>
+        <span>一室一厅</span>
+        <span>37m²</span>
+      </div>
       <!-- 入住时间 -->
-      <van-row type="flex" justify="space-between" class="timeRange" @click="handleTimePickerClick()">  
+      <!-- <van-row type="flex" justify="space-between" class="timeRange" @click="handleTimePickerClick()">  
         <van-col span="8">
           <p class="timeRangeT">入住</p>
           <p class="timeRangeTime">{{ timeRangeInfo.from }}<span>{{ timeRangeInfo.fromWeek | weekFilter }}</span></p>
@@ -61,33 +47,22 @@
           <p class="timeRangeT timeRangeTitle2">退房</p>
           <p class="timeRangeTime timeRangeTime2"><span>{{ timeRangeInfo.toWeek | weekFilter }}</span> {{ timeRangeInfo.to }}</p>
         </van-col>
-      </van-row>
-      <van-divider :style="{borderColor: '#dcdcdc'}"/>
-      <!-- 详情 -->
-      <div class="detail">
-        <p class="contentTitle">详情</p>
-        <p class="detailContent">{{ detailData.description }}</p>
-        <p href="" class="detailHandleClick" @click="handleIntroClick">查看详情>></p>
+      </van-row> -->
+      <!-- 房源信息 -->
+      <div class="roomInfo">
+        <p class="contentTitle">房源信息</p>
+        <van-row class="roomInfoRow">
+          <van-col span="12">支付<span class="roomInfoSpan">押一付一</span></van-col>
+          <van-col span="12">租约<span class="roomInfoSpan">3月起租</span></van-col>
+          <van-col span="12">朝向<span class="roomInfoSpan">南</span></van-col>
+          <van-col span="12">装修<span class="roomInfoSpan">精装</span></van-col>
+          <van-col span="12">楼层<span class="roomInfoSpan">12层</span></van-col>
+          <van-col span="12">商圈<span class="roomInfoSpan">外滩</span></van-col>
+        </van-row>
       </div>
-      <van-divider :style="{borderColor: '#dcdcdc'}"/>
-      <!-- 位置 -->
-      <div class="map">
-        <p class="contentTitle">位置</p>
-        <div class="amap-wrapper">
-          <el-amap
-          class="amap-box"
-          vid="amap-vue"
-          :center="detailData.locationMap | mapFilter"
-          :position="center"
-          :zoom="zoom">
-            <el-amap-marker v-for="marker in markers" :position="marker.position" :key="marker.positon" ></el-amap-marker>
-          </el-amap>
-        </div>
-      </div>
-      <van-divider :style="{borderColor: '#dcdcdc'}"/>
       <!-- 设施 -->
       <div class="facilities">
-        <p class="contentTitle">设施</p>
+        <p class="contentTitle">服务设施</p>
         <van-grid
         :gutter="10"
         :border='false'
@@ -105,7 +80,6 @@
             </template>
           </van-grid-item>
           <van-grid-item
-            text="更多"
             @click="handleServiceClick()">
             <template slot="icon">
               <svg-icon
@@ -113,12 +87,35 @@
               font-size="22px"
               style="margin-bottom:10px;"/>
             </template>
+            <template slot="text">
+              <span style="color:red;font-size:12px;">更多</span>
+            </template>
           </van-grid-item>
         </van-grid>
       </div>
-      <van-divider :style="{borderColor: '#dcdcdc'}"/>
+      <!-- 详情 -->
+      <div class="detail">
+        <p class="contentTitle">详情介绍</p>
+        <p class="detailContent">{{ detailData.description }}</p>
+        <p href="" class="detailHandleClick" @click="handleIntroClick">查看详情>></p>
+      </div>
+      <!-- 位置 -->
+      <div class="map">
+        <p class="contentTitle">房屋位置</p>
+        <div class="amap-wrapper">
+          <el-amap
+          class="amap-box"
+          vid="amap-vue"
+          :center="detailData.locationMap | mapFilter"
+          :position="center"
+          :zoom="zoom">
+            <el-amap-marker v-for="marker in markers" :position="marker.position" :key="marker.positon" ></el-amap-marker>
+          </el-amap>
+        </div>
+      </div>
+
       <!-- 预定须知 -->
-      <div class="notice">
+      <!-- <div class="notice">
         <p class="contentTitle" style="margin-bottom:16px;">预定须知</p>
         <cell-components
         cell-name='在线押金'
@@ -132,10 +129,10 @@
         cell-name='退订规则'
         :cell-value='detailData.refundRule '
         cell-color='#DA4F53'/>
-      </div>
-      <van-divider :style="{borderColor: '#dcdcdc'}"/>
+      </div> -->
+      
       <!-- 入住须知 -->
-      <div class="notice2">
+      <!-- <div class="notice2">
         <p class="contentTitle" style="margin-bottom:16px;">入住须知</p>
         <cell-components
         cell-name='入离时间'
@@ -149,7 +146,7 @@
         cell-name='卫生打扫'
         cell-value='1客1扫'
         cell-color='#000'/>
-      </div>
+      </div> -->
       <!-- 提交订单兰 -->
       <van-submit-bar
         :price='roomSelectPrice*100'
@@ -248,7 +245,8 @@ export default {
       timePopupshow:false,
       roomSelectPrice:'',
       rulishijian:'',
-      wordTime:''
+      wordTime:'',
+      current: 0,
     }
   },
   computed: {},
@@ -420,6 +418,9 @@ export default {
         
       });
     },
+    onChange(index) {
+      this.current = index;
+    },
   }
 }
 </script>
@@ -455,51 +456,43 @@ export default {
   padding: 10px 20px;
   color: #333;
   .title1{
-    color: #542813;
-    font-size: 13px;
-    line-height: 23.38px;
+    font-size: 16px;
+    line-height: 24px;
     font-weight: 700;
   }
   .title2{
-    font-size: 24px;
-    line-height: 36px;
-    font-family: 'PingFangSC-Regular';
+    font-size: 14px;
     font-weight: 700;
-    color: #333;
-  }
-  .info{
-    margin: 10px 0;
-    .van-col{
-      margin-bottom:5px;
-    }
-    font-size: 13px;
-    .icon{
-      font-size: 18px;
-      margin-right: 5px;
-    }
+    margin-top: 10px;
   }
   .infoBox{
-    font-size: 13px;
-    padding-bottom: 10px;
-    p{
-      line-height: 22px;
+    font-weight: 700;
+    margin-top: 12px;
+    span{
+      margin-right: 10px;
     }
-    .p1{
-      font-weight: 700;
+    .infoBoxPrice{
+      color: #DA4F53;
+      font-size: 22px;
     }
-    .icon{
-      font-size: 30px;
-      margin: 6px 14px 0 4px;
+  }
+  .roomInfo{
+    font-weight: 700;
+    font-size: 14px;
+    .roomInfoRow{
+      color: #aaa;
     }
     .van-col{
-      border: 1px solid #d5d5d5;
-      padding: 8px 8px;
-      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .roomInfoSpan{
+      margin-left: 10px;
+      color: #000;
     }
   }
   .contentTitle{
-    margin-top: 16px;
-    font-size: 15px;
+    margin: 16px 0 16px 0;
+    font-size: 18px;
     color: #000;
     font-weight: 700;
   }
@@ -571,5 +564,12 @@ export default {
     padding-bottom: 80px;
   }
 }
-
+.custom-indicator {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  padding: 2px 5px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.1);
+}
 </style>
