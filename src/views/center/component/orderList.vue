@@ -3,9 +3,9 @@
     <van-row type="flex" justify="space-around" class="orderCard"
     v-for="(item,index) in allOrderQuery" :key="index" @click="goDetail(item.orderNumber,item.roomId)">
       <van-col span="12" class="orderCardLeft">
-        <p class=‘ordername’>{{ item.roomTitle }}</p>
-        <p>{{ item.from | timeFilter }}-{{ item.to | timeFilter }}<span style="margin-left:8px">{{ item.lodgerCount }}位</span></p>
-        <p>{{ item.status | statusFilter }}<span class='orderMoney'>¥{{ item.payment }}</span></p>
+        <p class='ordername'>{{ item.roomTitle }}</p>
+        <p class="orderTime">{{ item.from | timeFilter }}-{{ item.to | timeFilter }}<span style="margin-left:8px">{{ item.lodgerCount }}位</span></p>
+        <p class="orderStatus">{{ item.status | statusFilter }}<span class='orderMoney'>¥{{ item.payment }}</span></p>
       </van-col>
       <van-col span="8"><img class="cardListImg" :src="GLOBAL.imgSrc+item.roomCover"></van-col>
     </van-row>
@@ -37,7 +37,7 @@ export default {
     statusFilter(val){
       const status = {
         Pending:'订单待支付',
-        paid:'订单已完成',
+        Paid:'订单已支付',
         Refund: '订单已退款',
         Cancel:'订单已取消',
         Closed: '订单已关闭',
@@ -84,13 +84,11 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-.ordername{
 
-}
 .cardListImg{
   width: 125px;
   height: 85px;
-  margin-top: 16px;
+  margin-top: 17px;
   border-radius: 6px;
 }
 .orderCard{
@@ -103,21 +101,23 @@ export default {
   p{
     font-size: 12px;
     color: #333;
-    line-height: 24px;
+    line-height: 20px;
   }
-  p:nth-child(1){
+  .ordername{
     font-size: 15px;
     color: #000;
-    font-weight: 700;
     overflow:hidden; 
     text-overflow:ellipsis;
     display:-webkit-box; 
     -webkit-box-orient:vertical;
     -webkit-line-clamp:1; 
   }
+  .orderTime{
+    margin-top: 8px;
+  }
 }
 .orderMoney{
   color: #DA4F53;
-  margin-left: 5px;
+  margin-left: 6px;
 }
 </style>

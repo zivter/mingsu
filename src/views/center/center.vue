@@ -31,15 +31,15 @@
         <div class="centerOrder">
           <p class="orderTitle">名宿订单</p>
           <van-row type="flex" justify="space-around">
-            <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'pending'}})">
+            <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'pending'}})">
               <i class="centerSpirt Spirt1"></i>
               <p class="orderName">代付款</p>
             </van-col>
-            <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
+            <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'paid'}})">
               <i class="centerSpirt Spirt2"></i>
               <p class="orderName">已支付</p>
             </van-col>
-            <van-col span="6" @click="$router.push({path:'/coupon',query:{type:'paid'}})">
+            <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'expired'}})">
               <i class="centerSpirt Spirt3"></i>
               <p class="orderName">未成功</p>
             </van-col>
