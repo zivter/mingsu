@@ -103,6 +103,14 @@ const mingsuRouter = new Router({
       },
     },
     {
+      path: "/withdrawHistory",
+      name: "withdrawHistory",
+      component: () => import("@/views/center/withdrawHistory"),
+      meta: {
+        title: "提现",
+      },
+    },
+    {
       path: "/collect",
       name: "collect",
       component: () => import("@/views/center/collect"),

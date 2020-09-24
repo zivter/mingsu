@@ -1,8 +1,7 @@
 <template>
-  <div class="purseList">
-    <div class="purseCard" v-for="item in purseList" :key="item.id">
+  <div class="withdrawList">
+    <div class="purseCard" v-for="item in withdrawList" :key="item.id">
       <div class="purseT overflow">
-        <img :src="item.img" alt class="purse-img" />
         <div class="purseL float-left">
           <p class="title">{{ item.title }}</p>
           <p>创建时间：{{ item.startTime | timeFilter }}</p>
@@ -27,7 +26,7 @@
 // import { GetMyPurse } from '@/api/purse';  //还木有接口
 import moment from "moment";
 export default {
-  name: "",
+  name: "withdrawHistoryList",
   props: {
     purseType: {
       type: Boolean,
@@ -37,7 +36,7 @@ export default {
   components: {},
   data() {
     return {
-      purseList: [
+      withdrawList: [
         {
           id: 1,
           title:
@@ -120,7 +119,7 @@ export default {
         MaxResultCount: 20,
       };
       // GetMyPurse(param).then((result) => {
-      //   this.purseList = result.result.items
+      //   this.withdrawList = result.result.items
       // }).catch((err) => {
 
       // });
@@ -130,7 +129,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.purseList {
+.withdrawList {
   margin-top: 10px;
 }
 .purseCard {
@@ -146,7 +145,7 @@ export default {
 }
 .purseL {
   color: #333;
-  width: calc(100% - 95px);
+  width: 100%;
   p:nth-child(1) {
     font-size: 16px;
     line-height: 20px;
