@@ -1,23 +1,25 @@
 <template>
   <div class="withdrawList">
-    <div class="purseCard" v-for="item in withdrawList" :key="item.id">
-      <div class="purseT overflow">
-        <div class="purseL float-left">
-          <p class="title">{{ item.title }}</p>
-          <p>创建时间：{{ item.startTime | timeFilter }}</p>
-          <p>订单号：{{ item.orderId }}</p>
-          <p>
-            实付金额：{{ item.amount }}
-            <span class="float-right">
-              预估收益：
-              <span class="text-red">¥{{ item.futureIncome }}</span>
-            </span>
-          </p>
+    <div v-if="withdrawList.length">
+      <div class="purseCard"  v-for="item in withdrawList" :key="item.id">
+        <div class="purseT overflow" @click="viewDetail(item)">
+          <div class="purseL float-left">
+            <p class="title">提现成功</p>
+            <p>创建时间：{{ item.startTime | timeFilter }}</p>
+          </div>
+          <div class="purseR float-left">
+            ¥<span>{{item.amount}}</span>
+          </div>
+        </div>
+        <div class="purseBtm">
+          <p>{{ item.description }}</p>
         </div>
       </div>
-      <div class="purseBtm">
-        <p>{{ item.description }}</p>
-      </div>
+
+    </div>
+    <div v-else class="empty-in-your-area">
+      <img src="../../../assets/img/emptybag.png" width="145px" alt="">
+      <p>暂无数据，赶紧去下单赚佣金吧</p>
     </div>
   </div>
 </template>
@@ -41,17 +43,18 @@ export default {
           id: 1,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
+          status:'fail',
           img: "http://placehold.it/80x80",
         },
         {
           id: 2,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -61,7 +64,7 @@ export default {
           id: 3,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -71,7 +74,7 @@ export default {
           id: 4,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -81,7 +84,7 @@ export default {
           id: 5,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -91,7 +94,7 @@ export default {
           id: 6,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -124,6 +127,9 @@ export default {
 
       // });
     },
+    viewDetail(){
+
+    }
   },
 };
 </script>
@@ -156,6 +162,9 @@ export default {
     line-height: 24px;
   }
 }
+.purseR{
+  line-height: 40px;
+}
 .purseT {
   display: flex;
   justify-content: flex-start;
@@ -183,5 +192,14 @@ export default {
 }
 /deep/ .van-divider {
   margin: 10px 0;
+}
+.empty-in-your-area{
+  text-align: center;
+  img{
+    margin:100px auto 0;
+  }
+  p{
+    margin-top:50px;
+  }
 }
 </style>

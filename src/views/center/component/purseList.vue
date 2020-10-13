@@ -42,7 +42,7 @@ export default {
           id: 1,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -52,7 +52,7 @@ export default {
           id: 2,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -62,7 +62,7 @@ export default {
           id: 3,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -72,7 +72,7 @@ export default {
           id: 4,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -82,7 +82,7 @@ export default {
           id: 5,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,
@@ -92,7 +92,7 @@ export default {
           id: 6,
           title:
             "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10：30：21",
+          startTime: "2020-03-20 10:30:21",
           orderId: "132132321",
           amount: 56.36,
           futureIncome: 63.33,

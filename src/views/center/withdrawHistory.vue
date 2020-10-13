@@ -1,6 +1,6 @@
 <template>
   <div class="withdraw">
-    <van-nav-bar title="提现" left-text left-arrow @click-left="onClickLeft" />
+    <van-nav-bar title="提现明细" left-text left-arrow @click-left="onClickLeft" />
     <div class="container">
       <withdrawHistoryList></withdrawHistoryList>
     </div>
