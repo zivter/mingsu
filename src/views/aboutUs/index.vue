@@ -19,6 +19,7 @@ import introduce from './component/introduce';
 import joinUs from './component/joinUs';
 import contact from './component/contact';
 import share from '@/utils/share';
+import { getArticle } from '@/api/aboutus';
 
 export default {
   name: 'aboutUs',
@@ -36,10 +37,23 @@ export default {
   },
   created(){
     share.share(this.$route.meta.title);
+    this.getArticle(1)
+    this.getArticle(2)
+    this.getArticle(3)
   },
   filters:{
   },
   methods:{
+    getArticle(type) {
+      const param = {
+        type: type
+      }
+      getArticle(param).then((result) => {
+        
+      }).catch((err) => {
+        
+      });
+    }
   }
 }
 </script>

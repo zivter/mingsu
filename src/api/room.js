@@ -2,6 +2,12 @@ import request from '@/utils/request'
 const BASE_ROOM_API_PATH = '/api/services/app/Room'
 const headers = window.localStorage.getItem('accessToken') ? { Authorization: 'Bearer ' + window.localStorage.getItem('accessToken') } : {}
 
+const UserToken = window.localStorage.getItem('accessToken') ? window.localStorage.getItem('accessToken') : ''
+const headearss = {
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    'UserToken': UserToken
+}
+
 /**
  * 所有居家设施
  */
@@ -70,6 +76,30 @@ export function GetPrices(data) {
         url: BASE_ROOM_API_PATH + '/GetPrices',
         headers: headers,
         method: 'get',
+        params: data
+    })
+}
+
+/**
+ * 20.房源列表
+ */
+export function roomList(data) {
+    return request({
+        url: '/room/h5/list',
+        headers: headearss,
+        method: 'post',
+        params: data
+    })
+}
+
+/**
+ * 21.查询房源信息
+ */
+export function roomInfo(data) {
+    return request({
+        url: '/room/h5/info',
+        headers: headearss,
+        method: 'post',
         params: data
     })
 }

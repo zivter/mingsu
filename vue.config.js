@@ -28,9 +28,23 @@ module.exports = {
         // host: "172.22.18.56",
         port: 8089,
         proxy: {
-            '/api': {
+            [process.env.VUE_APP_BASE_API + '/api']: {
                 target: 'https://www.shigvg77.cn/',
+                changeOrigin: true,
+                pathRewrite: {
+                    ['^' + process.env.VUE_APP_BASE_API]: ''
+                }
             },
+            [process.env.VUE_APP_BASE_API]: {
+                // target: 'https://www.shigvg77.cn/',
+                target: 'http://47.110.245.184:8080/',
+                changeOrigin: true,
+                pathRewrite: {
+                    ['^' + process.env.VUE_APP_BASE_API]: ''
+                }
+            },
+            
+            
         }, // string | Object
         // before: app => {}
     }, // 第三方插件配置

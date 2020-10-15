@@ -2,6 +2,12 @@ import request from '@/utils/request'
 const BASE_ORDER_API_PATH = '/api/services/app/Order'
 const headers = window.localStorage.getItem('accessToken') ? { Authorization: 'Bearer ' + window.localStorage.getItem('accessToken') } : {}
 
+const UserToken = window.localStorage.getItem('accessToken') ? window.localStorage.getItem('accessToken') : ''
+const headearss = {
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    'UserToken': UserToken
+}
+
 /**
  * 管理后台,订单详情
  */
@@ -71,5 +77,41 @@ export function orderCancel(data) {
         headers: headers,
         method: 'post',
         data
+    })
+}
+
+/**
+ * 22.新增会员订单
+ */
+export function addOrder(data) {
+    return request({
+        url: '/order/h5/add',
+        headers: headearss,
+        method: 'post',
+        params: data
+    })
+}
+
+/**
+ * 23.取消会员订单
+ */
+export function editOrder(data) {
+    return request({
+        url: '/order/h5/edit',
+        headers: headearss,
+        method: 'post',
+        params: data
+    })
+}
+
+/**
+ * 24.查询订单信息
+ */
+export function orderInfo(data) {
+    return request({
+        url: '/order/h5/info',
+        headers: headearss,
+        method: 'post',
+        params: data
     })
 }

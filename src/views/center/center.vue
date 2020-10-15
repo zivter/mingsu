@@ -37,19 +37,27 @@
           <p class="orderTitle">名宿订单</p>
           <van-row type="flex" justify="space-around">
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'pending'}})">
-              <i class="centerSpirt Spirt1"></i>
+              <svg class="icon orderIcon" aria-hidden="true">
+                <use xlink:href="#icon-zu2491"></use>
+              </svg>
               <p class="orderName">代付款</p>
             </van-col>
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'paid'}})">
-              <i class="centerSpirt Spirt2"></i>
+              <svg class="icon orderIcon" aria-hidden="true">
+                <use xlink:href="#icon-zujian9111"></use>
+              </svg>
               <p class="orderName">已支付</p>
             </van-col>
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'expired'}})">
-              <i class="centerSpirt Spirt3"></i>
+              <svg class="icon orderIcon" aria-hidden="true">
+                <use xlink:href="#icon-zu2501"></use>
+              </svg>
               <p class="orderName">未成功</p>
             </van-col>
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'cancel'}})">
-              <i class="centerSpirt Spirt4"></i>
+              <svg class="icon orderIcon" aria-hidden="true">
+                <use xlink:href="#icon-zu432"></use>
+              </svg>
               <p class="orderName">全部</p>
             </van-col>
           </van-row>
@@ -57,7 +65,9 @@
 
         <div class="centerList">
           <van-cell title="租房订单" icon="location-o" is-link @click="$router.push({path:'/coupon'})">
-            <i slot="icon" class="centerSpirt centerSpirt5"></i>
+            <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
+              <use xlink:href="#icon-renew"></use>
+            </svg>
           </van-cell>
           <van-cell
             title="消息中心"
@@ -65,10 +75,14 @@
             is-link
             @click="$router.push({path:'/occupant'})"
           >
-            <i slot="icon" class="centerSpirt centerSpirt6"></i>
+            <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
+              <use xlink:href="#icon-xiaoxi3"></use>
+            </svg>
           </van-cell>
           <van-cell title="营销中心" icon="location-o" is-link @click="$router.push({path:'/profile'})">
-            <i slot="icon" class="centerSpirt centerSpirt7"></i>
+            <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
+              <use xlink:href="#icon-yingxiaozhongxin1"></use>
+            </svg>
           </van-cell>
           <van-cell
             title="入住人信息"
@@ -76,10 +90,14 @@
             is-link
             @click="$router.push({path:'/profile'})"
           >
-            <i slot="icon" class="centerSpirt centerSpirt8"></i>
+            <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
+              <use xlink:href="#icon-zu2601"></use>
+            </svg>
           </van-cell>
           <van-cell title="我的资料" icon="location-o" is-link @click="$router.push({path:'/profile'})">
-            <i slot="icon" class="centerSpirt centerSpirt9"></i>
+            <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
+              <use xlink:href="#icon-gerenxinxi"></use>
+            </svg>
           </van-cell>
         </div>
       </div>
@@ -309,5 +327,14 @@ export default {
       background-position: 0 -660px;
     }
   }
+}
+.orderIcon{
+  margin: 0 auto;
+  display: block;
+  font-size: 24px;
+}
+.orderIcon2{
+  font-size: 18px;
+  margin-top: 2px;
 }
 </style>
