@@ -30,7 +30,7 @@ export default {
 
 <style scoped lang='scss'>
 .introduce{
-    padding: 20px 20px;
+    padding: 20px 20px 40px;
     background: #f8f8f8;
     min-height: 100vh;
     .p1{
