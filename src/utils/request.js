@@ -10,7 +10,8 @@ Vue.use(Notify);
 axios.defaults.timeout = 10000
     // create an axios instance
 const service = axios.create({
-    baseURL: 'https://www.shigvg77.cn/', // api 的 base_url
+    // baseURL: 'https://www.shigvg77.cn/', // api 的 base_url
+    baseURL: process.env.VUE_APP_BASE_API,
     timeout: 10000, // request timeout （10s)
     // withCredentials: true,
     debug: false
