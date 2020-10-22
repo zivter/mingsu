@@ -187,6 +187,14 @@ const mingsuRouter = new Router({
         title: "支付成功",
       },
     },
+    {
+      path: "/feedback",
+      name: "Feedback",
+      component: () => import("@/views/center/feedback"),
+      meta: {
+        title: "问题与建议",
+      },
+    },
     // {
     //     path: '/cleaning',
     //     redirect: './cleaning/index',

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Vant from 'vant';
+import { Notify } from 'vant';
 import 'vant/lib/index.css';
 import router from './router'
 import 'vant/lib/icon/local.css';
@@ -12,6 +13,7 @@ import store from './store'
 import global_ from './components/global'
 import InfiniteLoading from 'vue-infinite-loading';
 
+Vue.use(Notify);
 Vue.use(Vant);
 Vue.use(VueRouter)
 Vue.use(InfiniteLoading, {

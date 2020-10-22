@@ -5,7 +5,7 @@
     <van-field :border='false' label="姓名" class="formContent" placeholder="请输入您的真实姓名" v-model="form.clientName" />
     <van-field :border='false' label="电话" class="formContent" placeholder="请输入您的联系电话" v-model="form.phone" />
     <van-field :border='false' label="住址" class="formContent" placeholder="请输入您的住址信息" v-model="form.clientAddress" />
-    <van-button type="danger" round class="saveBtn" @click="addCollaborate">警告按钮</van-button>
+    <van-button type="danger" round class="saveBtn" @click="addCollaborate">提交</van-button>
   </div>
 </template>
 
@@ -17,10 +17,6 @@ export default {
   },
   data() {
     return {
-      servicePhone: '',
-      p:{
-        phone: 18668804008
-      },
       form: {
         clientName: '',
         phone: '',
@@ -34,9 +30,11 @@ export default {
   },
   methods:{
     addCollaborate(){
-      addCollaborate().then((result) => {
+      addCollaborate(this.form).then((result) => {
+        this.$notify({ type: 'success', message: '提交成功' });
+        console.log(result)
       }).catch((err) => {
-        Notify({ type: 'danger', message: err });
+        this.$notify({ type: 'danger', message: err });
       });
     }
   }

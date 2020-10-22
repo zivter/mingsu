@@ -88,13 +88,18 @@
             title="入住人信息"
             icon="location-o"
             is-link
-            @click="$router.push({path:'/profile'})"
+            @click="$router.push({path:'/occupant'})"
           >
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
               <use xlink:href="#icon-zu2601"></use>
             </svg>
           </van-cell>
           <van-cell title="我的资料" icon="location-o" is-link @click="$router.push({path:'/profile'})">
+            <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
+              <use xlink:href="#icon-gerenxinxi"></use>
+            </svg>
+          </van-cell>
+          <van-cell title="意见反馈" icon="location-o" is-link @click="$router.push({path:'/feedback'})">
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
               <use xlink:href="#icon-gerenxinxi"></use>
             </svg>
