@@ -3,18 +3,16 @@
     <router-view/>
     <van-tabbar v-model="active" route active-color="#000" inactive-color="#000">
       <van-tabbar-item replace to="/" name="home" icon="home-o">
-      <span>客房</span>
         <template #icon="props">
           <!-- <img :src="props.active ? homeOn : homeOff "/> -->
-          <van-icon :name="props.active ? 'wap-home' : 'wap-home-o'" />
+          <van-icon :name="props.active ? 'wap-home' : 'wap-home-o'" size="26" style="margin-top:6px"/>
         </template>
       </van-tabbar-item>
       <!-- <van-tabbar-item replace to="/ticket" name="friends" icon="credit-pay">门票</van-tabbar-item> -->
       <van-tabbar-item replace to="/center" name="setting" icon="user-o">
-        <span>个人中心</span>
         <template #icon="props">
           <!-- <img :src="props.active ? centerOn : centerOff "/> -->
-          <van-icon :name="props.active ? 'manager' : 'manager-o'" />
+          <van-icon :name="props.active ? 'manager' : 'manager-o'" size="26" style="margin-top:6px"/>
         </template>
       </van-tabbar-item>
     </van-tabbar>

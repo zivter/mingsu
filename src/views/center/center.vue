@@ -37,27 +37,39 @@
           <p class="orderTitle">名宿订单</p>
           <van-row type="flex" justify="space-around">
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'pending'}})">
-              <svg class="icon orderIcon" aria-hidden="true">
-                <use xlink:href="#icon-zu2491"></use>
-              </svg>
+              <div style="position:relative">
+                <svg class="icon orderIcon" aria-hidden="true">
+                  <use xlink:href="#icon-zu2491"></use>
+                </svg>
+                <span class="badges" v-if="statusCounts.pending!=0">{{ statusCounts.pending >= 99 ? '99+' : statusCounts.pending }}</span>
+              </div>
               <p class="orderName">代付款</p>
             </van-col>
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'paid'}})">
-              <svg class="icon orderIcon" aria-hidden="true">
-                <use xlink:href="#icon-zujian9111"></use>
-              </svg>
+              <div style="position:relative">
+                <svg class="icon orderIcon" aria-hidden="true">
+                  <use xlink:href="#icon-zujian9111"></use>
+                </svg>
+                <span class="badges" v-if="statusCounts.success!=0">{{ statusCounts.success >= 99 ? '99+' : statusCounts.success }}</span>
+              </div>
               <p class="orderName">已支付</p>
             </van-col>
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'expired'}})">
-              <svg class="icon orderIcon" aria-hidden="true">
-                <use xlink:href="#icon-zu2501"></use>
-              </svg>
+              <div style="position:relative">
+                <svg class="icon orderIcon" aria-hidden="true">
+                  <use xlink:href="#icon-zu2501"></use>
+                </svg>
+                <span class="badges" v-if="statusCounts.fail!=0">{{ statusCounts.fail >= 99 ? '99+' : statusCounts.fail }}</span>
+              </div>
               <p class="orderName">未成功</p>
             </van-col>
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'cancel'}})">
-              <svg class="icon orderIcon" aria-hidden="true">
-                <use xlink:href="#icon-zu432"></use>
-              </svg>
+              <div style="position:relative">
+                <svg class="icon orderIcon" aria-hidden="true">
+                  <use xlink:href="#icon-zu432"></use>
+                </svg>
+                <span class="badges" v-if="statusCounts.total!=0">{{ statusCounts.total >= 99 ? '99+' : statusCounts.total }}</span>
+              </div>
               <p class="orderName">全部</p>
             </van-col>
           </van-row>
@@ -341,5 +353,25 @@ export default {
 .orderIcon2{
   font-size: 18px;
   margin-top: 2px;
+}
+.badges{
+  position: absolute;
+  right: 20px;
+  top: -10px;
+  background: red;
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 700;
+  padding: 0 5px;
+  line-height: 18px;
+  height: 18px;
+  font-size: 12px;
+  text-align: center;
+  box-sizing: border-box;
+  font-family: -apple-system-font, Helvetica Neue, Arial, sans-serif;
+  background-color: #ee0a24;
+  border: 1px solid #fff;
+  border-radius: 16px;
+
 }
 </style>
