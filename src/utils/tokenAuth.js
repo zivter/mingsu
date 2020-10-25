@@ -1,4 +1,5 @@
 import { WechatH5Auth, ExternalAuthenticate, GetShareParams } from '@/api/tokenAuth'
+import { GetWechatProfile } from "@/api/account";
 import Vue from 'vue'
 import store from '../store'
 import Cookies from 'js-cookie'
@@ -23,8 +24,19 @@ let tokenAuth = {
             location.reload()
         }).catch((err) => {});
     },
+    /**
+     * 获取个人信息
+     */
+    GetWechatProfile() {
+        GetWechatProfile().then((result) => {
+            store.dispatch('tokenAuth/setTokenId', result.result.userId)
+        })
+        .catch((err) => {
+        });
+    },
     getAuth(query, urlDirect) {
         const that = this;
+        tokenAuth.GetWechatProfile()
         if (query.ctag) {
             Cookies.set('ctag', query.ctag, { expires: 1 })
         }

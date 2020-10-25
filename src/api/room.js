@@ -2,10 +2,10 @@ import request from '@/utils/request'
 const BASE_ROOM_API_PATH = '/api/services/app/Room'
 const headers = window.localStorage.getItem('accessToken') ? { Authorization: 'Bearer ' + window.localStorage.getItem('accessToken') } : {}
 
-const UserToken = window.localStorage.getItem('accessToken') ? window.localStorage.getItem('accessToken') : ''
+const tokenId = window.localStorage.getItem('tokenId') ? window.localStorage.getItem('tokenId') : ''
 const headearss = {
-    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    'UserToken': UserToken
+    'Content-Type': 'application/x-www-from-urlencoded',
+    'UserToken': tokenId
 }
 
 /**

@@ -195,6 +195,22 @@ const mingsuRouter = new Router({
         title: "问题与建议",
       },
     },
+    {
+      path: "/messageCenter",
+      name: "MessageCenter",
+      component: () => import("@/views/messageCenter/index"),
+      meta: {
+        title: "消息中心",
+      },
+    },
+    {
+      path: "/activityCenter",
+      name: "ActivityCenter",
+      component: () => import("@/views/activityCenter/index"),
+      meta: {
+        title: "营销中心",
+      },
+    },
     // {
     //     path: '/cleaning',
     //     redirect: './cleaning/index',

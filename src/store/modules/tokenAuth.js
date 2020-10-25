@@ -1,6 +1,7 @@
 //state
 const state = {
     token: null,
+    tokenId: null,
 }
 
 //getters
@@ -48,12 +49,20 @@ const actions = {
         window.localStorage.setItem('recordTime', token.recordTime)
             // window.localStorage.setItem('accessToken', JSON.stringify(token));
     },
+    setTokenId(context, token) {
+        context.commit('setTokenId', token)
+        window.localStorage.setItem('tokenId', token);
+            // window.localStorage.setItem('accessToken', JSON.stringify(token));
+    },
 }
 
 //mutations
 const mutations = {
     setToken(state, token) {
         state.token = token
+    },
+    setTokenId(state, tokenId) {
+        state.tokenId = tokenId
     },
 }
 

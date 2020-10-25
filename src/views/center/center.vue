@@ -85,13 +85,13 @@
             title="消息中心"
             icon="location-o"
             is-link
-            @click="$router.push({path:'/occupant'})"
+            @click="$router.push({path:'/messageCenter'})"
           >
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
               <use xlink:href="#icon-xiaoxi3"></use>
             </svg>
           </van-cell>
-          <van-cell title="营销中心" icon="location-o" is-link @click="$router.push({path:'/profile'})">
+          <van-cell title="营销中心" icon="location-o" is-link @click="$router.push({path:'/activityCenter'})">
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
               <use xlink:href="#icon-yingxiaozhongxin1"></use>
             </svg>
@@ -137,7 +137,12 @@ export default {
   data() {
     return {
       proFileData: {},
-      statusCounts: {},
+      statusCounts: {
+        pending: 0,
+        success: 0,
+        fail: 0,
+        total: 0
+      },
       nickName: "",
     };
   },

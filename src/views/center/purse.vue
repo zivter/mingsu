@@ -37,6 +37,7 @@
 
 <script>
 import purseList from "./component/purseList";
+import { welfareList, welfareInfo, accountInfo, accountUnified } from "@/api/center";
 export default {
   name: "Purse",
   props: {},
@@ -47,12 +48,20 @@ export default {
   computed: {},
   watch: {},
   filters: {},
-  created() {},
+  created() {
+    this.accountUnified()
+  },
   mounted() {},
   methods: {
     onClickLeft() {
       this.$router.go(-1);
     },
+    accountUnified() {
+      accountUnified().then((result) => {
+
+      }).err((err) => {
+      })
+    }
   },
 };
 </script>

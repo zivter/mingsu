@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-const UserToken = window.localStorage.getItem('accessToken') ? window.localStorage.getItem('accessToken') : ''
+const UserToken = window.localStorage.getItem('tokenId') ? window.localStorage.getItem('tokenId') : ''
 
 /**
  * 1.文章获取
@@ -23,7 +23,7 @@ export function addCollaborate(data) {
     return request({
         url: '/collaborate/h5/add',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            'Content-Type': 'application/x-www-from-urlencoded',
             'UserToken': UserToken
         },
         method: 'post',

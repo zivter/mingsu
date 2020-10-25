@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 const UserToken = window.localStorage.getItem('accessToken') ? window.localStorage.getItem('accessToken') : ''
+const tokenId = window.localStorage.getItem('tokenId') ? window.localStorage.getItem('tokenId') : ''
 const headears = {
-    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    'UserToken': UserToken
+    'Content-Type': 'application/x-www-from-urlencoded',
+    'UserToken': tokenId
 }
 /**
  * 3.反馈信息新增
