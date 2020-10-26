@@ -1,7 +1,7 @@
 <template>
   <div class="activityCenter">
     <van-nav-bar
-      title="活动中心"
+      title="我的报名"
       left-text=""
       left-arrow
       @click-left="$router.go(-1)"
@@ -11,13 +11,14 @@
       error-text="请求失败，点击重新加载"
       finished-text="没有更多了">
         <div
-        v-for="(item,index) in welfareLists"
-        @click="handleListClick(item,index)"
+        v-for="(item,index) in enrollLists"
         class="activeCard"
         :key='index'>
-          <p class="activeTime">{{ item.signTime | timeFilter }}</p>
           <img :src="GLOBAL.imgSrc2+item.cover" alt="" class="activeImg">
-          <p class="activeTitle">{{ item.title }}</p>
+					<div style="overflow:hidden;">
+						<span class="activeTime float-left">{{ item.signTime | timeFilter }}</span>
+						<span class="activeTitle float-right" @click="showInfo(item)">报名人信息 ></span>
+					</div>
         </div>
     </van-list>
     <!-- 无线滚动 -->
@@ -26,26 +27,38 @@
       <div slot="no-results" style='color:#666;font-size:13px;margin-top:10px;'>暂无信息...</div>
     </infinite-loading>
 
-    <p class="myJoin" @click="goIntoMyJoin">我的报名</p>
+		<van-overlay :show="show" @click="show = false">
+			<div class="wrapper">
+				<van-cell-group class="showContent">
+					<van-field v-model="nowInfo.enrollName" readonly label="姓名" style="font-size:13px;"/>
+					<van-field v-model="nowInfo.phone" readonly label="电话" style="font-size:13px;"/>
+					<van-field v-model="nowInfo.enrollAddress" readonly label="住址" style="font-size:13px;"/>
+					<van-field v-model="nowInfo.idCard" readonly label="身份证号码" style="font-size:13px;"/>
+				</van-cell-group>
+			</div>
+		</van-overlay>
+
   </div>
 </template>
 
 <script>
-import { welfareList } from "@/api/center";
+import { enrollList } from "@/api/pokect";
 import Vue from 'vue'
 import moment from 'moment';
 
 export default {
-  name: 'ActivityCenter',
+  name: 'MyJoin',
   props: {
   },
   data() {
     return {
-      welfareLists: [],
+      enrollLists: [],
       form: {
 				page: 1,
 				limit: 20
-			}
+			},
+			nowInfo: {},
+			show: false
     }
   },
   created(){
@@ -56,17 +69,17 @@ export default {
     }
   },
   methods:{
-    getwelfareList() {
-      welfareList(this.form).then((result) => {
-        this.welfareLists = result.result
+    getenrollList() {
+      enrollList(this.form).then((result) => {
+        this.enrollLists = result.result
       }).catch((err) => {
         this.$notify({ type: "danger", message: err });
       })
     },
     /**无线滚动 */
     infiniteHandler($state) {
-      welfareList(this.form).then((result) => {
-        this.welfareLists.push(...result.data.records)
+      enrollList(this.form).then((result) => {
+        this.enrollLists.push(...result.data.records)
         if (result.data.records.length>0) {
           this.form.page += 1;
           $state.loaded();
@@ -76,19 +89,10 @@ export default {
       }).catch((err) => {
       })
     },
-    handleListClick(item, index) {
-      this.$router.push({
-        path: 'activeDetail',
-        query:{
-          id: item.id,
-        }
-      })
-    },
-    goIntoMyJoin() {
-      this.$router.push({
-        path: 'myJoin',
-      })
-    }
+		showInfo(item) {
+			this.nowInfo = item
+			this.show = true
+		}
   }
 }
 </script>
@@ -112,33 +116,30 @@ export default {
     }
   }
   .activeTime{
-    padding-left: 10px;
     font-size: 12px;
-    border-bottom: 1px solid #eee;
-    line-height: 24px;
+    line-height: 30px;
+		margin-left: 10px;
   }
   .activeTitle{
     font-size: 12px;
-    border-bottom: 1px solid #eee;
-    line-height: 24px;
-    display:-webkit-box;
-    -webkit-box-orient:vertical;
-    -webkit-line-clamp:2;
-    overflow:hidden;
-    padding: 5px 10px;
+    line-height: 30px;
+		margin-right: 10px;
   }
 }
-.myJoin{
-  position: fixed;
-  right: 10px;
-  bottom: 60px;
-  width: 30px;
-  line-height: 16px;
-  background: #DA4F53;
-  color: #fff;
-  border-radius: 50%;
-  font-size: 12px;
-  padding: 5px 6px 6px;
-  text-align: center;
+.wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+.showContent{
+	border-radius: 6px;
+	overflow: hidden;
+	padding: 16px 6px;
+	width: 68%;
+	font-size: 13px;
+}
+.block {
+	background-color: #fff;
 }
 </style>

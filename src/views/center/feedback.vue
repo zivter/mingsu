@@ -1,6 +1,6 @@
 <template>
   <div class="feedback">
-      <van-nav-bar
+    <van-nav-bar
       title="问题与建议"
       left-text=""
       left-arrow

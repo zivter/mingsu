@@ -204,13 +204,46 @@ const mingsuRouter = new Router({
       },
     },
     {
+      path: "/messageDetail",
+      name: "MessageDetail",
+      component: () => import("@/views/messageCenter/messageDetail"),
+      meta: {
+        title: "消息详情",
+      },
+    },
+    {
       path: "/activityCenter",
       name: "ActivityCenter",
       component: () => import("@/views/activityCenter/index"),
       meta: {
-        title: "营销中心",
+        title: "活动中心",
       },
     },
+    {
+      path: "/activeDetail",
+      name: "ActiveDetail",
+      component: () => import("@/views/activityCenter/activeDetail"),
+      meta: {
+        title: "活动详情",
+      },
+    },
+    {
+      path: "/activeJoin",
+      name: "ActiveJoin",
+      component: () => import("@/views/activityCenter/activeJoin"),
+      meta: {
+        title: "活动详情",
+      },
+    },
+    {
+      path: "/myJoin",
+      name: "MyJoin",
+      component: () => import("@/views/activityCenter/myJoin"),
+      meta: {
+        title: "我的报名",
+      },
+    },
+
     // {
     //     path: '/cleaning',
     //     redirect: './cleaning/index',

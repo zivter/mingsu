@@ -96,6 +96,11 @@
               <use xlink:href="#icon-yingxiaozhongxin1"></use>
             </svg>
           </van-cell>
+          <van-cell title="活动中心" icon="location-o" is-link @click="$router.push({path:'/activityCenter'})">
+            <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
+              <use xlink:href="#icon-yingxiaozhongxin1"></use>
+            </svg>
+          </van-cell>
           <van-cell
             title="入住人信息"
             icon="location-o"
