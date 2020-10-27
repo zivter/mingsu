@@ -1,25 +1,25 @@
 <template>
   <div class="withdraw">
-    <van-nav-bar title="提现" left-text left-arrow @click-left="onClickLeft" />
+    <van-nav-bar title="提现" left-text left-arrow @click-left="$router.go(-1)" />
     <div class="container">
       <div class="topBG">
         <van-field
-          :value="params.zfb"
+          :value="account.accountNumber"
           label="到账支付宝"
           placeholder="请输入支付宝账号"
           :border="false"
           bind:change="onChange"
         />
         <van-field
-          :value="params.zfb"
+          :value="account.zfb"
           label="真实姓名"
           placeholder="请输入真实姓名"
           :border="false"
           bind:change="onChange"
         />
         <van-field
-          :value="params.zfb"
-          placeholder="请输入提现金额"
+          :value="account.zfb"
+          placeholder="请输入提现金额1"
           :border="false"
           bind:change="onChange"
           input-class="zfb-input"
@@ -35,14 +35,14 @@
           </template>
         </van-field>
         <van-field
-          :value="params.phone"
+          :value="account.phone"
           label="手机号"
           placeholder="请输入手机号码"
           :border="false"
           bind:change="onChange"
         />
-        <van-field
-          :value="params.code"
+        <!-- <van-field
+          :value="account.code"
           label="验证码"
           placeholder="请输入验证码"
           :border="false"
@@ -59,7 +59,7 @@
           <van-button slot="button" size="small" type="primary" plain v-else
             >发送验证码</van-button
           >
-        </van-field>
+        </van-field> -->
       </div>
       <div>
         <van-button
@@ -74,6 +74,9 @@
 </template>
 
 <script>
+import { accountInfo, accountEdit } from "@/api/center";
+import { addExtract } from "@/api/pokect";
+
 export default {
   name: "withdraw",
   props: {},
@@ -81,20 +84,24 @@ export default {
   data() {
     return {
       isTesting: false,
-      params: {
-        zfb: "",
-      },
+      account: {}
     };
   },
   computed: {},
   watch: {},
   filters: {},
-  created() {},
+  created() {
+    this.accountInfo()
+  },
   mounted() {},
   methods: {
-    onClickLeft() {
-      this.$router.go(-1);
-    },
+    accountInfo() {
+      accountInfo().then((result) => {
+        this.account = result.data
+      }).catch((err) => {
+        this.$notify({ type: 'danger', message: err });
+      });
+    }
   },
 };
 </script>

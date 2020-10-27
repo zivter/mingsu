@@ -70,7 +70,7 @@ export default {
       accountInfo().then((result) => {
         
       }).catch((err) => {
-        
+        this.$notify({ type: 'danger', message: err });
       });
     }
   },
@@ -86,8 +86,8 @@ $blackFontColor: #000;
 $bgColor: #f7f7f7;
 $subBgColor: #fff;
 .Purse {
-  background: #f8f9fb;
-  min-height: 100vh;
+  background: #F8F9FB;
+  height: 100vh;
 }
 .orderNav {
   /deep/ .van-tabs__line {

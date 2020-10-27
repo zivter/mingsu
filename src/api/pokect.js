@@ -88,3 +88,15 @@ export function delEnroll(data) {
         params: data
     })
 }
+
+/**
+ * 32.会员收益列表
+ */
+export function billProfit(data) {
+    return request({
+        url: '/bill/h5/profit',
+        headers: headears,
+        method: 'post',
+        params: data
+    })
+}
