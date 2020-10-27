@@ -4,12 +4,12 @@
     <div class="container">
       <div class="topBG">
         <div class="money-box">
-          <p class="money">12334.00</p>
+          <p class="money">{{ unified.allProfit }}</p>
           <p class="money-text">佣金总收益(元)</p>
         </div>
         <div class="bg-up-card">
           <span class="card-title">可提现金额（元）</span>
-          <span class="card-number">12334.00</span>
+          <span class="card-number">{{ unified.balance }}</span>
           <van-button
             plain
             type="primary"
@@ -21,11 +21,11 @@
       <ul class="btn-list">
         <li>
           <p>待结算佣金</p>
-          <p class="btn-number">12334.00</p>
+          <p class="btn-number">{{ unified.unsettled }}</p>
         </li>
         <li>
           <p>已提现金额</p>
-          <p class="btn-number">0.00</p>
+          <p class="btn-number">{{ unified.extract }}</p>
         </li>
       </ul>
       <ul class="detail-list">
@@ -37,19 +37,23 @@
 
 <script>
 import purseList from "./component/purseList";
-import { welfareList, welfareInfo, accountInfo, accountUnified } from "@/api/center";
+import { accountUnified, accountInfo } from "@/api/center";
+
 export default {
   name: "Purse",
   props: {},
   components: { purseList },
   data() {
-    return {};
+    return {
+      unified: {}
+    };
   },
   computed: {},
   watch: {},
   filters: {},
   created() {
     this.accountUnified()
+    this.accountInfo()
   },
   mounted() {},
   methods: {
@@ -57,10 +61,17 @@ export default {
       this.$router.go(-1);
     },
     accountUnified() {
-      accountUnified().then((result) => {
-
-      }).err((err) => {
+      accountUnified({}).then((result) => {
+        this.unified = result.data
+      }).catch((err) => {
       })
+    },
+    accountInfo() {
+      accountInfo().then((result) => {
+        
+      }).catch((err) => {
+        
+      });
     }
   },
 };

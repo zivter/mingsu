@@ -1,30 +1,41 @@
 <template>
   <div class="purseList">
-    <div class="purseCard" v-for="item in purseList" :key="item.id">
-      <div class="purseT overflow">
-        <img :src="item.img" alt class="purse-img" />
-        <div class="purseL float-left">
-          <p class="title">{{ item.title }}</p>
-          <p>创建时间：{{ item.startTime | timeFilter }}</p>
-          <p>订单号：{{ item.orderId }}</p>
-          <p>
-            实付金额：{{ item.amount }}
-            <span class="float-right">
-              预估收益：
-              <span class="text-red">¥{{ item.futureIncome }}</span>
-            </span>
-          </p>
+    <van-tabs v-model="active">
+      <van-tab title="订单">
+        <div class="purseCard" v-for="item in purseList" :key="item.id">
+          <div class="purseT overflow">
+            <img :src="item.img" alt class="purse-img" />
+            <div class="purseL float-left">
+              <p class="title">{{ item.title }}</p>
+              <p>创建时间：{{ item.startTime | timeFilter }}</p>
+              <p>订单号：{{ item.orderId }}</p>
+              <p>
+                实付金额：{{ item.amount }}
+                <span class="float-right">
+                  预估收益：
+                  <span class="text-red">¥{{ item.futureIncome }}</span>
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="purseBtm">
+            <p>{{ item.description }}</p>
+          </div>
         </div>
-      </div>
-      <div class="purseBtm">
-        <p>{{ item.description }}</p>
-      </div>
-    </div>
+      </van-tab>
+      <van-tab title="充值"></van-tab>
+      <van-tab title="提现">
+      </van-tab>
+      <van-tab title="分佣"></van-tab>
+    </van-tabs>
+
+    
   </div>
 </template>
 
 <script>
 // import { GetMyPurse } from '@/api/purse';  //还木有接口
+import { flowList } from "@/api/pokect";
 import moment from "moment";
 export default {
   name: "",
