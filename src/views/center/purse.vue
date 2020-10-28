@@ -37,7 +37,7 @@
 
 <script>
 import purseList from "./component/purseList";
-import { accountUnified, accountInfo } from "@/api/center";
+import { accountUnified } from "@/api/center";
 
 export default {
   name: "Purse",
@@ -53,7 +53,6 @@ export default {
   filters: {},
   created() {
     this.accountUnified()
-    this.accountInfo()
   },
   mounted() {},
   methods: {
@@ -64,15 +63,9 @@ export default {
       accountUnified({}).then((result) => {
         this.unified = result.data
       }).catch((err) => {
+        this.$notify({ type: 'warning', message: err })
       })
     },
-    accountInfo() {
-      accountInfo().then((result) => {
-        
-      }).catch((err) => {
-        
-      });
-    }
   },
 };
 </script>

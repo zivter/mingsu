@@ -4,21 +4,21 @@
     <div class="container">
       <div class="topBG">
         <van-field
-          :value="params.zfb"
+          :value="account.accountNumber"
           label="到账支付宝"
           placeholder="请输入支付宝账号"
           :border="false"
           bind:change="onChange"
         />
         <van-field
-          :value="params.zfb"
+          :value="account.realName"
           label="真实姓名"
           placeholder="请输入真实姓名"
           :border="false"
           bind:change="onChange"
         />
         <van-field
-          :value="params.zfb"
+          :value="extract.amount"
           placeholder="请输入提现金额"
           :border="false"
           bind:change="onChange"
@@ -35,14 +35,14 @@
           </template>
         </van-field>
         <van-field
-          :value="params.phone"
+          :value="account.phone"
           label="手机号"
           placeholder="请输入手机号码"
           :border="false"
           bind:change="onChange"
         />
-        <van-field
-          :value="params.code"
+        <!-- <van-field
+          :value="account.code"
           label="验证码"
           placeholder="请输入验证码"
           :border="false"
@@ -59,7 +59,7 @@
           <van-button slot="button" size="small" type="primary" plain v-else
             >发送验证码</van-button
           >
-        </van-field>
+        </van-field> -->
       </div>
       <div>
         <van-button
@@ -74,16 +74,21 @@
 </template>
 
 <script>
+import { accountInfo, accountEdit } from "@/api/center";
 export default {
   name: "withdraw",
   props: {},
   components: {},
   data() {
     return {
+      account: {},
       isTesting: false,
       params: {
         zfb: "",
       },
+      extract: {
+        amount: ''
+      }
     };
   },
   computed: {},
@@ -95,6 +100,13 @@ export default {
     onClickLeft() {
       this.$router.go(-1);
     },
+    accountInfo() {
+      accountInfo().then((result) => {
+        this.account = result.data
+      }).catch((err) => {
+        this.$notify({ type: 'warning', message: err })
+      });
+    }
   },
 };
 </script>
