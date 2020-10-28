@@ -103,11 +103,19 @@ const mingsuRouter = new Router({
       },
     },
     {
+      path: "/withdrawSuccess",
+      name: "WithdrawSuccess",
+      component: () => import("@/views/center/withdrawSuccess"),
+      meta: {
+        title: "提现成功",
+      },
+    },
+    {
       path: "/withdrawHistory",
       name: "withdrawHistory",
       component: () => import("@/views/center/withdrawHistory"),
       meta: {
-        title: "提现",
+        title: "提现明细",
       },
     },
     {
@@ -193,6 +201,14 @@ const mingsuRouter = new Router({
       component: () => import("@/views/center/feedback"),
       meta: {
         title: "问题与建议",
+      },
+    },
+    {
+      path: "/marketing",
+      name: "Marketing",
+      component: () => import("@/views/center/marketing"),
+      meta: {
+        title: "营销中心",
       },
     },
     {

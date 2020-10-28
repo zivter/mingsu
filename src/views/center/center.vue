@@ -91,9 +91,9 @@
               <use xlink:href="#icon-xiaoxi3"></use>
             </svg>
           </van-cell>
-          <van-cell title="营销中心" icon="location-o" is-link @click="$router.push({path:'/activityCenter'})">
+          <van-cell title="营销中心" icon="location-o" is-link @click="$router.push({path:'/marketing'})">
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
-              <use xlink:href="#icon-yingxiaozhongxin1"></use>
+              <use xlink:href="#icon-tuiguangzhuanqian"></use>
             </svg>
           </van-cell>
           <van-cell title="活动中心" icon="location-o" is-link @click="$router.push({path:'/activityCenter'})">
@@ -118,7 +118,7 @@
           </van-cell>
           <van-cell title="意见反馈" icon="location-o" is-link @click="$router.push({path:'/feedback'})">
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
-              <use xlink:href="#icon-gerenxinxi"></use>
+              <use xlink:href="#icon-yijianfankui"></use>
             </svg>
           </van-cell>
         </div>

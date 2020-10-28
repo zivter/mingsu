@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1119363",
+      "name": "意见反馈",
+      "font_class": "yijianfankui",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "688078",
+      "name": "活动 旗帜 标记",
+      "font_class": "huodongqizhibiaoji",
+      "unicode": "e778",
+      "unicode_decimal": 59256
+    },
+    {
+      "icon_id": "9851613",
+      "name": "推广赚钱",
+      "font_class": "tuiguangzhuanqian",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
       "icon_id": "17690027",
       "name": "组 432",
       "font_class": "zu432",

@@ -1,31 +1,35 @@
 <template>
   <div class="withdrawList">
     <div v-if="withdrawList.length">
-      <div class="purseCard"  v-for="item in withdrawList" :key="item.id">
+      <div class="purseCard"  v-for="(item,index) in withdrawList" :key="index">
         <div class="purseT overflow" @click="viewDetail(item)">
           <div class="purseL float-left">
-            <p class="title">提现成功</p>
-            <p>创建时间：{{ item.startTime | timeFilter }}</p>
+            <p class="title">{{ item.extractState | extractStateFilter }}</p>
+            <p>创建时间：{{ item.createTime | timeFilter }}</p>
           </div>
           <div class="purseR float-left">
             ¥<span>{{item.amount}}</span>
           </div>
         </div>
         <div class="purseBtm">
-          <p>{{ item.description }}</p>
+          <p>{{ item.remark }}</p>
         </div>
       </div>
+    </div>
 
-    </div>
-    <div v-else class="empty-in-your-area">
-      <img src="../../../assets/img/emptybag.png" width="145px" alt="">
-      <p>暂无数据，赶紧去下单赚佣金吧</p>
-    </div>
+    <!-- 无线滚动 -->
+    <infinite-loading @infinite="infiniteHandler">
+      <div slot="no-more" style='color:#999;font-size:13px;margin-top:10px;padding-bottom:20px;'>没有更多房源了...</div>
+      <div slot="no-results" class="empty-in-your-area">
+        <img src="../../../assets/img/emptybag.png" width="145px" alt="">
+        <p>暂无数据，赶紧去下单赚佣金吧</p>
+      </div>
+    </infinite-loading>
   </div>
 </template>
 
 <script>
-// import { GetMyPurse } from '@/api/purse';  //还木有接口
+import { extractList } from '@/api/pokect';  //
 import moment from "moment";
 export default {
   name: "withdrawHistoryList",
@@ -38,68 +42,11 @@ export default {
   components: {},
   data() {
     return {
+      form: {
+        page: 0,
+        limit: 20
+      },
       withdrawList: [
-        {
-          id: 1,
-          title:
-            "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10:30:21",
-          orderId: "132132321",
-          amount: 56.36,
-          futureIncome: 63.33,
-          status:'fail',
-          img: "http://placehold.it/80x80",
-        },
-        {
-          id: 2,
-          title:
-            "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10:30:21",
-          orderId: "132132321",
-          amount: 56.36,
-          futureIncome: 63.33,
-          img: "http://placehold.it/80x80",
-        },
-        {
-          id: 3,
-          title:
-            "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10:30:21",
-          orderId: "132132321",
-          amount: 56.36,
-          futureIncome: 63.33,
-          img: "http://placehold.it/80x80",
-        },
-        {
-          id: 4,
-          title:
-            "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10:30:21",
-          orderId: "132132321",
-          amount: 56.36,
-          futureIncome: 63.33,
-          img: "http://placehold.it/80x80",
-        },
-        {
-          id: 5,
-          title:
-            "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10:30:21",
-          orderId: "132132321",
-          amount: 56.36,
-          futureIncome: 63.33,
-          img: "http://placehold.it/80x80",
-        },
-        {
-          id: 6,
-          title:
-            "宝贝标题宝贝标题宝贝标题宝贝标贝标题宝贝贝标题宝贝贝标题宝贝 题...",
-          startTime: "2020-03-20 10:30:21",
-          orderId: "132132321",
-          amount: 56.36,
-          futureIncome: 63.33,
-          img: "http://placehold.it/80x80",
-        },
       ],
     };
   },
@@ -109,10 +56,13 @@ export default {
     timeFilter(val) {
       return moment(val).format("YYYY.MM.DD");
     },
+    extractStateFilter(val) {
+      const statesList = ['已提交', '已完成', '失败']
+      return statesList[val]
+    }
   },
   created() {},
   mounted() {
-    this.GetMyPurses();
   },
   methods: {
     GetMyPurses() {
@@ -129,7 +79,22 @@ export default {
     },
     viewDetail(){
 
-    }
+    },
+    /**无线滚动 */
+    infiniteHandler($state) {
+      extractList(this.form).then((result) => {
+        this.withdrawList.push(...result.data.records)
+        if (result.data.records.length > 0) {
+          this.form.page += 1;
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      }).catch((err) => {
+        this.$notify({type:'warning',message:err})
+      })
+    },
+
   },
 };
 </script>

@@ -4,45 +4,53 @@
     <div class="container">
       <div class="topBG">
         <van-field
-          :value="account.accountNumber"
-          label="到账支付宝"
+          v-model="account.accountNumber"
+          label="支付宝账号"
           placeholder="请输入支付宝账号"
           :border="false"
           bind:change="onChange"
         />
         <van-field
-          :value="account.realName"
+          v-model="account.realName"
           label="真实姓名"
           placeholder="请输入真实姓名"
           :border="false"
           bind:change="onChange"
         />
         <van-field
-          :value="extract.amount"
-          placeholder="请输入提现金额"
+          v-model="account.idCard"
+          label="身份证"
+          placeholder="请输入身份证号"
           :border="false"
           bind:change="onChange"
+        />
+        <van-field
+          v-model="extract.amount"
+          :placeholder="'可提现 ¥'+account.balance"
+          :border="false"
+          bind:change="onChange"
+          label="提现金额"
           input-class="zfb-input"
         >
-          <template slot="label">
-            <div>
-              <p>提现金额</p>
-              <p class="label-icon">¥</p>
+          <template slot="button">
+            <!-- <van-button @click="withDrawAll" size="mini">全部提现</van-button> -->
+            <span class="field-button" style="color:#da4f53;font-size:13px;" @click="withDrawAll">全部提现</span>
+            <!-- <div>
               <div class="label-bottom">
-                可提现 ¥2000 <span class="field-button">全部提现</span>
+                 <span class="field-button"  @click="withDrawAll">全部提现</span>
               </div>
-            </div>
+            </div> -->
           </template>
         </van-field>
         <van-field
-          :value="account.phone"
+          v-model="account.phone"
           label="手机号"
           placeholder="请输入手机号码"
           :border="false"
           bind:change="onChange"
         />
         <!-- <van-field
-          :value="account.code"
+          v-model="account.code"
           label="验证码"
           placeholder="请输入验证码"
           :border="false"
@@ -65,23 +73,30 @@
         <van-button
           size="normal"
           class="submit-btn"
-          @click="$router.push({ path: '/withdrawHistory' })"
+          @click="submit"
           >提交申请</van-button
         >
       </div>
+      <p class="withdrawalList" @click="$router.push({ path: '/withdrawHistory' })">提现明细</p>
     </div>
   </div>
 </template>
 
 <script>
 import { accountInfo, accountEdit } from "@/api/center";
+import { addExtract } from "@/api/pokect";
 export default {
   name: "withdraw",
   props: {},
   components: {},
   data() {
     return {
-      account: {},
+      account: {
+        accountNumber: '',
+        realName: '',
+        phone: '',
+        idCard: ''
+      },
       isTesting: false,
       params: {
         zfb: "",
@@ -94,7 +109,9 @@ export default {
   computed: {},
   watch: {},
   filters: {},
-  created() {},
+  created() {
+    this.accountInfo()
+  },
   mounted() {},
   methods: {
     onClickLeft() {
@@ -106,7 +123,40 @@ export default {
       }).catch((err) => {
         this.$notify({ type: 'warning', message: err })
       });
-    }
+    },
+    /** 提交 */
+    submit() {
+      if(this.account.accountNumber === '' 
+      || this.account.realName === '' 
+      || this.account.phone === '' 
+      || this.account.idCard === '' 
+      || this.extract.amount === '') {
+        this.$notify({ type: 'warning', message: '请将提现信息填写完整' })
+        return
+      }
+      const params = {
+        accountType: 1,
+        accountNumber: this.account.accountNumber,
+        realName: this.account.realName,
+        phone: this.account.phone,
+        idCard: this.account.idCard,
+      }
+      /** 保存账户信息 */
+      accountEdit(params).then((result) => {
+      }).catch((err) => {
+        this.$notify({ type: 'warning', message: err })
+      });
+        this.$router.push({ path: '/withdrawSuccess' })
+      /** 提现接口 */
+      addExtract(this.extract).then((result) => {
+        this.$notify({ type: 'success', message: '提现成功' })
+      }).catch((err) => {
+        this.$notify({ type: 'warning', message: err })
+      });
+    },
+  withDrawAll(){
+    this.extract.amount = this.account.balance
+  }
   },
 };
 </script>
@@ -145,8 +195,6 @@ $subBgColor: #fff;
         font-weight: normal;
       }
       /deep/ [input-class="zfb-input"] {
-        margin-top: 32px;
-        margin-left: -86px;
         width: calc(100% + 86px);
         font-size: 16px;
       }
@@ -160,7 +208,7 @@ $subBgColor: #fff;
         font-size: 12px;
         font-weight: normal;
         .field-button {
-          color: $btnColor;
+          color: #da4f53;
         }
       }
     }
@@ -174,6 +222,11 @@ $subBgColor: #fff;
     height: 40px;
     line-height: 40px;
     border-radius: 4px;
+  }
+  .withdrawalList{
+    color: #da4f53;
+    text-align: center;
+    margin-top: 40px;
   }
 }
 </style>
