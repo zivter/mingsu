@@ -71,6 +71,14 @@ const mingsuRouter = new Router({
       },
     },
     {
+      path: "/board/orderDetail",
+      name: "board",
+      component: () => import("@/views/board/orderDetail"),
+      meta: {
+        title: "确认订单",
+      },
+    },
+    {
       path: "/orderDetail",
       name: "orderDetail",
       component: () => import("@/views/center/orderDetail"),
