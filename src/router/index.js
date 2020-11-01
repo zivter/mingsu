@@ -267,7 +267,38 @@ const mingsuRouter = new Router({
         title: "我的报名",
       },
     },
-
+    {
+      path: "/rentalList",
+      name: "RentalList",
+      component: () => import("@/views/center/rentalList"),
+      meta: {
+        title: "租房订单",
+      },
+    },
+    {
+      path: "/rentHome",
+      name: "RentHome",
+      component: () => import("@/views/rentHome/index"),
+      meta: {
+        title: "租房首页",
+      },
+    },
+    {
+      path: "/rentDetail",
+      name: "RentDetail",
+      component: () => import("@/views/rentHome/detail"),
+      meta: {
+        title: "租房详情",
+      },
+    },
+    {
+      path: "/rentOrder",
+      name: "RentOrder",
+      component: () => import("@/views/rentHome/order"),
+      meta: {
+        title: "租房确认",
+      },
+    },
     // {
     //     path: '/cleaning',
     //     redirect: './cleaning/index',

@@ -76,7 +76,7 @@
         </div>
 
         <div class="centerList">
-          <van-cell title="租房订单" icon="location-o" is-link @click="$router.push({path:'/coupon'})">
+          <van-cell title="租房订单" icon="location-o" is-link @click="$router.push({path:'/rentalList'})">
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
               <use xlink:href="#icon-renew"></use>
             </svg>

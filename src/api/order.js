@@ -115,3 +115,15 @@ export function orderInfo(data) {
         params: data
     })
 }
+
+/**
+ * 26.订单列表查询
+ */
+export function orderInfoList(data) {
+  return request({
+      url: '/order/h5/list',
+      headers: headearss,
+      method: 'post',
+      params: data
+  })
+}
