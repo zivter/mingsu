@@ -195,7 +195,6 @@ export default {
             rentLength: this.timeradio,
             beginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             peopleCount: 1,
-            couponId: '',
             
           }
           addOrder(param).then((result) => {
