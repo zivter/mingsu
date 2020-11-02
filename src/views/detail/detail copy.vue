@@ -30,14 +30,14 @@
     <div class="dBody">
       <!-- 标题简介 -->
       <p class="title1">{{ detailData.title }}</p>
-      <!-- <p class="title2">近地铁 | 拎包入住 | 近地铁 | 朝南</p> -->
+      <p class="title2">近地铁 | 拎包入住 | 近地铁 | 朝南</p>
       <div class="infoBox">
         <span class="infoBoxPrice">{{ roomSelectPrice }}<span style="font-size:14px;">/晚</span></span>
-        <!-- <span>一室一厅</span>
-        <span>37m²</span> -->
+        <span>一室一厅</span>
+        <span>37m²</span>
       </div>
       <!-- 入住时间 -->
-      <van-row type="flex" justify="space-between" class="timeRange" @click="handleTimePickerClick()">  
+      <!-- <van-row type="flex" justify="space-between" class="timeRange" @click="handleTimePickerClick()">  
         <van-col span="8">
           <p class="timeRangeT">入住</p>
           <p class="timeRangeTime">{{ timeRangeInfo.from }}<span>{{ timeRangeInfo.fromWeek | weekFilter }}</span></p>
@@ -47,9 +47,9 @@
           <p class="timeRangeT timeRangeTitle2">退房</p>
           <p class="timeRangeTime timeRangeTime2"><span>{{ timeRangeInfo.toWeek | weekFilter }}</span> {{ timeRangeInfo.to }}</p>
         </van-col>
-      </van-row>
+      </van-row> -->
       <!-- 房源信息 -->
-      <!-- <div class="roomInfo">
+      <div class="roomInfo">
         <p class="contentTitle">房源信息</p>
         <van-row class="roomInfoRow">
           <van-col span="12">支付<span class="roomInfoSpan">押一付一</span></van-col>
@@ -59,7 +59,7 @@
           <van-col span="12">楼层<span class="roomInfoSpan">12层</span></van-col>
           <van-col span="12">商圈<span class="roomInfoSpan">外滩</span></van-col>
         </van-row>
-      </div> -->
+      </div>
       <!-- 设施 -->
       <div class="facilities">
         <p class="contentTitle">服务设施</p>

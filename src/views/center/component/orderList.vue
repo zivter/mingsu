@@ -9,6 +9,13 @@
       </van-col>
       <van-col span="8"><img class="cardListImg" :src="GLOBAL.imgSrc+item.roomCover"></van-col>
     </van-row>
+
+    <!-- 无线滚动 -->
+    <infinite-loading @infinite="infiniteHandler">
+      <div slot="no-more" style='color:#999;font-size:13px;margin-top:10px;padding-bottom:20px;'>没有更多房源了...</div>
+      <div slot="no-results" style='color:#666;font-size:13px;margin-top:10px;'>暂无房源...</div>
+    </infinite-loading>
+
   </div>
 </template>
 
@@ -18,7 +25,7 @@ import moment from 'moment'
 
 export default {
   name: '',
-  props:  {
+  props: {
     orderType:{
       type: String,
       required: false
@@ -27,7 +34,15 @@ export default {
   components:{ },
   data() {
     return {
-      allOrderQuery:[]
+      allOrderQuery:[],
+      form: {
+        Keyword: '',
+        OrderStatus: this.orderType=='all'?'':this.orderType,
+        from: '',
+        to: '',
+        SkipCount: 0,
+        MaxResultCount: 20
+      }
     }
   },
   computed: {
@@ -52,7 +67,7 @@ export default {
   created() {
   },
   mounted() {
-    this.GetAllOrderQuery()
+    // this.GetAllOrderQuery()
   },
   methods:{
     GetAllOrderQuery(){
@@ -78,7 +93,21 @@ export default {
           roomId: roomId
         }
       })
-    }
+    },
+    /**无线滚动 */
+    infiniteHandler($state) {
+      GetAllOrderQuery(this.form).then((result) => {
+        this.allOrderQuery.push(...result.result.items)
+        if (result.result.items.length > 0) {
+          this.form.SkipCount += 20;
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      }).catch((err) => {
+        this.$notify({type:'warning',message:err})
+      })
+    },
   }
 }
 </script>
