@@ -22,10 +22,10 @@
             <p class="homeTitle">{{ item.title }}</p>
             <div class="homePrice overflow">
               <p class="float-left">￥{{ item.startPrice }} /晚</p>
-              <div class="float-right">
+              <!-- <div class="float-right">
                 <img src="@/assets/img/favourYes.png" alt="" class="favourIcon">
                 <p class="favourCount">520赞</p>
-              </div>
+              </div> -->
             </div>
           </div>
         </van-col>

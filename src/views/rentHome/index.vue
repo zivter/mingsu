@@ -23,10 +23,10 @@
             <div class="homePrice overflow">
               <p class="float-left">￥{{ item.dayAmount }} /晚</p>
               <p class="float-left listTag">酒店公寓</p>
-              <div class="float-right">
+              <!-- <div class="float-right">
                 <img src="@/assets/img/favourYes.png" alt="" class="favourIcon">
                 <p class="favourCount">520赞</p>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

@@ -127,3 +127,16 @@ export function orderInfoList(data) {
       params: data
   })
 }
+
+/**
+ * 31.调用账单付款
+ */
+export function orderBill(data) {
+    return request({
+        url: '/bill/h5/orderBill',
+        headers: headearss,
+        method: 'post',
+        params: data
+    })
+  }
+  

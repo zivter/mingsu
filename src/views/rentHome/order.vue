@@ -87,7 +87,7 @@
 
 <script>
 import { roomInfo } from '@/api/room'
-import { addOrder } from '@/api/order'
+import { addOrder, orderBill } from '@/api/order'
 
 import contract from './component/contract'
 import moment from 'moment';
@@ -197,8 +197,14 @@ export default {
             peopleCount: 1,
             
           }
+          //** 提交订单获取bid */
           addOrder(param).then((result) => {
-            debugger
+            if(result.success) {
+              const orderParam = {
+                bid: result.data
+              }
+              this.orderBill(orderParam)
+            }
           }).catch((err) => {
             this.$notify({ type: 'danger', message: err });
           });
@@ -209,6 +215,43 @@ export default {
     },
     viewContract() {
 
+    },
+    //** 根据bid获取支付的信息 */
+    orderBill (orderParam){
+      orderBill(orderParam).then((result) => {
+        if (typeof WeixinJSBridge == "undefined"){
+          if( document.addEventListener ){
+              document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady, false);
+          }else if (document.attachEvent){
+              document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady); 
+              document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady);
+          }
+        }else{
+          this.onBridgeReady(result.result.jsApiParameters);
+        }
+      }).catch((errs) => {
+        this.$notify({ type: 'danger', message: errs });
+      });
+    },
+    /**调用微信支付api */
+    onBridgeReady(jsApiParameters){
+      var that = this
+      WeixinJSBridge.invoke(
+        'getBrandWCPayRequest', JSON.parse(jsApiParameters),
+        function(res){
+          if(res.err_msg == "get_brand_wcpay_request:ok" ){
+          // 使用以上方式判断前端返回,微信团队郑重提示：
+            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+            const ctag = Cookies.get('ctag');
+            if (ctag) {
+              Cookies.remove('ctag')
+            }
+            that.$router.push({
+              path: 'orderSuccess'
+            })
+          } 
+        }
+      ); 
     },
     /**
      * 获取客房详情
