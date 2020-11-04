@@ -276,6 +276,14 @@ const mingsuRouter = new Router({
       },
     },
     {
+      path: "/rentalOrderDetail",
+      name: "RentalOrderDetail",
+      component: () => import("@/views/center/rentalOrderDetail"),
+      meta: {
+        title: "租房订单详情",
+      },
+    },
+    {
       path: "/rentHome",
       name: "RentHome",
       component: () => import("@/views/rentHome/index"),

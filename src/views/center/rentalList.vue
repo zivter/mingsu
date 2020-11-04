@@ -2,25 +2,31 @@
   <div class="rentList">
     <van-nav-bar title="租房订单" left-text left-arrow @click-left="$router.go(-1);" />
     <div class="rentCard"
-    v-for="(item,index) in allOrderQuery" :key="index" @click="goDetail(item.orderNumber,item.roomId)">
+    v-for="(item,index) in allOrderQuery" :key="index" @click="goDetail(item.id,item.roomId)">
       <div class="rentTop">
-        <p class="rentTime">{{ item.from | timeFilter }}</p>
-        <p class="rentStatus">{{ item.status | statusFilter }}</p>
+        <p class="rentTime">{{ item.beginTime | timeFilter }}</p>
+        <p class="rentStatus">{{ item.orderState | statusFilter }}</p>
       </div>
       <div class="rentBtm">
-        <img class="rentImg" :src="GLOBAL.imgSrc+item.roomCover">
+        <img class="rentImg" :src="GLOBAL.imgSrc2+item.cover">
         <div class="rentRight">
           <p class='rentname'>{{ item.roomTitle }}</p>
           <p class="rentType">酒店公寓</p>
-          <p class="rentStatus">¥{{ item.payment }}/月</p>
+          <p class="rentStatus">¥{{ item.orderDetails[0].amount }}/{{ item.rentLength }}天</p>
         </div>
       </div>
     </div>
+
+    <!-- 无线滚动 -->
+    <infinite-loading @infinite="infiniteHandler">
+      <div slot="no-more" style='color:#999;font-size:13px;margin-top:10px;padding-bottom:20px;'>没有更多租房订单了...</div>
+      <div slot="no-results" style='color:#666;font-size:13px;margin-top:10px;'>暂无租房订单...</div>
+    </infinite-loading>
   </div>
 </template>
 
 <script>
-import { GetAllOrderQuery } from '@/api/orderQuery'
+import { orderInfoList } from '@/api/order'
 import moment from 'moment'
 
 export default {
@@ -34,7 +40,11 @@ export default {
   components:{ },
   data() {
     return {
-      allOrderQuery:[]
+      allOrderQuery:[],
+      form: {
+        page: 1,
+        limit: 50
+      }
     }
   },
   computed: {
@@ -42,14 +52,7 @@ export default {
   watch: {},
   filters: {
     statusFilter(val){
-      const status = {
-        Pending:'订单待支付',
-        Paid:'订单已支付',
-        Refund: '订单已退款',
-        Cancel:'订单已取消',
-        Closed: '订单已关闭',
-        Expired: '订单已失效'
-      }
+      const status = ['待付款', '进行中', '已完成', '已取消']
       return status[val]
     },
     timeFilter(val){
@@ -59,27 +62,26 @@ export default {
   created() {
   },
   mounted() {
-    this.GetAllOrderQuery()
   },
   methods:{
-    GetAllOrderQuery(){
-      const param = {
-        Keyword:'',
-        OrderStatus: this.orderType=='all'?'':this.orderType,
-        from:'',
-        to:'',
-        SkipCount:0,
-        MaxResultCount:50
-      }
-      GetAllOrderQuery(param).then((result) => {
-        this.allOrderQuery = result.result.items
+    /**无线滚动 */
+    infiniteHandler($state) {
+      orderInfoList(this.form).then((result) => {
+        this.allOrderQuery.push(...result.data.records)
+        if (result.data.records.length > 0) {
+          this.form.page += 1;
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
       }).catch((err) => {
-        
-      });
+        this.$notify({type:'warning',message:err})
+      })
     },
+
     goDetail(id,roomId){
       this.$router.push({
-        path:'orderDetail',
+        path:'rentalOrderDetail',
         query:{
           id: id,
           roomId: roomId
