@@ -25,7 +25,7 @@
           <van-divider style="margin: 4px 0"/>
           <div class="messageBtm">
             <span class="messageTime">{{ item.createTime | timeFilter }}</span>
-            <span class="messageBtn" @click="checkDetail(item)">点击查看</span>
+            <span class="messageBtn" @click="checkDetail(item)" v-if="item.messageType == 1 || item.messageType == 2">点击查看</span>
           </div>
         </div>
     </van-list>
@@ -60,7 +60,7 @@ export default {
   filters:{
     messageTypeFilter(val) {
       const type = ['报名', '订单', '佣金', '提现']
-      return type[val]
+      return type[val-1]
     },
     timeFilter(val) {
       return moment(val).format('YYYY-MM-DD HH-mm-ss')
@@ -82,12 +82,21 @@ export default {
       })
     },
     checkDetail(val) {
-      this.$router.push({
-        path: 'messageDetail',
-        query:{
-          id: val.id,
-        }
-      })
+      if(val.messageType === 1) {
+        this.$router.push({
+          path: 'activeDetail',
+          query:{
+            id: val.id,
+          }
+        })
+      } else {
+        this.$router.push({
+          path: 'rentalOrderDetail',
+          query:{
+            id: val.relationId,
+          }
+        })
+      }
     }
   }
 }
@@ -102,7 +111,7 @@ export default {
 
 }
 .hasread{
-  color: #666;
+  color: #888;
 }
 .messageCard{
   background: #fff;
