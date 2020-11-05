@@ -16,10 +16,10 @@
         <van-cell title="付款周期" :value="orderData.cycle+'天'" />
         <van-cell title="押金" :value="'￥'+orderData.orderDetails[1].amount" />
         <van-cell title="总租金" :value="'￥'+orderData.orderDetails[1].amount" />
-        <van-cell title="合计" :value="'￥'+orderData.orderDetails[1].amount + orderData.orderDetails[0].amount" />
+        <van-cell title="合计" :value="'￥'+(orderData.orderDetails[1].amount + orderData.orderDetails[0].amount)" />
       </div>
       <p class="warmTip">查看租赁合同</p>
-      <van-tabs v-model="tabActive">
+      <van-tabs v-model="tabActive"  type="card">
         <van-tab title="未支付">未支付</van-tab>
         <van-tab title="已支付">已支付</van-tab>
       </van-tabs>
@@ -148,8 +148,12 @@ $subBgColor: #fff;
   color: $btnColor;
   font-size: 11px;
   padding: 10px 16px;
+  text-align: center;
 }
 .infoContent{
   background: #fff;
+}
+/deep/ .van-tabs__nav--card{
+  margin: 0;
 }
 </style>

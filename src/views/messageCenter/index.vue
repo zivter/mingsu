@@ -106,9 +106,9 @@ export default {
 .messageCenter{
   background: #F8F9FB;
   min-height: 100vh;
+  padding-bottom: 50px;
 }
 .messageList{
-
 }
 .hasread{
   color: #888;
