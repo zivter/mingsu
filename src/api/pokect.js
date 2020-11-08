@@ -10,7 +10,7 @@ const headears = {
  */
 export function flowList(data) {
     return request({
-        url: '/flow/h5/list',
+        url: '/tow/flow/h5/list',
         headers: headears,
         method: 'post',
         params: data
@@ -22,7 +22,7 @@ export function flowList(data) {
  */
 export function addExtract(data) {
     return request({
-        url: '/extract/h5/add',
+        url: '/tow/extract/h5/add',
         headers: headears,
         method: 'post',
         params: data
@@ -34,7 +34,7 @@ export function addExtract(data) {
  */
 export function extractList(data) {
     return request({
-        url: '/extract/h5/list',
+        url: '/tow/extract/h5/list',
         headers: headears,
         method: 'post',
         params: data
@@ -46,7 +46,7 @@ export function extractList(data) {
  */
 export function enrollList(data) {
     return request({
-        url: '/enroll/h5/list',
+        url: '/tow/enroll/h5/list',
         headers: headears,
         method: 'post',
         params: data
@@ -58,7 +58,7 @@ export function enrollList(data) {
  */
 export function enrollInfo(data) {
     return request({
-        url: '/enroll/h5/info',
+        url: '/tow/enroll/h5/info',
         headers: headears,
         method: 'post',
         params: data
@@ -70,7 +70,7 @@ export function enrollInfo(data) {
  */
 export function addEnroll(data) {
     return request({
-        url: '/enroll/h5/add',
+        url: '/tow/enroll/h5/add',
         headers: headears,
         method: 'post',
         params: data
@@ -82,7 +82,7 @@ export function addEnroll(data) {
  */
 export function delEnroll(data) {
     return request({
-        url: '/enroll/h5/delete',
+        url: '/tow/enroll/h5/delete',
         headers: headears,
         method: 'post',
         params: data
@@ -94,7 +94,7 @@ export function delEnroll(data) {
  */
 export function profitList(data) {
     return request({
-        url: '/bill/h5/profit',
+        url: '/tow/bill/h5/profit',
         headers: headears,
         method: 'post',
         params: data

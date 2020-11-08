@@ -74,12 +74,15 @@
         <van-button type="danger" class="confirmBtns" @click="submit">提交订单</van-button>
         <van-button type="danger" class="confirmBtns" @click="contractshow = true">合同预览</van-button>
       </div>
-      <van-popup v-model="contractshow"
+      <!-- 租赁合同 -->
+      <van-popup
+      v-model="contractshow"
       closeable
       close-icon-position="top-left"
       position="bottom"
       :style="{ height: '100%' }">
-        <contract />
+        <p class="contractTitle">{{ article.title }}</p>
+        <p class="contractContent">{{ article.article }}</p>
       </van-popup>
     </div>
   </div>
@@ -87,9 +90,9 @@
 
 <script>
 import { roomInfo } from '@/api/room'
-import { addOrder, orderBill } from '@/api/order'
+import { addOrder, orderBill, billFirst } from '@/api/order'
+import { getArticle } from '@/api/aboutus'
 
-import contract from './component/contract'
 import moment from 'moment';
 import share from '@/utils/share';
 import tokenAuth from '@/utils/tokenAuth';
@@ -101,7 +104,7 @@ export default {
   name: '',
   props:  {
   },
-  components:{ contract },
+  components:{},
   data() {
     return {
       detailData: {
@@ -120,6 +123,7 @@ export default {
       payradio: '',
       timeList: [30, 90, 180, 360],
       payList: [1, 5, 10, 30],
+      article: {}
     }
   },
   computed: {
@@ -170,6 +174,7 @@ export default {
     share.share(this.$route.meta.title);
     tokenAuth.getAuth(this.$route.query);
     this.roomInfo()
+    this.getArticle()
   },
   mounted() {},
   methods:{
@@ -195,15 +200,14 @@ export default {
             rentLength: this.timeradio,
             beginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             peopleCount: 1,
-            
           }
           //** 提交订单获取bid */
           addOrder(param).then((result) => {
             if(result.success) {
               const orderParam = {
-                bid: result.data
+                oid: result.data
               }
-              this.orderBill(orderParam)
+              this.billFirst(orderParam)
             }
           }).catch((err) => {
             this.$notify({ type: 'danger', message: err });
@@ -213,8 +217,18 @@ export default {
           this.$notify({ type: 'info', message: '已取消' });
         });
     },
-    viewContract() {
-
+    /** 首次调用bill */
+    billFirst(orderParam) {
+      billFirst(orderParam).then((result) => {
+        if(result.success) {
+          const orderParams = {
+            bid: result.data.id
+          }
+          this.orderBill(orderParams)
+        }
+      }).catch((err) => {
+        this.$notify({ type: 'danger', message: err });
+      });
     },
     //** 根据bid获取支付的信息 */
     orderBill (orderParam){
@@ -227,7 +241,7 @@ export default {
               document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady);
           }
         }else{
-          this.onBridgeReady(result.result.jsApiParameters);
+          this.onBridgeReady(result.data);
         }
       }).catch((errs) => {
         this.$notify({ type: 'danger', message: errs });
@@ -237,7 +251,14 @@ export default {
     onBridgeReady(jsApiParameters){
       var that = this
       WeixinJSBridge.invoke(
-        'getBrandWCPayRequest', JSON.parse(jsApiParameters),
+        'getBrandWCPayRequest', {
+          appId: jsApiParameters.appId,
+          nonceStr: jsApiParameters.nonceStr,
+          package: jsApiParameters.packageValue,
+          paySign: jsApiParameters.sign,
+          signType: jsApiParameters.signType,
+          timeStamp: jsApiParameters.timeStamp
+        },
         function(res){
           if(res.err_msg == "get_brand_wcpay_request:ok" ){
           // 使用以上方式判断前端返回,微信团队郑重提示：
@@ -247,7 +268,7 @@ export default {
               Cookies.remove('ctag')
             }
             that.$router.push({
-              path: 'orderSuccess'
+              path: 'rentOrderSuccess'
             })
           } 
         }
@@ -268,7 +289,18 @@ export default {
     onChange(index) {
       this.current = index;
     },
-  }
+    /** 租赁合同 */
+    getArticle() {
+      const param = {
+        type: 4
+      }
+      getArticle(param).then((result) => {
+        this.article = result.data
+      }).catch((err) => {
+        this.$notify({type:'warning',message:err})
+      });
+    },
+  },
 }
 </script>
 
@@ -350,5 +382,14 @@ $btnColor: #DA4F53;
     line-height: 24px;
     height: 32px;
   }
+}
+.contractTitle{
+  text-align: center;
+  margin: 20px 0;
+  font-weight: 700;
+}
+.contractContent{
+  text-indent: 2em;
+  padding: 6px 10px;
 }
 </style>

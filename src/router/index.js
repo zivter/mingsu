@@ -308,9 +308,12 @@ const mingsuRouter = new Router({
       },
     },
     {
-      path: "/rentSuccess",
-      name: "Success",
-      component: () => import("@/views/rentHome/success"),
+      path: "/rentOrderSuccess",
+      name: "RentOrderSuccess",
+      component: () => import("@/views/rentHome/rentOrderSuccess"),
+      meta: {
+        title: "租房成功",
+      },
     },
     // {
     //     path: '/cleaning',

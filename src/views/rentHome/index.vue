@@ -176,6 +176,7 @@ export default {
 .home{
   background: #f4f4f4;
   min-height: 100vh;
+  padding-bottom: 40px;
 }
 .fixedSelect{
   background: rgba(0,0,0,0.8);

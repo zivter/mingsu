@@ -10,7 +10,7 @@ const headears = {
  */
 export function addFeedback(data) {
     return request({
-        url: '/feedback/h5/add',
+        url: '/tow/feedback/h5/add',
         headers: headears,
         method: 'post',
         params: data
@@ -22,7 +22,7 @@ export function addFeedback(data) {
  */
 export function welfareList(data) {
     return request({
-        url: '/welfare/h5/list',
+        url: '/tow/welfare/h5/list',
         headers: headears,
         method: 'post',
         params: data
@@ -34,7 +34,7 @@ export function welfareList(data) {
  */
 export function welfareInfo(data) {
     return request({
-        url: '/welfare/h5/info',
+        url: '/tow/welfare/h5/info',
         headers: headears,
         method: 'post',
         params: data
@@ -46,7 +46,7 @@ export function welfareInfo(data) {
  */
 export function messageList(data) {
     return request({
-        url: '/message/h5/list',
+        url: '/tow/message/h5/list',
         headers: headears,
         method: 'post',
         params: data
@@ -58,7 +58,7 @@ export function messageList(data) {
  */
 export function messageInfo(data) {
     return request({
-        url: '/message/h5/info',
+        url: '/tow/message/h5/info',
         headers: headears,
         method: 'post',
         params: data
@@ -70,7 +70,7 @@ export function messageInfo(data) {
  */
 export function messageEdit(data) {
     return request({
-        url: '/message/h5/edit',
+        url: '/tow/message/h5/edit',
         headers: headears,
         method: 'post',
         params: data
@@ -82,7 +82,7 @@ export function messageEdit(data) {
  */
 export function messageDelete(data) {
     return request({
-        url: '/message/h5/delete',
+        url: '/tow/message/h5/delete',
         headers: headears,
         method: 'post',
         params: data
@@ -94,7 +94,7 @@ export function messageDelete(data) {
  */
 export function accountInfo(data) {
     return request({
-        url: '/account/h5/info',
+        url: '/tow/account/h5/info',
         headers: headears,
         method: 'post',
         params: data
@@ -106,7 +106,7 @@ export function accountInfo(data) {
  */
 export function accountUnified(data) {
     return request({
-        url: '/account/h5/unified',
+        url: '/tow/account/h5/unified',
         headers: headears,
         method: 'post',
         params: data
@@ -118,7 +118,7 @@ export function accountUnified(data) {
  */
 export function accountEdit(data) {
     return request({
-        url: '/account/h5/edit',
+        url: '/tow/account/h5/edit',
         headers: headears,
         method: 'post',
         params: data
@@ -130,7 +130,7 @@ export function accountEdit(data) {
  */
 export function addScanning(data) {
     return request({
-        url: '/scanning/h5/add',
+        url: '/tow/scanning/h5/add',
         headers: headears,
         method: 'post',
         params: data

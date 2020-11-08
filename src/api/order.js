@@ -85,7 +85,7 @@ export function orderCancel(data) {
  */
 export function addOrder(data) {
     return request({
-        url: '/order/h5/add',
+        url: '/tow/order/h5/add',
         headers: headearss,
         method: 'post',
         params: data
@@ -97,7 +97,7 @@ export function addOrder(data) {
  */
 export function editOrder(data) {
     return request({
-        url: '/order/h5/edit',
+        url: '/tow/order/h5/edit',
         headers: headearss,
         method: 'post',
         params: data
@@ -109,7 +109,7 @@ export function editOrder(data) {
  */
 export function orderInfo(data) {
     return request({
-        url: '/order/h5/info',
+        url: '/tow/order/h5/info',
         headers: headearss,
         method: 'post',
         params: data
@@ -121,22 +121,46 @@ export function orderInfo(data) {
  */
 export function orderInfoList(data) {
   return request({
-      url: '/order/h5/list',
+      url: '/tow/order/h5/list',
       headers: headearss,
       method: 'post',
       params: data
   })
 }
 
+/*
+ * 27.账单列表
+ */
+export function billList(data) {
+    return request({
+        url: '/tow/bill/h5/list',
+        headers: headearss,
+        method: 'post',
+        params: data
+    })
+}
+
+/*
+ * 27.订单的第一个账单查询
+ */
+export function billFirst(data) {
+    return request({
+        url: '/tow/bill/h5/first',
+        headers: headearss,
+        method: 'post',
+        params: data
+    })
+}
 /**
  * 31.调用账单付款
  */
 export function orderBill(data) {
     return request({
-        url: '/bill/h5/orderBill',
+        url: '/tow/bill/h5/orderBill',
         headers: headearss,
         method: 'post',
         params: data
     })
   }
+  
   

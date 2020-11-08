@@ -35,8 +35,8 @@ module.exports = {
                     ['^' + process.env.VUE_APP_BASE_API]: ''
                 }
             },
-            [process.env.VUE_APP_BASE_API]: {
-                target: 'https://www.shigvg77.cn/tow/',
+            [process.env.VUE_APP_BASE_API + '/tow']: {
+                target: 'https://www.shigvg77.cn/',
                 // target: 'http://47.110.245.184:8080/',
                 changeOrigin: true,
                 pathRewrite: {

@@ -6,7 +6,7 @@ const UserToken = window.localStorage.getItem('tokenId') ? window.localStorage.g
  */
 export function getArticle(data) {
     return request({
-        url: '/article/h5/info',
+        url: '/tow/article/h5/info',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
             'UserToken': UserToken
@@ -21,7 +21,7 @@ export function getArticle(data) {
  */
 export function addCollaborate(data) {
     return request({
-        url: '/collaborate/h5/add',
+        url: '/tow/collaborate/h5/add',
         headers: {
             'Content-Type': 'application/x-www-from-urlencoded',
             'UserToken': UserToken

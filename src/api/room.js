@@ -85,7 +85,7 @@ export function GetPrices(data) {
  */
 export function roomList(data) {
     return request({
-        url: '/room/h5/list',
+        url: '/tow/room/h5/list',
         headers: headearss,
         method: 'post',
         params: data
@@ -97,7 +97,7 @@ export function roomList(data) {
  */
 export function roomInfo(data) {
     return request({
-        url: '/room/h5/info',
+        url: '/tow/room/h5/info',
         headers: headearss,
         method: 'post',
         params: data

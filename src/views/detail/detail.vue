@@ -106,10 +106,9 @@
           <el-amap
           class="amap-box"
           vid="amap-vue"
-          :center="detailData.locationMap | mapFilter"
           :position="center"
           :zoom="zoom">
-            <el-amap-marker v-for="marker in markers" :position="marker.position" :key="marker.positon" ></el-amap-marker>
+            <el-amap-marker v-for="marker in markers" :position="marker.position" :key="marker.position" ></el-amap-marker>
           </el-amap>
         </div>
       </div>

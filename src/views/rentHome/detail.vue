@@ -104,13 +104,16 @@
         <p class="contentTitle">房屋位置</p>
         <p>{{ detailData.positionType }}</p>
         <div class="amap-wrapper">
-          <el-amap
+          <!-- <el-amap
           class="amap-box"
           vid="amap-vue"
           :center="detailData.locationMap | mapFilter"
           :position="center"
           :zoom="zoom">
-            <el-amap-marker v-for="marker in markers" :position="marker.position" :key="marker.positon" ></el-amap-marker>
+            <el-amap-marker v-for="(marker,index) in markers" :position="marker.position" :key="index" :vid="index"></el-amap-marker>
+          </el-amap> -->
+          <el-amap vid="amap-vue" :zoom="zoom" class="amap-demo">
+            <el-amap-marker v-for="(marker, index) in markers" :position="marker.position" :events="marker.events" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>
           </el-amap>
         </div>
       </div>
@@ -201,7 +204,23 @@ export default {
       likeHeart: false,
       zoom: 13,
       center: [],
-      markers: [],
+      markers: [
+        {
+          position: [121.5273285, 31.21515044],
+          events: {
+            click: () => {
+              alert('click marker');
+            },
+            dragend: (e) => {
+              console.log('---event---: dragend')
+              this.markers[0].position = [e.lnglat.lng, e.lnglat.lat];
+            }
+          },
+          visible: true,
+          draggable: false,
+          template: '<span>1</span>',
+        }
+      ],
       address: '',
       btnError: false,
       servicePopupshow: false,
@@ -273,13 +292,14 @@ export default {
       roomInfo({id: this.$route.query.id}).then((result) => {
         if(result.success == true){
           this.detailData = result.data
+          console.log(this.detailData)
           this.getIconCnName(result.data.serviceFacilities.split(','),this.facilitiesList)
           let o = {
-            position:[this.detailData.coordinate.split(',')[1],this.detailData.coordinate.split(',')[0]],
+            position:[result.data.coordinate.split(',')[1],result.data.coordinate.split(',')[0]],
             visible:true
           }
-          this.markers.push(o)
-          const title = `浙拾光-酒店公寓（${result.data.bedroomCount}卧${result.data.bedCount}床${result.data.bathroomCount}卫适合${result.data.lodgerCount}人入住）`;
+          this.markers = [o]
+          const title = `浙拾光-房屋租赁`;
           share.share(result.data.title.split('】')[0].concat('】'), this.GLOBAL.imgSrc2+result.data.cover, title);
         }
       }).catch((err) => {

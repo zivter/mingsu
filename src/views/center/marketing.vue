@@ -58,7 +58,7 @@ $subBgColor: #fff;
   min-height: 100vh;
 }
 .container{
-  padding: 20px 40px;
+  padding: 20px 40px 80px;
   color: #fff;
   font-size: 13px;
   line-height: 18px;
