@@ -66,7 +66,6 @@
         @submit="submit">
         <van-row slot="default" class="defaultC">
           <van-col span="14">
-            <span class="perNight" @click="selectAll">全选</span>
           </van-col>
           <van-col span="10" class="priceDetail" >合计：￥{{ totalAmount }}</van-col>
         </van-row>
