@@ -2,7 +2,7 @@
   <div class="home">
     <van-row type="flex" justify="space-around" class="fixedSelect">
       <van-col span="8" @click="priceShow = true">{{ selectType }}<van-icon name="play"/></van-col>
-      <van-col span="8" @click="positionPickerShow = true">位置<van-icon name="play"/></van-col>
+      <van-col span="8" @click="positionPickerShow = true">{{ CategoryName }}<van-icon name="play"/></van-col>
       <van-col span="8" @click="selectorPickerShow = true">筛选<van-icon name="play"/></van-col>
     </van-row>
     <div class="banner"></div>
@@ -17,11 +17,18 @@
         @click="handleListClick(item,index)"
         class="homeCard"
         :key='index'>
-          <img v-lazy="GLOBAL.imgSrc2+item.cover" alt=""  class="homeListImg">
+          <van-swipe indicator-color="white" class="dSwiper homeListImg">
+            <van-swipe-item>
+              <img v-lazy="GLOBAL.imgSrc2+item.cover" alt="">
+            </van-swipe-item>
+            <van-swipe-item v-for="item in item.images" :key="item.id">
+              <img v-lazy="GLOBAL.imgSrc2+item.imageName" alt="">
+            </van-swipe-item>
+          </van-swipe>
           <div class="homeListInfo">
             <p class="homeTitle">{{ item.title }}</p>
             <div class="homePrice overflow">
-              <p class="float-left">￥{{ item.dayAmount }} /晚</p>
+              <p class="float-left">￥{{ item.thirtyAmount }} /月</p>
               <p class="float-left listTag">酒店公寓</p>
               <!-- <div class="float-right">
                 <img src="@/assets/img/favourYes.png" alt="" class="favourIcon">
@@ -99,6 +106,7 @@ export default {
         { name: '按最晚更新排序', value:'最晚更新' },
         { name: '取消', value:'0' }
       ],
+      CategoryName: '位置',
       selectType: '价格最低',
     }
   },
@@ -133,7 +141,8 @@ export default {
     positionChange(data){
       this.roomListForm.page = 1;
       this.roomListForm.limit = 20;
-      this.roomListForm.CategoryId = data
+      this.roomListForm.CategoryId = data.id
+      this.CategoryName = data.text ? data.text : '位置'
       this.positionPickerShow = false
       this.roomList = []
       this.infiniteHandler()

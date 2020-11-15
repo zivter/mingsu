@@ -22,17 +22,17 @@
         <img v-lazy="GLOBAL.imgSrc2+item.imageName" alt="">
       </van-swipe-item>
       <template #indicator>
-      <div class="custom-indicator" style="color:#fff;font-size:10px">
-        <van-icon name="photo-o" size="12" style="top:2px;right:2px"/>{{ current + 1 }}/{{detailData.images.length + 1}}
-      </div>
-    </template>
+        <div class="custom-indicator" style="color:#fff;font-size:10px">
+          <van-icon name="photo-o" size="12" style="top:2px;right:2px"/>{{ current + 1 }}/{{detailData.images.length + 1}}
+        </div>
+      </template>
     </van-swipe>
     <div class="dBody">
       <!-- 标题简介 -->
       <p class="title1">{{ detailData.title }}</p>
       <p class="title2">{{ detailData.tag }}</p>
       <div class="infoBox">
-        <span class="infoBoxPrice">{{ detailData.thirtyAmount }}<span style="font-size:14px;">/晚</span></span>
+        <span class="infoBoxPrice">{{ detailData.thirtyAmount }}<span style="font-size:14px;"> /月</span></span>
         <span>{{ detailData.houseType }}</span>
         <span>{{ detailData.deposit }}m²</span>
       </div>
@@ -113,16 +113,20 @@
             <el-amap-marker v-for="(marker,index) in markers" :position="marker.position" :key="index" :vid="index"></el-amap-marker>
           </el-amap> -->
           <el-amap vid="amap-vue" :zoom="zoom" class="amap-demo">
-            <el-amap-marker v-for="(marker, index) in markers" :position="marker.position" :events="marker.events" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>
+            <el-amap-marker v-for="(marker, index) in markers" :key="index"
+            :position="marker.position" :events="marker.events" :visible="marker.visible"
+            :draggable="marker.draggable" :vid="index">
+            </el-amap-marker>
           </el-amap>
         </div>
       </div>
 
       <!-- 提交订单兰 -->
       <van-submit-bar
+        :price='detailData.thirtyAmount*100'
         label=" "
         style="z-index:1000;box-shadow:0px 16px 10px 16px #ddd;"
-        :suffix-label='"/晚"'
+        :suffix-label='"/月"'
         button-text="立即预定"
         @submit="skipToOrder">
       </van-submit-bar>
@@ -144,7 +148,7 @@
     close-icon-position="top-left"
     position="bottom"
     :style="{ height: '100%' }">
-      <intro :intro-data='detailData.description'/>
+      <intro :intro-data='detailData.describe'/>
     </van-popup>
 
     <!-- 时间 -->
@@ -163,7 +167,6 @@
 
 <script>
 import svgIcon from '@/components/SvgIcon/index'
-import cellComponents from '@/components/cellComponents/index'
 import timePicker from '@/components/timePicker/index'
 import service from './component/service'
 import intro from './component/intro'
@@ -191,7 +194,7 @@ export default {
   name: 'detail',
   props: {
   },
-  components:{ svgIcon, cellComponents, service, intro, timePicker },
+  components:{ svgIcon, service, intro, timePicker },
   data() {
     return {
       detailData:{
@@ -542,6 +545,9 @@ export default {
   .notice2{
     padding-bottom: 80px;
   }
+}
+.van-submit-bar__text{
+  text-align: left;
 }
 .custom-indicator {
   position: absolute;

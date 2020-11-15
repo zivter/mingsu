@@ -108,7 +108,8 @@
           vid="amap-vue"
           :position="center"
           :zoom="zoom">
-            <el-amap-marker v-for="marker in markers" :position="marker.position" :key="marker.position" ></el-amap-marker>
+            <el-amap-marker v-for="marker in markers" :position="marker.position" :key="marker.position">
+            </el-amap-marker>
           </el-amap>
         </div>
       </div>
@@ -192,7 +193,6 @@
 
 <script>
 import svgIcon from '@/components/SvgIcon/index'
-import cellComponents from '@/components/cellComponents/index'
 import timePicker from '@/components/timePicker/index'
 import service from './service'
 import intro from './intro'
@@ -220,10 +220,12 @@ export default {
   name: 'detail',
   props: {
   },
-  components:{ svgIcon, cellComponents, service, intro, timePicker },
+  components:{ svgIcon, service, intro, timePicker },
   data() {
     return {
-      detailData:{},
+      detailData:{
+        images:[]
+      },
       facilitiesList:[],
       likeHeart: false,
       zoom: 13,
@@ -562,6 +564,9 @@ export default {
   .notice2{
     padding-bottom: 80px;
   }
+}
+.van-submit-bar__text{
+  text-align: left;
 }
 .custom-indicator {
   position: absolute;

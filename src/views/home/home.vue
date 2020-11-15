@@ -2,7 +2,7 @@
   <div class="home">
     <van-row type="flex" justify="space-around" class="fixedSelect">
       <van-col span="8" @click="timePickerShow = true">{{ timeRange | timeRangeFilter }}<van-icon name="play"/></van-col>
-      <van-col span="8" @click="positionPickerShow = true">位置<van-icon name="play"/></van-col>
+      <van-col span="8" @click="positionPickerShow = true">{{ CategoryName }}<van-icon name="play"/></van-col>
       <van-col span="8" @click="selectorPickerShow = true">筛选<van-icon name="play"/></van-col>
     </van-row>
     <div class="banner"></div>
@@ -100,6 +100,7 @@ export default {
         SkipCount:0,
         MaxResultCount:20,
       },
+      CategoryName: '位置',
       timeRange:moment().format('YYYY-MM-DD')+','+moment().add(1,'d').format('YYYY-MM-DD'),
 
     }
@@ -136,34 +137,32 @@ export default {
           timeRange: this.timeRange
         }
       })
-    },
+    },  
     timeChange(data){
-      this.roomListForm.SkipCount = 0;
-      this.roomListForm.MaxResultCount = 20;
+      this.reset()
       this.roomListForm.from = data.from
       this.roomListForm.to = data.to
       this.timeRange = moment(data.from).format('YYYY-MM-DD') + ',' + moment(data.to).format('YYYY-MM-DD')
       this.timePickerShow = false
-      this.roomList = []
-      this.infiniteHandler()
     },
     positionChange(data){
-      this.roomListForm.SkipCount = 0;
-      this.roomListForm.MaxResultCount = 20;
-      this.roomListForm.CategoryId = data
+      this.reset()
+      this.roomListForm.CategoryId = data.id
+      this.CategoryName = data.text ? data.text : '位置'
       this.positionPickerShow = false
-      this.roomList = []
-      this.infiniteHandler()
     },
     selectorChange(data){
-      this.roomListForm.SkipCount = 0;
-      this.roomListForm.MaxResultCount = 20;
+      this.reset()
       this.roomListForm.PriceFrom = data.PriceFrom
       this.roomListForm.PriceTo = data.PriceTo
       this.roomListForm.LodgerCount = data.LodgerCount
       this.roomListForm.BedCount = data.BedCount
       this.roomListForm.BedroomCount = data.BedroomCount
       this.selectorPickerShow = false
+    },
+    reset(){
+      this.roomListForm.SkipCount = 0;
+      this.roomListForm.MaxResultCount = 20;
       this.roomList = []
       this.infiniteHandler()    
     },

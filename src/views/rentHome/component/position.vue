@@ -25,7 +25,7 @@ export default {
       activeId: 1,
       activeIndex: 0,
       allCategory:[],
-      positionId:null
+      position: {}
     }
   },
   computed: {},
@@ -53,16 +53,16 @@ export default {
     },
     onConfirm(type){
       if(type === 1) {
-        this.positionId = null;
+        this.position = {};
         this.activeIndex = 0;
         this.activeId = 1;
       }
-      this.$emit('positionChange', this.positionId)
+      this.$emit('positionChange', this.position)
     },
     handleNavClick(val){
     },
     handleItemClick(val){
-      this.positionId = val.id
+      this.position = val
     }
   }
 }

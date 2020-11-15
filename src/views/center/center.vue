@@ -81,7 +81,7 @@
               <use xlink:href="#icon-renew"></use>
             </svg>
           </van-cell>
-          <van-cell
+          <!-- <van-cell
             title="消息中心"
             icon="location-o"
             is-link
@@ -90,7 +90,7 @@
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
               <use xlink:href="#icon-xiaoxi3"></use>
             </svg>
-          </van-cell>
+          </van-cell> -->
           <van-cell title="营销中心" icon="location-o" is-link @click="$router.push({path:'/marketing'})">
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
               <use xlink:href="#icon-tuiguangzhuanqian"></use>
@@ -119,6 +119,11 @@
           <van-cell title="意见反馈" icon="location-o" is-link @click="$router.push({path:'/feedback'})">
             <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
               <use xlink:href="#icon-yijianfankui"></use>
+            </svg>
+          </van-cell>
+          <van-cell title="拾光官方" icon="location-o" is-link @click="$router.push({path:'/aboutUs'})">
+            <svg class="icon orderIcon2" aria-hidden="true" slot="icon">
+              <use xlink:href="#icon-xiaoxi3"></use>
             </svg>
           </van-cell>
         </div>

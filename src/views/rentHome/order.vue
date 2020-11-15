@@ -25,11 +25,12 @@
         <p class="title1">{{ detailData.title }}</p>
         <p class="title2">{{ detailData.tag }}</p>
         <div class="infoBox">
-          <span class="infoBoxPrice">{{ detailData.thirtyAmount }}<span style="font-size:14px;">/晚</span></span>
+          <span class="infoBoxPrice">{{ detailData.thirtyAmount }}<span style="font-size:14px;">/月</span></span>
           <span>{{ detailData.houseType }}</span>
           <span>{{ detailData.deposit }}m²</span>
         </div>
       </div>
+      <p class="warmTip">温馨提示：租期按照订单提交日起计算</p>
       <div class="selectContent">
         <van-cell is-link @click="timeradioshow = true" :value="timeradio | timeradioFilter" title="租约时长"/>
         <van-popup v-model="timeradioshow" position="bottom">
@@ -43,17 +44,25 @@
               </van-cell>
             </van-cell-group>
           </van-radio-group>
+          
           <van-button type="danger" class="confirmBtn" size="small" @click="timeradioshow = false">确定</van-button>
         </van-popup>
 
         <van-cell is-link @click="payradioshow = true" :value="payradio | payradioFilter" title='付款周期'/>
         <van-popup v-model="payradioshow" position="bottom">
           <p class="selectTitle">付款周期</p>
-          <van-radio-group v-model="payradio" v-for="item in payList" :key="item">
-            <van-cell-group>
-              <van-cell :title="'每'+item+'天一付'" clickable @click="payradio = item">
+          <van-radio-group v-model="payradio">
+            <van-cell-group v-for="item in payList" :key="item">
+              <van-cell :title="'每'+item+'天一付'" clickable @click="payradio = item" v-if="!(timeradio == 30 && item == 30)">
                 <template #right-icon>
                   <van-radio :name="item" />
+                </template>
+              </van-cell>
+            </van-cell-group>
+            <van-cell-group>
+              <van-cell title="一次性付清" clickable @click="payradio = timeradio">
+                <template #right-icon>
+                  <van-radio :name="timeradio" />
                 </template>
               </van-cell>
             </van-cell-group>
@@ -123,7 +132,8 @@ export default {
       payradio: '',
       timeList: [30, 90, 180, 360],
       payList: [1, 5, 10, 30],
-      article: {}
+      article: {},
+      firstFee:''
     }
   },
   computed: {
@@ -131,42 +141,28 @@ export default {
   watch: {},
   filters: {
     payradioFilter(val) {
-      return val === '' ? '' : '每'+val+'天一付'
+      if(val >= 30 ) {
+        return '一次性付清'
+      } else {
+        return val === '' ? '' : '每'+val+'天一付'
+      }
     },
     timeradioFilter(val) {
       return val === '' ? '' : val+'天'
     },
     payradioPay(val, detailData) {
-      if(val === 1) {
-        return '￥'+ detailData.dayAmount
-      } else if(val === 5) {
-        return '￥'+ detailData.fiveAmount
-      } else if(val === 10) {
-        return '￥'+ detailData.tenAmount
-      } else if(val === 30) {
-        return '￥'+ detailData.thirtyAmount
+      if(val) {
+        return '￥'+ detailData.thirtyAmount * (val/30)
       }
     },
     allFee1(payradio, detailData, timeradio) {
-      if(payradio === 1) {
-        return '￥'+(timeradio/payradio)*detailData.dayAmount
-      } else if(payradio === 5) {
-        return '￥'+(timeradio/payradio)*detailData.fiveAmount
-      } else if(payradio === 10) {
-        return '￥'+(timeradio/payradio)*detailData.tenAmount
-      } else if(payradio === 30) {
-        return '￥'+(timeradio/payradio)*detailData.thirtyAmount
+      if(payradio) {
+        return '￥'+(timeradio/payradio)*detailData.thirtyAmount * (payradio/30)
       }
     },
     allFee2(payradio, detailData, timeradio) {
-      if(payradio === 1) {
-        return '￥'+((timeradio/payradio)*detailData.dayAmount+detailData.deposit)
-      } else if(payradio === 5) {
-        return '￥'+((timeradio/payradio)*detailData.fiveAmount+detailData.deposit)
-      } else if(payradio === 10) {
-        return '￥'+((timeradio/payradio)*detailData.tenAmount+detailData.deposit)
-      } else if(payradio === 30) {
-        return '￥'+((timeradio/payradio)*detailData.thirtyAmount+detailData.deposit)
+      if(payradio) {
+        return '￥'+((timeradio/payradio)*detailData.thirtyAmount * (payradio/30) +detailData.deposit)
       }
     }
   },
@@ -188,7 +184,7 @@ export default {
       }
       Dialog.confirm({
         title: '温馨提示',
-        message: '房屋租期为X月份，押金XXX元，支付方式XXXX，请先支付押金与第一付款周期费用，合计XXXXX元',
+        message: '房屋租期为'+this.timeradio/30+'月份，押金'+this.detailData.deposit+'元，支付方式微信，请先支付押金与第一付款周期费用，合计'+(this.detailData.deposit+(this.detailData.thirtyAmount*this.payradio/30))+'元',
       })
         .then(() => {
           // on confirm
@@ -196,7 +192,7 @@ export default {
             lodgersId: window.localStorage.getItem('tokenId'),
             orderType: 1,
             roomId: this.$route.query.id,
-            cycle: this.payradio,
+            cycle: this.payradio == this.timeradio ? 0 : this.payradio,
             rentLength: this.timeradio,
             beginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             peopleCount: 1,
@@ -345,8 +341,11 @@ $btnColor: #DA4F53;
     }
   }
 }
-.selectContent{
-  margin-top: 20px;
+.warmTip{
+  color: $btnColor;
+  font-size: 11px;
+  padding: 10px 16px;
+  text-align: left;
 }
 .selectTitle{
   line-height: 50px;

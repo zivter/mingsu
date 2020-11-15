@@ -12,7 +12,11 @@
       <p class="warmTip">温馨提示：押金将会在租期完结后自动回退之付款账户</p>
       <div class="infoContent">
         <van-cell title="周期租金" :value="'￥'+(orderData.orderDetails[0].amount/orderData.rentLength)*orderData.cycle" />
-        <van-cell title="租约时长" :value="orderData.rentLength+'天'" />
+        <van-cell title="租约时长">
+          <template #default>
+            {{ orderData.beginTime | timeFilter }}~{{ orderData.endTime | timeFilter }} ({{ orderData.rentLength }} 天)
+          </template>
+        </van-cell>
         <van-cell title="付款周期" :value="orderData.cycle+'天'" />
         <van-cell title="押金" :value="'￥'+orderData.orderDetails[1].amount" />
         <van-cell title="总租金" :value="'￥'+orderData.orderDetails[1].amount" />
@@ -326,5 +330,8 @@ $pColor: #666;
 }
 .defaultC{
   width: 100%;
+}
+.van-cell__title{
+  flex: 0.5;
 }
 </style>
