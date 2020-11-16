@@ -397,7 +397,6 @@ export default {
         this.rulishijian = result.data.checkInTime+'后入住,'+result.data.checkOutTime+'前退房'
         this.wordTime = result.data.workTimeFrom+' - '+result.data.workTimeTo
       }).catch((err) => {
-        
       });
     },
     onChange(index) {

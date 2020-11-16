@@ -17,14 +17,15 @@
         @click="handleListClick(item,index)"
         class="homeCard"
         :key='index'>
-          <img v-lazy="GLOBAL.imgSrc+item.images[0].imageUrl" alt=""  class="homeListImg">
+          <img v-lazy="GLOBAL.imgSrc+item.images[0].imageUrl" class="homeListImg">
           <div class="homeListInfo">
             <p class="homeTitle">{{ item.title }}</p>
             <div class="homePrice overflow">
               <p class="float-left">￥{{ item.startPrice }} /晚</p>
               <!-- <div class="float-right">
-                <img src="@/assets/img/favourYes.png" alt="" class="favourIcon">
-                <p class="favourCount">520赞</p>
+                <img v-if="item.isMyFavor" src="@/assets/img/favourYes.png" class="favourIcon">
+                <img v-else src="@/assets/img/favourNo.png" class="favourIcon">
+                <p class="favourCount">0赞</p>
               </div> -->
             </div>
           </div>
@@ -236,7 +237,7 @@ export default {
   border-radius: 2%;
   .homeListImg{
     max-width: 100%;
-    height: 180px;
+    height: 160px;
     img{
       width:100%;
       height: 100%;
@@ -250,7 +251,7 @@ export default {
   }
   .favourCount{
     padding: 0;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 500;
     text-align: center;
     line-height: 20px;

@@ -103,3 +103,15 @@ export function roomInfo(data) {
         params: data
     })
 }
+
+/**
+ * 33.新增房源点赞
+ */
+export function addPraise(data) {
+    return request({
+        url: '/tow/praise/h5/add',
+        headers: headearss,
+        method: 'post',
+        params: data
+    })
+}

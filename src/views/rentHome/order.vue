@@ -35,7 +35,7 @@
         <van-cell is-link @click="timeradioshow = true" :value="timeradio | timeradioFilter" title="租约时长"/>
         <van-popup v-model="timeradioshow" position="bottom">
           <p class="selectTitle">租约时长</p>
-          <van-radio-group v-model="timeradio" v-for="item in timeList" :key="item">
+          <van-radio-group v-model="timeradio" v-for="item in timeList" :key="item" @change='radioGroupChange'>
             <van-cell-group>
               <van-cell :title="item+'天'" clickable @click="timeradio = item">
                 <template #right-icon>
@@ -90,8 +90,8 @@
       close-icon-position="top-left"
       position="bottom"
       :style="{ height: '100%' }">
-        <p class="contractTitle">{{ article.title }}</p>
-        <p class="contractContent">{{ article.article }}</p>
+        <!-- <p class="contractTitle">{{ article.title }}</p> -->
+        <p class="contractContent" style="word-break:break-all;white-space: pre-line;padding:10px 16px 30px;" v-html="article"></p>
       </van-popup>
     </div>
   </div>
@@ -99,8 +99,7 @@
 
 <script>
 import { roomInfo } from '@/api/room'
-import { addOrder, orderBill, billFirst } from '@/api/order'
-import { getArticle } from '@/api/aboutus'
+import { addOrder, orderBill, billFirst, orderContractr } from '@/api/order'
 
 import moment from 'moment';
 import share from '@/utils/share';
@@ -170,7 +169,7 @@ export default {
     share.share(this.$route.meta.title);
     tokenAuth.getAuth(this.$route.query);
     this.roomInfo()
-    this.getArticle()
+    this.orderContractr()
   },
   mounted() {},
   methods:{
@@ -286,16 +285,20 @@ export default {
       this.current = index;
     },
     /** 租赁合同 */
-    getArticle() {
+    orderContractr() {
       const param = {
-        type: 4
+        id: this.$route.query.id
       }
-      getArticle(param).then((result) => {
+      orderContractr(param).then((result) => {
         this.article = result.data
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
       });
     },
+    radioGroupChange(val) {
+      console.log(val)
+      this.payradio = ''
+    }
   },
 }
 </script>

@@ -30,10 +30,11 @@
             <div class="homePrice overflow">
               <p class="float-left">￥{{ item.thirtyAmount }} /月</p>
               <p class="float-left listTag">酒店公寓</p>
-              <!-- <div class="float-right">
-                <img src="@/assets/img/favourYes.png" alt="" class="favourIcon">
-                <p class="favourCount">520赞</p>
-              </div> -->
+              <div class="float-right" @click.stop="favourClick(item)">
+                <img v-if="item.isMyFavor" src="@/assets/img/favourYes.png" class="favourIcon">
+                <img v-else src="@/assets/img/favourNo.png" class="favourIcon">
+                <p class="favourCount">{{ item.praiseCount }}赞</p>
+              </div>
             </div>
           </div>
         </div>
@@ -66,7 +67,7 @@
 </template>
 
 <script>
-import { roomList } from '@/api/room'
+import { roomList, addPraise } from '@/api/room'
 
 import share from '@/utils/share';
 import tokenAuth from '@/utils/tokenAuth';
@@ -174,8 +175,20 @@ export default {
           $state.complete();
         }
       }).catch((err) => {
+        this.$notify({ type: 'danger', message: err });
       })
     },
+    favourClick(item) {
+      const param = {
+        rid: item.id
+      }
+      addPraise(param).then((result) => {
+        item.isMyFavor = true
+        item.praiseCount = item.praiseCount + 1
+      }).catch((err) => {
+        this.$notify({ type: 'danger', message: err });
+      });
+    }
   },
  
 }

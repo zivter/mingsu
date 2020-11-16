@@ -151,12 +151,25 @@ export function billFirst(data) {
         params: data
     })
 }
+
 /**
  * 31.调用账单付款
  */
 export function orderBill(data) {
     return request({
         url: '/tow/bill/h5/orderBill',
+        headers: headearss,
+        method: 'post',
+        params: data
+    })
+  }
+  
+  /**
+ * 34.获取订单合同
+ */
+export function orderContractr(data) {
+    return request({
+        url: '/tow/order/h5/contractr',
         headers: headearss,
         method: 'post',
         params: data
