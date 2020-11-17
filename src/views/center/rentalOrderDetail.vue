@@ -25,23 +25,25 @@
       <p class="warmTip" @click="contractShow = true">查看租赁合同</p>
       <van-tabs v-model="tabActive" type="card">
         <van-tab title="未支付">
-          <van-radio-group v-model="payradio" ref="checkboxGroup" @change="checkboxChange">
-            <van-radio :name="index" class="payList" v-for="(item, index) in billData1" :key="index">
-              <div class="payListTop">
-                <div class="payListTopL">
-                  ￥{{ item.payAmount }}
-                  <span>房屋租金</span>
+          <van-checkbox-group v-model="payradio" ref="checkboxGroup" @change="checkboxChange">
+            <van-cell-group>
+              <van-checkbox :name="index" class="payList" v-for="(item, index) in billData1" :key="index">
+                <div class="payListTop">
+                  <div class="payListTopL">
+                    ￥{{ item.payAmount }}
+                    <span>房屋租金</span>
+                  </div>
+                  <div class="payListTopR">
+                    未支付
+                  </div>
                 </div>
-                <div class="payListTopR">
-                  未支付
+                <div class="payListBtm">
+                  <span class="payListBtmL">{{ item.beginTime | timeFilter }}-{{ item.endTime | timeFilter }}</span>
+                  <span class="payListBtmR">{{ item.beginTime | timeFilter }}前</span>
                 </div>
-              </div>
-              <div class="payListBtm">
-                <span class="payListBtmL">{{ item.beginTime | timeFilter }}-{{ item.endTime | timeFilter }}</span>
-                <span class="payListBtmR">{{ item.beginTime | timeFilter }}前</span>
-              </div>
-            </van-radio>
-          </van-radio-group>
+              </van-checkbox>
+            </van-cell-group>
+          </van-checkbox-group>
         </van-tab>
         <van-tab title="已支付">
           <div class="payList" v-for="item in billData2" :key="item">
@@ -83,16 +85,14 @@
     close-icon-position="top-left"
     position="bottom"
     :style="{ height: '100%' }">
-      <p class="contractTitle">{{ article.title }}</p>
-      <p class="contractContent">{{ article.article }}</p>
+      <p class="contractContent" style="word-break:break-all;white-space:pre-line;padding:10px 16px 30px;" v-html="article"></p>
     </van-popup>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
-import { orderInfo, billList, orderBill } from '@/api/order'
-import { getArticle } from '@/api/aboutus'
+import { orderInfo, billList, orderBill, orderContractr } from '@/api/order'
 export default {
   name: 'RentalOrderDetail',
   props: {
@@ -100,14 +100,16 @@ export default {
   components:{},
   data() {
     return {
-      orderData: {},
+      orderData: {
+        orderDetails: []
+      },
       tabActive: 0,
       billData: {},
       contractShow: false,
       article: {},
       billData1: [],
       billData2: [],
-      payradio: '',
+      payradio: [],
       totalAmount: ''
     }
   },
@@ -121,7 +123,7 @@ export default {
   created() {
     this.orderInfo()
     this.billList()
-    this.getArticle()
+    this.orderContractr()
   },
   mounted() {
   },
@@ -161,11 +163,11 @@ export default {
       });
     },
     /** 租赁合同 */
-    getArticle() {
+    orderContractr() {
       const param = {
-        type: 4
+        id: this.$route.query.id
       }
-      getArticle(param).then((result) => {
+      orderContractr(param).then((result) => {
         this.article = result.data
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
@@ -176,13 +178,17 @@ export default {
     },
     /** 提交按钮 */
     submit() {
-      if(this.payradio === '') {
+      if(this.payradio.length === 0) {
         this.$notify({type:'warning',message:'请选择待支付的订单'})
         return
       }
+      console.log(this.billData1)
+      const PostDataList = this.payradio.map(item => {
+        return this.billData1[item].id
+      }).join(',')
       //** 根据bid获取支付的信息 */
       const orderParam = {
-        bid: this.billData1[this.payradio].id
+        bid: PostDataList
       }
       orderBill(orderParam).then((result) => {
         if (typeof WeixinJSBridge == "undefined"){
@@ -240,10 +246,11 @@ export default {
       this.$refs.checkboxGroup.toggleAll(true);
     },
     checkboxChange(list) {
-      // this.totalAmount = eval(this.payradio.map(item => {
-      //   return this.billData1[item].payAmount
-      // }).join('+')).toFixed(1)
-      this.totalAmount = this.billData1[list].payAmount
+      this.totalAmount = eval(this.payradio.map(item => {
+        return this.billData1[item].payAmount
+      }).join('+'))
+      this.totalAmount ? this.totalAmount.toFixed(1) : 0
+      // this.totalAmount = this.billData1[list].payAmount
     }
   }
 }
@@ -293,7 +300,7 @@ $pColor: #666;
   text-indent: 2em;
   padding: 6px 10px;
 }
-/deep/ .van-radio__label{
+/deep/ .van-checkbox__label{
   flex: 1;
 }
 .payList{

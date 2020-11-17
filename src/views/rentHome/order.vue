@@ -140,7 +140,7 @@ export default {
   watch: {},
   filters: {
     payradioFilter(val) {
-      if(val >= 30 ) {
+      if(val > 30 ) {
         return '一次性付清'
       } else {
         return val === '' ? '' : '每'+val+'天一付'
