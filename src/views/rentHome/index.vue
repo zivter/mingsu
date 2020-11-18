@@ -197,7 +197,7 @@ export default {
 <style scoped lang='scss'>
 .home{
   background: #f4f4f4;
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
   padding-bottom: 40px;
 }
 .fixedSelect{

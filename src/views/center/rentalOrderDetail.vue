@@ -106,7 +106,7 @@ export default {
       tabActive: 0,
       billData: {},
       contractShow: false,
-      article: {},
+      article: '',
       billData1: [],
       billData2: [],
       payradio: [],

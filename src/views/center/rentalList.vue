@@ -102,6 +102,7 @@ $subBgColor: #fff;
 .rentList{
   background: $bgColor;
   padding-bottom: 60px;
+  min-height: calc(100vh - 60px);
 }
 .rentCard{
   background: #fff;

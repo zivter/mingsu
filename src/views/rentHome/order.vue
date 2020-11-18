@@ -99,7 +99,8 @@
 
 <script>
 import { roomInfo } from '@/api/room'
-import { addOrder, orderBill, billFirst, orderContractr } from '@/api/order'
+import { getArticle } from '@/api/aboutus'
+import { addOrder, orderBill, billFirst } from '@/api/order'
 
 import moment from 'moment';
 import share from '@/utils/share';
@@ -131,7 +132,7 @@ export default {
       payradio: '',
       timeList: [30, 90, 180, 360],
       payList: [1, 5, 10, 30],
-      article: {},
+      article: '',
       firstFee:''
     }
   },
@@ -168,8 +169,8 @@ export default {
   created() {
     share.share(this.$route.meta.title);
     tokenAuth.getAuth(this.$route.query);
+    this.getArticle()
     this.roomInfo()
-    this.orderContractr()
   },
   mounted() {},
   methods:{
@@ -285,18 +286,17 @@ export default {
       this.current = index;
     },
     /** 租赁合同 */
-    orderContractr() {
+    getArticle() {
       const param = {
-        id: this.$route.query.id
+        type: 4
       }
-      orderContractr(param).then((result) => {
-        this.article = result.data
+      getArticle(param).then((result) => {
+        this.article = result.data.article
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
       });
     },
     radioGroupChange(val) {
-      console.log(val)
       this.payradio = ''
     }
   },

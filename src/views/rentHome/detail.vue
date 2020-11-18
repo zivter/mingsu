@@ -34,7 +34,7 @@
       <div class="infoBox">
         <span class="infoBoxPrice">{{ detailData.thirtyAmount }}<span style="font-size:14px;"> /月</span></span>
         <span>{{ detailData.houseType }}</span>
-        <span>{{ detailData.deposit }}m²</span>
+        <span>{{ detailData.area }}m²</span>
       </div>
       <!-- 入住时间 -->
       <!-- <van-row type="flex" justify="space-between" class="timeRange" @click="handleTimePickerClick()">  
