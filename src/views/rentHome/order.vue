@@ -312,11 +312,11 @@ $btnColor: #DA4F53;
 }
 .orderImgList{
   width: 100%;
-  height: 320px;
+  height: 56.4vw;
 }
 .orderImg{
   width: 100%;
-  height: 320px;
+  height: 56.4vw;
 }
 .dBody{
   padding: 10px 20px;

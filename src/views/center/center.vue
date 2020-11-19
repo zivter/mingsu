@@ -34,7 +34,7 @@
         </van-row>
 
         <div class="centerOrder">
-          <p class="orderTitle">名宿订单</p>
+          <p class="orderTitle">民宿订单</p>
           <van-row type="flex" justify="space-around">
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'pending'}})">
               <div style="position:relative">
@@ -43,7 +43,7 @@
                 </svg>
                 <span class="badges" v-if="statusCounts.pending!=0">{{ statusCounts.pending >= 99 ? '99+' : statusCounts.pending }}</span>
               </div>
-              <p class="orderName">代付款</p>
+              <p class="orderName">待支付</p>
             </van-col>
             <van-col span="6" @click="$router.push({path:'/orderCenter',query:{type:'paid'}})">
               <div style="position:relative">

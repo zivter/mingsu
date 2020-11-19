@@ -1,26 +1,60 @@
 <template>
   <div class="contact">
-    <img src="@/assets/img/aboutus3.png" alt="" class="banner">
-    <p class="contactTitle">请填写您的联系信息</p>
-    <van-field :border='false' label="姓名" class="formContent" placeholder="请输入您的真实姓名" v-model="form.clientName" />
-    <van-field :border='false' label="电话" class="formContent" placeholder="请输入您的联系电话" v-model="form.phone" />
-    <van-field :border='false' label="住址" class="formContent" placeholder="请输入您的住址信息" v-model="form.clientAddress" />
-    <van-button type="danger" round class="saveBtn" @click="addCollaborate">提交</van-button>
+    <div class="contact1">
+      <img src="@/assets/img/contactus.png" alt="" class="logo">
+      <van-cell :border="false" title='宁波·总部' is-link  icon="home-o" >
+        <template #default>
+            <a :href="'tel:18668804008'">18668804008</a>
+        </template>
+      </van-cell>
+      <van-cell :border="false" title='宁波·大公馆站' is-link  icon="location-o" >
+        <template #default>
+            <a :href="'tel:15957477775'">15957477775</a>
+        </template>
+      </van-cell>
+      <van-cell :border="false" title='宁波·世纪广场站' is-link  icon="location-o" >
+        <template #default>
+            <a :href="'tel:15957477775'">15957477775</a>
+        </template>
+      </van-cell>
+      <van-cell :border="false" title='宁波·外滩风景站' is-link  icon="location-o" >
+        <template #default>
+            <a :href="'tel:18858084802'">18858084802</a>
+        </template>
+      </van-cell>
+      <van-cell :border="false" title='宁波·新典星座站' is-link  icon="location-o" >
+        <template #default>
+            <a :href="'tel:18858084802'">18858084802</a>
+        </template>
+      </van-cell>
+    </div>
+    <div class="contact2">
+    </div>
+      <van-cell :border="false" title='在线客服' value="跳转微信联系" is-link  icon="more-o" />
+      <van-cell :border="false" title='客服电话' is-link  icon="service-o" >
+        <template #default>
+            <a :href="'tel:15957477775'">15957477775</a>
+        </template>
+      </van-cell>
+      <van-cell :border="false" title='加盟咨询' is-link  icon="phone-o" >
+        <template #default>
+            <a :href="'tel:18658804008'">18658804008</a>
+        </template>
+      </van-cell>
   </div>
 </template>
 
 <script>
-import { addCollaborate } from '@/api/aboutus';
+import { GetCommonSettings } from '@/api/configuration';
 export default {
   name: '',
   props: {
   },
   data() {
     return {
-      form: {
-        clientName: '',
-        phone: '',
-        clientAddress: ''
+      servicePhone: '',
+      p:{
+        phone: 18668804008
       }
     }
   },
@@ -29,12 +63,11 @@ export default {
   filters:{
   },
   methods:{
-    addCollaborate(){
-      addCollaborate(this.form).then((result) => {
-        this.$notify({ type: 'success', message: '提交成功' });
-        console.log(result)
+    GetCommonSettings(){
+      GetCommonSettings().then((result) => {
+        this.servicePhone = result.result.servicePhone
       }).catch((err) => {
-        this.$notify({ type: 'danger', message: err });
+        
       });
     }
   }
@@ -43,25 +76,8 @@ export default {
 
 <style scoped lang='scss'>
 .contact{
-  background: #fff;
-  height: calc(100vh - 44px);
-  .contactTitle{
-    text-align: center;
-    font-size: 13px;
-    line-height: 36px;
-  }
-  .formContent{
-    padding: 12px 30px;
-  }
-  .saveBtn{
-    width: 80%;
-    display: block;
-    position: fixed;
-    bottom: 70px;
-    left: 0;
-    right: 0;
-    margin: auto;
-  }
+  background: #f8f8f8;
+  min-height: 100vh;
   .contact1{
     background: #fff;
   }

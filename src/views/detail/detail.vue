@@ -447,7 +447,7 @@ export default {
   }
 }
 .dSwiper{
-  height: 227px;
+  height: 56.4vw;
   img{
     height: 100%;
     width: 100%;

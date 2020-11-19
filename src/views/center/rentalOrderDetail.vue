@@ -270,7 +270,7 @@ $pColor: #666;
 }
 .rentImg{
   width: 100%;
-  height: 230px;
+  height: 56.4vw;
 }
 .rentTitle{
   font-weight: 700;

@@ -326,10 +326,20 @@
       <p class="p1">无需加盟执行费用，包含（选址费用、设计采购费用、装修费用、平台运营费用、房源保洁管理费用、保洁费用、日用品费用、日常维护费用）</p>
       </van-tab>
     </van-tabs>
+    <div class="contact">
+      <img src="@/assets/img/aboutus3.png" alt="" class="banner">
+      <p class="contactTitle">请填写您的联系信息</p>
+      <van-field :border='false' label="姓名" class="formContent" placeholder="请输入您的真实姓名" v-model="form.clientName" />
+      <van-field :border='false' label="电话" class="formContent" placeholder="请输入您的联系电话" v-model="form.phone" />
+      <van-field :border='false' label="住址" class="formContent" placeholder="请输入您的住址信息" v-model="form.clientAddress" />
+      <van-button type="danger" round class="saveBtn" @click="addCollaborate">提交</van-button>
+    </div>
+
   </div>
 </template>
 
 <script>
+import { addCollaborate } from '@/api/aboutus';
 export default {
   name: '',
   props: {
@@ -337,7 +347,12 @@ export default {
   data() {
     return {
       allAlign: null,
-      tableData: []
+      tableData: [],
+      form: {
+        clientName: '',
+        phone: '',
+        clientAddress: ''
+      }
     }
   },
   created(){
@@ -349,6 +364,14 @@ export default {
     headerCellClassName ({ column, columnIndex }) {
         return 'col-blue'
     },
+    addCollaborate(){
+      addCollaborate(this.form).then((result) => {
+        this.$notify({ type: 'success', message: '提交成功' });
+        console.log(result)
+      }).catch((err) => {
+        this.$notify({ type: 'danger', message: err });
+      });
+    }
   }
 }
 </script>
@@ -369,7 +392,7 @@ export default {
 .van-tab__pane{
   background: #fff!important;
   min-height: calc(100vh - 170px);
-  padding-bottom: 80px;
+  padding-bottom: 10px;
 }
 .my-table {
   width: 100%;
@@ -398,5 +421,40 @@ export default {
   font-weight: 700;
   margin-left: 20px;
   font-size: 15px;
+}
+.contact{
+  background: #fff;
+  .contactTitle{
+    text-align: center;
+    font-size: 13px;
+    line-height: 36px;
+  }
+  .formContent{
+    padding: 12px 30px;
+  }
+  .banner{
+    width: 100%;
+  }
+  .saveBtn{
+    width: 80%;
+    display: block;
+    margin: 16px auto 80px;
+  }
+  .contact1{
+    background: #fff;
+  }
+  .contact2{
+    background: #fff;
+    margin-top: 20px;
+  }
+  .logo{
+    margin: 0 auto;
+    padding: 40px 0 30px 0;
+    display: block;
+    height: 35px;
+  }
+  a{
+    color: #666;
+  }
 }
 </style>

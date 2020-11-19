@@ -236,8 +236,8 @@ export default {
   margin: 3% 3% 0 0;
   border-radius: 2%;
   .homeListImg{
-    max-width: 100%;
-    height: 160px;
+    width: 100%;
+    height: 34.2vw;
     img{
       width:100%;
       height: 100%;
