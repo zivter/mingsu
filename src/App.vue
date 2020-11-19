@@ -8,6 +8,12 @@
           <van-icon :name="props.active ? 'wap-home' : 'wap-home-o'" size="26" style="margin-top:6px"/>
         </template>
       </van-tabbar-item>
+      <van-tabbar-item replace to="/rentHome" name="home" icon="home-o">
+        <template #icon="props">
+          <!-- <img :src="props.active ? homeOn : homeOff "/> -->
+          <van-icon :name="props.active ? 'shop' : 'shop-o'" size="26" style="margin-top:6px"/>
+        </template>
+      </van-tabbar-item>
       <!-- <van-tabbar-item replace to="/ticket" name="friends" icon="credit-pay">门票</van-tabbar-item> -->
       <van-tabbar-item replace to="/center" name="setting" icon="user-o">
         <template #icon="props">
