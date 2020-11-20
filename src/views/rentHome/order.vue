@@ -30,7 +30,7 @@
           <span>{{ detailData.deposit }}m²</span>
         </div>
       </div>
-      <p class="warmTip">温馨提示：租期按照订单提交日起计算</p>
+      <p class="warmTip"> </p>
       <div class="selectContent">
         <van-cell is-link @click="timeradioshow = true" :value="timeradio | timeradioFilter" title="租约时长"/>
         <van-popup v-model="timeradioshow" position="bottom">
@@ -51,7 +51,7 @@
         <van-cell is-link @click="payradioshow = true" :value="payradio | payradioFilter" title='付款周期'/>
         <van-popup v-model="payradioshow" position="bottom">
           <p class="selectTitle">付款周期</p>
-          <van-radio-group v-model="payradio">
+          <van-radio-group v-model="payradio" @change='payradioGroupChange'>
             <van-cell-group v-for="item in payList" :key="item">
               <van-cell :title="'每'+item+'天一付'" clickable @click="payradio = item" v-if="!(timeradio == 30 && item == 30)">
                 <template #right-icon>
@@ -69,9 +69,13 @@
           </van-radio-group>
           <van-button type="danger" class="confirmBtn" @click="payradioshow = false">确定</van-button>
         </van-popup>
+
+        <van-cell is-link @click="canlendarShow = true" :value="canlendarBegin" title='租约开始时间'/>
+        <van-calendar v-model="canlendarShow"  @confirm="canlendarConfirm" />
+
       </div>
       <div class="infoContent">
-        <van-cell :value="payradio | payradioPay(detailData)" title='周期租金'/>
+        <van-cell :value="'￥'+cycleNum" title='周期租金'/>
         <van-cell :value="timeradio | timeradioFilter" title='租约时长'/>
         <van-cell :value="payradio | payradioFilter" title='付款周期'/>
         <van-cell :value="'￥'+detailData.deposit" title='押金'/>
@@ -133,7 +137,10 @@ export default {
       timeList: [30, 90, 180, 360],
       payList: [1, 5, 10, 30],
       article: '',
-      firstFee:''
+      firstFee:'',
+      canlendarShow: false,
+      canlendarBegin: '',
+      cycleNum: 0
     }
   },
   computed: {
@@ -178,13 +185,13 @@ export default {
       this.$router.go(-1)
     },
     submit(){
-      if(this.payradio === '' || this.timeradio === '') {
-        this.$notify({ type: 'danger', message: '请将选择支付周期和租赁时长' });
+      if(this.payradio === '' || this.timeradio === '' || this.canlendarBegin === '') {
+        this.$notify({ type: 'danger', message: '请将选择支付周期,租赁时长和开始租赁日期' });
         return
       }
       Dialog.confirm({
         title: '温馨提示',
-        message: '房屋租期为'+this.timeradio/30+'月份，押金'+this.detailData.deposit+'元，支付方式微信，请先支付押金与第一付款周期费用，合计'+(this.detailData.deposit+(this.detailData.thirtyAmount*this.payradio/30))+'元',
+        message: '房屋租期为'+this.timeradio/30+'月份，押金'+this.detailData.deposit+'元，支付方式微信，请先支付押金与第一付款周期费用，合计'+(this.detailData.deposit+this.detailData.cycleNum)+'元',
       })
         .then(() => {
           // on confirm
@@ -194,7 +201,7 @@ export default {
             roomId: this.$route.query.id,
             cycle: this.payradio == this.timeradio ? 0 : this.payradio,
             rentLength: this.timeradio,
-            beginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            beginTime: this.canlendarBegin,
             peopleCount: 1,
           }
           //** 提交订单获取bid */
@@ -296,8 +303,35 @@ export default {
         this.$notify({type:'warning',message:err})
       });
     },
+    /** 租约时长改变 */
     radioGroupChange(val) {
       this.payradio = ''
+    },
+    /** 周期时间改变 */
+    payradioGroupChange(val) {
+      console.log(val)
+      switch (val) {
+        case 1:
+          this.cycleNum = this.detailData.dayAmount
+          break;
+        case 5:
+          this.cycleNum = this.detailData.fiveAmount
+          break;
+        case 10:
+          this.cycleNum = this.detailData.tenAmount
+          break;
+        case 30:
+          this.cycleNum = this.detailData.thirtyAmount
+          break;
+        default:
+          this.cycleNum = this.detailData.allAmount
+          break;
+      }
+    },
+    /** 日历确认 */
+    canlendarConfirm(data) {
+      this.canlendarShow = false
+      this.canlendarBegin = moment(data).format('YYYY-MM-DD HH:mm:ss')
     }
   },
 }

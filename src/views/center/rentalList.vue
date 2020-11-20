@@ -11,7 +11,7 @@
         <img class="rentImg" :src="GLOBAL.imgSrc2+item.cover">
         <div class="rentRight">
           <p class='rentname'>{{ item.roomTitle }}</p>
-          <p class="rentType">酒店公寓</p>
+          <p class="rentType">{{ item.roomTypeName || '酒店公寓' }}</p>
           <p class="rentStatus">¥{{ item.orderDetails[0].amount }}/{{ item.rentLength }}天</p>
         </div>
       </div>
@@ -131,7 +131,7 @@ $subBgColor: #fff;
     float: left;
     width: 160px;
     display: block;
-    height: 120px;
+    height: 100px;
   }
   .rentRight{
     float: left;

@@ -29,7 +29,7 @@
             <p class="homeTitle">{{ item.title }}</p>
             <div class="homePrice overflow">
               <p class="float-left">￥{{ item.thirtyAmount }} /月</p>
-              <p class="float-left listTag">酒店公寓</p>
+              <p class="float-left listTag">{{ item.roomTypeName || '酒店公寓' }}</p>
               <div class="float-right" @click.stop="favourClick(item)">
                 <img v-if="item.isMyFavor" src="@/assets/img/favourYes.png" class="favourIcon">
                 <img v-else src="@/assets/img/favourNo.png" class="favourIcon">

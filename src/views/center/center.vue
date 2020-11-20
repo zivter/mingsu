@@ -12,6 +12,7 @@
             :src="proFileData.headLogo"
           />
           <p class="avatorP">{{ nickName }}</p>
+          <p>{{account.levelValue}}</p>
         </div>
       </div>
       <div class="centerBtm">
@@ -137,6 +138,7 @@ import Vue from "vue";
 import { GetWechatProfile } from "@/api/account";
 import { GetStatusCounts } from "@/api/orderQuery";
 import { GetProfile } from "@/api/memberUser";
+import { accountInfo } from "@/api/center";
 import share from "@/utils/share";
 import tokenAuth from "@/utils/tokenAuth";
 
@@ -154,6 +156,9 @@ export default {
         total: 0
       },
       nickName: "",
+      account: {
+        levelValue: null
+      }
     };
   },
   computed: {},
@@ -165,6 +170,7 @@ export default {
     this.GetWechatProfile();
     this.GetStatusCounts();
     this.GetProfile();
+    this.accountInfo()
   },
   mounted() {},
   methods: {
@@ -208,6 +214,14 @@ export default {
         .catch((err) => {
           this.$notify({ type: "warning", message: err });
         });
+    },
+    /** 账户信息 获取等级 */
+    accountInfo() {
+      accountInfo().then((result) => {
+        this.account = result.data
+      }).catch((err) => {
+        this.$notify({ type: 'warning', message: err })
+      });
     },
   },
 };
