@@ -208,9 +208,9 @@ export default {
   }
 }
 .banner{
-  background: url('../../assets/img/banner.png') no-repeat center;
+  background: url('../../assets/img/mingsubg.jpg') no-repeat center;
   width: 100%;
-  height: 45vh;
+  height: 40vh;
   background-size: 100% 100%;
   color: #fff;
   line-height: 30px;

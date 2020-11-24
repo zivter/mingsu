@@ -12,7 +12,7 @@
             :src="proFileData.headLogo"
           />
           <p class="avatorP">{{ nickName }}</p>
-          <p>{{account.levelValue}}</p>
+          <p class="level">用户等级：{{account.levelValue}}</p>
         </div>
       </div>
       <div class="centerBtm">
@@ -239,7 +239,7 @@ export default {
 .topBG {
   background: url("../../assets/img/centerBG.png") no-repeat center;
   background-size: 100% 100%;
-  height: 174px;
+  height: 198px;
   position: relative;
   .shareBtn {
     position: absolute;
@@ -259,6 +259,12 @@ export default {
       color: #fff;
       font-size: 22px;
       line-height: 40px;
+    }
+    .level{
+      line-height: 12px;
+      color: #fff;
+      text-align: center;
+      font-size: 12px;
     }
   }
 }
