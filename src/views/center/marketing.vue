@@ -2,7 +2,8 @@
   <div class="marketing">
     <van-nav-bar title="营销中心" left-text left-arrow @click-left="onClickLeft" />
     <div class="container">
-      <img src="../../assets/img/invitePng.png" alt="" class="tuiguangimg">
+      <img src="@/assets/img/invitePng.png" alt="" class="tuiguangimg" v-if="imgUrl === ''">
+      <img :src="imgUrl" alt="" class="tuiguangimg" v-else>
       <van-button type="primary" class="saveBtn" @click="downloadPic">长按图片保存二维码</van-button>
     </div>
   </div>
@@ -11,6 +12,7 @@
 <script>
 import Vue from 'vue';
 import VueQrcode from '@chenfengyuan/vue-qrcode';
+import { advertScanning } from '@/api/center';
 
 Vue.component(VueQrcode.name, VueQrcode);
 
@@ -20,13 +22,15 @@ export default {
   components: {},
   data() {
     return {
-      tokenId: window.localStorage.getItem('tokenId') ? window.localStorage.getItem('tokenId') : ''
+      tokenId: window.localStorage.getItem('tokenId') ? window.localStorage.getItem('tokenId') : '',
+      imgUrl: ''
     };
   },
   computed: {},
   watch: {},
   filters: {},
   created() {
+    this.advertScanning()
   },
   mounted() {},
   methods: {
@@ -35,6 +39,16 @@ export default {
     },
     downloadPic() {
 
+    },
+    advertScanning() {
+      const param = {
+        superior: this.tokenId
+      }
+      advertScanning(param).then((result) => {
+        this.imgUrl = result.data
+      }).catch((err) => {
+        this.$notify({ type: 'danger', message: err });
+      });
     }
   },
 };

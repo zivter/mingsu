@@ -136,3 +136,15 @@ export function addScanning(data) {
         params: data
     })
 }
+
+/**
+ * 35.获取推广二维码图片
+ */
+export function advertScanning(data) {
+    return request({
+        url: '/scanning/h5/advert',
+        headers: headears,
+        method: 'post',
+        params: data
+    })
+}
