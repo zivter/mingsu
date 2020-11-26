@@ -27,8 +27,8 @@ Vue.prototype.GLOBAL = global_
 // Vue.prototype.url = 'https://www.shigvg77.cn/h5/index.html#/'
     // Vue.prototype.url = 'http://192.168.31.160:8089/#/'
     // Vue.prototype.url = 'http://172.22.18.56:8089/#/'
-    Vue.prototype.url = 'http://localhost:8089/#'
-// Vue.prototype.url = 'https://www.shigvg77.cn/h5/test/index.html#/'
+    // Vue.prototype.url = 'http://localhost:8089/#'
+Vue.prototype.url = 'https://www.shigvg77.cn/h5/test/index.html#/'
 
 new Vue({
     store,

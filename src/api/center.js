@@ -142,7 +142,7 @@ export function addScanning(data) {
  */
 export function advertScanning(data) {
     return request({
-        url: '/scanning/h5/advert',
+        url: '/tow/scanning/h5/advert',
         headers: headears,
         method: 'post',
         params: data

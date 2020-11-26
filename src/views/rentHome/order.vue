@@ -105,7 +105,7 @@
 import { roomInfo } from '@/api/room'
 import { getArticle } from '@/api/aboutus'
 import { addOrder, orderBill, billFirst } from '@/api/order'
-
+import { accountInfo } from "@/api/center";
 import moment from 'moment';
 import share from '@/utils/share';
 import tokenAuth from '@/utils/tokenAuth';
@@ -139,7 +139,7 @@ export default {
       article: '',
       firstFee:'',
       canlendarShow: false,
-      canlendarBegin: '',
+      canlendarBegin: moment().format('YYYY-MM-DD'),
       cycleNum: 0
     }
   },
@@ -299,6 +299,7 @@ export default {
       }
       getArticle(param).then((result) => {
         this.article = result.data.article
+        this.accountInfo()
       }).catch((err) => {
         this.$notify({type:'warning',message:err})
       });
@@ -306,10 +307,17 @@ export default {
     /** 租约时长改变 */
     radioGroupChange(val) {
       this.payradio = ''
+      if(this.canlendarBegin != '' && this.timeradio != '' && this.payradio != '') {
+          this.article = this.article.replace('{5}', moment(this.canlendarBegin).add(this.timeradio, 'd').format('YYYY-MM-DD HH:mm:ss'))
+          this.article = this.article.replace('{6}', '')
+          this.article = this.article.replace('{7}', this.timeradio)
+          this.article = this.article.replace('{8}', this.cycleNum)
+          this.article = this.article.replace('{9}', this.detailData.deposit + this.cycleNum)
+          this.article = this.article.replace('{10}', moment(this.canlendarBegin).format('YYYY-MM-DD HH:mm:ss'))
+        }
     },
     /** 周期时间改变 */
     payradioGroupChange(val) {
-      console.log(val)
       switch (val) {
         case 1:
           this.cycleNum = this.detailData.dayAmount
@@ -327,12 +335,41 @@ export default {
           this.cycleNum = this.detailData.allAmount
           break;
       }
+      if(this.canlendarBegin != '' && this.timeradio != '' && this.payradio != '') {
+        this.article = this.article.replace('{5}', moment(this.canlendarBegin).add(this.timeradio, 'd').format('YYYY-MM-DD HH:mm:ss'))
+        this.article = this.article.replace('{6}', '')
+        this.article = this.article.replace('{7}', this.timeradio)
+        this.article = this.article.replace('{8}', this.cycleNum)
+        this.article = this.article.replace('{9}', this.detailData.deposit + this.cycleNum)
+        this.article = this.article.replace('{10}', moment(this.canlendarBegin).format('YYYY-MM-DD HH:mm:ss'))
+      }
     },
     /** 日历确认 */
     canlendarConfirm(data) {
       this.canlendarShow = false
       this.canlendarBegin = moment(data).format('YYYY-MM-DD HH:mm:ss')
-    }
+    },
+    /** 账户信息 获取等级 */
+    accountInfo() {
+      accountInfo().then((result) => {
+        this.article = this.article.replace('{0}', result.data.realName)
+        this.article = this.article.replace('{1}', '男')
+        this.article = this.article.replace('{2}', result.data.idCard)
+        this.article = this.article.replace('{3}', result.data.phone)
+        this.article = this.article.replace('{4}', this.canlendarBegin != '' ? moment(this.canlendarBegin).format('YYYY-MM-DD HH:mm:ss') : '')
+        if(this.canlendarBegin != '' && this.timeradio != '' && this.payradio != '') {
+          this.article = this.article.replace('{5}', moment(this.canlendarBegin).add(this.timeradio, 'd').format('YYYY-MM-DD HH:mm:ss'))
+          this.article = this.article.replace('{6}', this.cycleNum)
+          this.article = this.article.replace('{7}', this.timeradio)
+          this.article = this.article.replace('{8}', this.cycleNum)
+          this.article = this.article.replace('{9}', this.detailData.deposit + this.cycleNum)
+          this.article = this.article.replace('{10}', moment(this.canlendarBegin).format('YYYY-MM-DD HH:mm:ss'))
+        }
+
+      }).catch((err) => {
+        this.$notify({ type: 'warning', message: err })
+      });
+    },
   },
 }
 </script>
