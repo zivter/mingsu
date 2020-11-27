@@ -35,7 +35,7 @@
         <van-cell is-link @click="timeradioshow = true" :value="timeradio | timeradioFilter" title="租约时长"/>
         <van-popup v-model="timeradioshow" position="bottom">
           <p class="selectTitle">租约时长</p>
-          <van-radio-group v-model="timeradio" v-for="item in timeList" :key="item" @change='radioGroupChange'>
+          <van-radio-group v-model="timeradio" v-for="item in detailData.rentLengths" :key="item" @change='radioGroupChange'>
             <van-cell-group>
               <van-cell :title="item+'天'" clickable @click="timeradio = item">
                 <template #right-icon>
@@ -52,7 +52,7 @@
         <van-popup v-model="payradioshow" position="bottom">
           <p class="selectTitle">付款周期</p>
           <van-radio-group v-model="payradio" @change='payradioGroupChange'>
-            <van-cell-group v-for="item in payList" :key="item">
+            <van-cell-group v-for="item in detailData.cycles" :key="item">
               <van-cell :title="'每'+item+'天一付'" clickable @click="payradio = item" v-if="!(timeradio == 30 && item == 30)">
                 <template #right-icon>
                   <van-radio :name="item" />
@@ -72,6 +72,8 @@
 
         <van-cell is-link @click="canlendarShow = true" :value="canlendarBegin" title='租约开始时间'/>
         <van-calendar v-model="canlendarShow"  @confirm="canlendarConfirm" />
+
+        <van-cell is-link @click="stayShow = true" :value="stayInfo.name" title='入住人信息'/>
 
       </div>
       <div class="infoContent">
@@ -97,6 +99,16 @@
         <!-- <p class="contractTitle">{{ article.title }}</p> -->
         <p class="contractContent" style="word-break:break-all;white-space: pre-line;padding:10px 16px 30px;" v-html="article"></p>
       </van-popup>
+      <!-- 入住人信息 -->
+      <van-popup
+      v-model="stayShow"
+      closeable
+      close-icon-position="top-left"
+      position="bottom"
+      :style="{ height: '100%' }">
+        <!-- <p class="contractTitle">{{ article.title }}</p> -->
+        <occupant @saveOccupant='saveOccupant'/>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -111,13 +123,14 @@ import share from '@/utils/share';
 import tokenAuth from '@/utils/tokenAuth';
 import Vue from 'vue'
 import { Lazyload, Dialog } from 'vant';
+import occupant from './component/selectOccupant';
 
 Vue.use(Lazyload);
 export default {
   name: '',
   props:  {
   },
-  components:{},
+  components:{ occupant },
   data() {
     return {
       detailData: {
@@ -134,13 +147,13 @@ export default {
       contractshow: false,
       timeradio: '',
       payradio: '',
-      timeList: [30, 90, 180, 360],
-      payList: [1, 5, 10, 30],
       article: '',
       firstFee:'',
       canlendarShow: false,
       canlendarBegin: moment().format('YYYY-MM-DD'),
-      cycleNum: 0
+      cycleNum: 0,
+      stayInfo: '',
+      stayShow: false
     }
   },
   computed: {
@@ -196,7 +209,7 @@ export default {
         .then(() => {
           // on confirm
           const param = {
-            lodgersId: window.localStorage.getItem('tokenId'),
+            lodgersId: this.stayInfo.id,
             orderType: 1,
             roomId: this.$route.query.id,
             cycle: this.payradio == this.timeradio ? 0 : this.payradio,
@@ -370,6 +383,11 @@ export default {
         this.$notify({ type: 'warning', message: err })
       });
     },
+    /** 保存入住人 */
+    saveOccupant(result) {
+      this.stayInfo = result
+      this.stayShow = false
+    }
   },
 }
 </script>

@@ -12,7 +12,7 @@
             :src="proFileData.headLogo"
           />
           <p class="avatorP">{{ nickName }}</p>
-          <p class="level">用户等级：{{account.levelValue}}</p>
+          <p class="level">用户等级：<van-icon name="star-o" v-for="item in account.levelValue" :key="item"/></p>
         </div>
       </div>
       <div class="centerBtm">
