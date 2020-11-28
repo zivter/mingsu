@@ -48,7 +48,7 @@
           <van-button type="danger" class="confirmBtn" size="small" @click="timeradioshow = false">确定</van-button>
         </van-popup>
 
-        <van-cell is-link @click="payradioshow = true" :value="payradio | payradioFilter" title='付款周期'/>
+        <van-cell is-link @click="payradioshow = true" :value="payradio | payradioFilter(timeradio)" title='付款周期'/>
         <van-popup v-model="payradioshow" position="bottom">
           <p class="selectTitle">付款周期</p>
           <van-radio-group v-model="payradio" @change='payradioGroupChange'>
@@ -160,8 +160,8 @@ export default {
   },
   watch: {},
   filters: {
-    payradioFilter(val) {
-      if(val > 30 ) {
+    payradioFilter(val, payradioFilter) {
+      if(val > 30 || (val && payradioFilter == val)) {
         return '一次性付清'
       } else {
         return val === '' ? '' : '每'+val+'天一付'

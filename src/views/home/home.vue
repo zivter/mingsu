@@ -210,7 +210,7 @@ export default {
 .banner{
   background: url('../../assets/img/mingsubg.jpg') no-repeat center;
   width: 100%;
-  height: 40vh;
+  height: 36vh;
   background-size: 100% 100%;
   color: #fff;
   line-height: 30px;
