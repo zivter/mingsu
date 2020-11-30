@@ -38,7 +38,7 @@
       </van-cell>
       <van-cell :border="false" title='加盟咨询' is-link  icon="phone-o" >
         <template #default>
-            <a :href="'tel:18658804008'">18658804008</a>
+            <a :href="'tel:18668804008'">18668804008</a>
         </template>
       </van-cell>
   </div>
