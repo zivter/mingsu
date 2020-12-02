@@ -6,14 +6,14 @@
     <van-row gutter="10" class="dateBtm" @click="timePopupshow = true">
       <van-col span="9">
         <p class="dateTime dateStart">{{ startDay | startDayFilter }}</p>
-        <p class="dateExplain">14:00后入住</p>
+        <p class="dateExplain">15:00后入住</p>
       </van-col>
       <van-col span="6">
         <p class="dateTotal">共{{ totalDay }}晚</p>
       </van-col>
       <van-col span="9" class="right">
         <p class="dateTime dateEnd">{{ endDay | endDayFilter }}</p>
-        <p class="dateExplain">14:00后离店</p>
+        <p class="dateExplain">12:00前离店</p>
       </van-col>
     </van-row>
 

@@ -32,7 +32,6 @@ export default {
     addCollaborate(){
       addCollaborate(this.form).then((result) => {
         this.$notify({ type: 'success', message: '提交成功' });
-        console.log(result)
       }).catch((err) => {
         this.$notify({ type: 'danger', message: err });
       });

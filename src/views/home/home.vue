@@ -17,7 +17,7 @@
         @click="handleListClick(item,index)"
         class="homeCard"
         :key='index'>
-          <img v-lazy="GLOBAL.imgSrc+item.images[0].imageUrl" class="homeListImg">
+          <img v-lazy="GLOBAL.imgSrc+item.cover" class="homeListImg">
           <div class="homeListInfo">
             <p class="homeTitle">{{ item.title }}</p>
             <div class="homePrice overflow">
@@ -121,7 +121,6 @@ export default {
   },
   created(){
     share.share(this.$route.meta.title);
-    tokenAuth.getAuth(this.$route.query);
   },
   methods:{
     onConfirm() {

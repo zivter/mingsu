@@ -49,17 +49,15 @@
         </van-col>
       </van-row>
       <!-- 房源信息 -->
-      <!-- <div class="roomInfo">
+      <div class="roomInfo">
         <p class="contentTitle">房源信息</p>
         <van-row class="roomInfoRow">
-          <van-col span="12">支付<span class="roomInfoSpan">押一付一</span></van-col>
-          <van-col span="12">租约<span class="roomInfoSpan">3月起租</span></van-col>
-          <van-col span="12">朝向<span class="roomInfoSpan">南</span></van-col>
-          <van-col span="12">装修<span class="roomInfoSpan">精装</span></van-col>
-          <van-col span="12">楼层<span class="roomInfoSpan">12层</span></van-col>
-          <van-col span="12">商圈<span class="roomInfoSpan">外滩</span></van-col>
+          <van-col span="12">床数<span class="roomInfoSpan">{{ detailData.bedCount }}</span></van-col>
+          <van-col span="12">人数<span class="roomInfoSpan">{{ detailData.lodgerCount }}</span></van-col>
+          <van-col span="12">卧室数<span class="roomInfoSpan">{{ detailData.bedroomCount }}</span></van-col>
+          <van-col span="12">卫生间数<span class="roomInfoSpan">{{ detailData.bathroomCount }}</span></van-col>
         </van-row>
-      </div> -->
+      </div>
       <!-- 设施 -->
       <div class="facilities">
         <p class="contentTitle">服务设施</p>
@@ -481,14 +479,14 @@ export default {
     font-weight: 700;
     font-size: 14px;
     .roomInfoRow{
-      color: #aaa;
+      color: #999;
     }
     .van-col{
       margin-bottom: 10px;
     }
     .roomInfoSpan{
       margin-left: 10px;
-      color: #000;
+      color: #333;
     }
   }
   .contentTitle{

@@ -182,7 +182,6 @@ export default {
         this.$notify({type:'warning',message:'请选择待支付的订单'})
         return
       }
-      console.log(this.billData1)
       const PostDataList = this.payradio.map(item => {
         return this.billData1[item].id
       }).join(',')

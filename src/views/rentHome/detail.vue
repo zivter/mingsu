@@ -215,7 +215,6 @@ export default {
               alert('click marker');
             },
             dragend: (e) => {
-              console.log('---event---: dragend')
               this.markers[0].position = [e.lnglat.lng, e.lnglat.lat];
             }
           },
@@ -295,7 +294,6 @@ export default {
       roomInfo({id: this.$route.query.id}).then((result) => {
         if(result.success == true){
           this.detailData = result.data
-          console.log(this.detailData)
           this.getIconCnName(result.data.serviceFacilities.split(','),this.facilitiesList)
           let o = {
             position:[result.data.coordinate.split(',')[1],result.data.coordinate.split(',')[0]],
