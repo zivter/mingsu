@@ -92,7 +92,7 @@ export default {
       roomListForm:{
         CategoryId:null,
         from:moment().format('YYYY-MM-DD'),
-        to:moment().add(1,'d').format('YYYY-MM-DD'),
+        to:moment().format('YYYY-MM-DD'),
         PriceFrom:null,
         PriceTo:null,
         LodgerCount:null,
@@ -103,7 +103,6 @@ export default {
       },
       CategoryName: '位置',
       timeRange:moment().format('YYYY-MM-DD')+','+moment().add(1,'d').format('YYYY-MM-DD'),
-
     }
   },
   filters:{
@@ -141,7 +140,7 @@ export default {
     timeChange(data){
       this.reset()
       this.roomListForm.from = data.from
-      this.roomListForm.to = data.to
+      this.roomListForm.to = moment(data.to).subtract(1, 'd').format('YYYY-MM-DD')
       this.timeRange = moment(data.from).format('YYYY-MM-DD') + ',' + moment(data.to).format('YYYY-MM-DD')
       this.timePickerShow = false
     },

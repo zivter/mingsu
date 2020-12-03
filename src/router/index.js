@@ -2,8 +2,11 @@ import Vue from "vue";
 import Router from "vue-router";
 import { WechatH5Auth, ExternalAuthenticate, GetShareParams } from '@/api/tokenAuth'
 import { GetWechatProfile } from "@/api/account";
+import { addScanning } from '@/api/center';
 import store from '../store'
 import Cookies from 'js-cookie'
+import { Notify } from 'vant';
+Vue.use(Notify);
 
 Vue.use(Router);
 
@@ -374,8 +377,11 @@ const tokenAuth = {
     ExternalAuthenticate(param).then((result) => {
       result.result.recordTime = new Date().getTime(); //记录时间
       store.dispatch('tokenAuth/setToken', result.result)
+      location.reload()
       next();
-    }).catch((err) => {});
+    }).catch((err) => {
+      Notify({ type: 'danger', message: err })
+    });
   },
   /**
    * 获取个人信息
@@ -383,10 +389,29 @@ const tokenAuth = {
   GetWechatProfile() {
     GetWechatProfile().then((result) => {
       store.dispatch('tokenAuth/setTokenId', result.result.userId)
+      if(window.localStorage.getItem('superior')) {
+        tokenAuth.addScanning()
+      }
     })
     .catch((err) => {
+      Notify({ type: 'danger', message: err })
     });
   },
+  /** 调用营销中心的接口 */
+  addScanning(){
+    const param = {
+      superior: window.localStorage.getItem('superior')
+    }
+    addScanning(param).then((result) => {
+      if(result.msg == '请不要尝试自己扫自己！') {
+        Notify({ type: 'danger', message: result.msg })
+      }
+      window.localStorage.removeItem('superior')
+    }).catch((err) => {
+      Notify({ type: 'danger', message: err })
+    });
+  },
+  /** 获取token */
   getAuth(to, next) {
     const that = this;
     tokenAuth.GetWechatProfile()

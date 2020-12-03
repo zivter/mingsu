@@ -132,7 +132,7 @@ export function addScanning(data) {
     return request({
         url: '/tow/scanning/h5/add',
         headers: headears,
-        method: 'post',
+        method: 'get',
         params: data
     })
 }

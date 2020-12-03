@@ -50,7 +50,8 @@ export default {
       totalDay: 1,
       endDay: moment().add(1,'d').format('MM-DD'),
       startDay: moment().format('MM-DD'),
-      dateList: []
+      dateList: [],
+      isSelect: true
     }
   },
   filters:{
@@ -108,9 +109,16 @@ export default {
       //     day.type = undefined;
       //   }
       // });
-      if(this.dateList.indexOf(moment(day.date).format()) == -1){
-        day.type = 'disabled';
+      if(this.isSelect === false) {
+        if(this.dateList.indexOf(moment(day.date).subtract(1, 'd').format()) == -1){
+          day.type = 'disabled';
+        }
+      } else {
+        if(this.dateList.indexOf(moment(day.date).format()) == -1){
+          day.type = 'disabled';
+        }
       }
+      
       if (day.type === 'start') {
         day.bottomInfo = '入住';
 
@@ -128,6 +136,7 @@ export default {
       }
       GetIdleDatesByDateRange(param).then((result) => {
         this.dateList = result.result.items
+        this.dateList.splice(10,1)
       }).catch((err) => {
         
       });
@@ -141,12 +150,15 @@ export default {
     onSelect(date){
       const [start, end] = date;
       if(end){
+        this.isSelect = true
         for(var i = 0;i<moment(end-start).date()-1;i++){
           if(this.dateList.indexOf(moment(start).add(i,'d').format()) == -1){
             this.$notify({type:'warning',message:'请选择正确日期'})
             this.reset()
           }
         }
+      } else {
+        this.isSelect = false
       }
       if(date[1]){
         this.totalDay = moment(end-start).date()-1
