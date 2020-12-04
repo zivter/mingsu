@@ -228,19 +228,19 @@ export default {
       ); 
     },
     /**取消支付 */
-    orderCancel() {
-      const param = {
-        id: this.orderData.id
-      }
-      orderCancel(param).then((result) => {
-        if (result.success) {
-          this.$notify({type:'success',message:'退订成功'});
-          location.reload()
-        }
-      }).catch((err) => {
-        this.$notify({type:'warning',message:err})
-      });
-    },
+    // orderCancel() {
+    //   const param = {
+    //     id: this.orderData.id
+    //   }
+    //   orderCancel(param).then((result) => {
+    //     if (result.success) {
+    //       this.$notify({type:'success',message:'退订成功'});
+    //       location.reload()
+    //     }
+    //   }).catch((err) => {
+    //     this.$notify({type:'warning',message:err})
+    //   });
+    // },
     selectAll() {
       this.$refs.checkboxGroup.toggleAll(true);
     },
