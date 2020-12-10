@@ -152,7 +152,12 @@ export default {
       canlendarShow: false,
       canlendarBegin: moment().format('YYYY-MM-DD'),
       cycleNum: 0,
-      stayInfo: '',
+      stayInfo: {
+        gender: 1,
+        identityNumber: "",
+        name: "",
+        phoneNumber: "",
+      },
       stayShow: false
     }
   },
@@ -365,10 +370,6 @@ export default {
     /** 账户信息 获取等级 */
     accountInfo() {
       accountInfo().then((result) => {
-        this.article = this.article.replace('{0}', result.data.realName)
-        this.article = this.article.replace('{1}', '男')
-        this.article = this.article.replace('{2}', result.data.idCard)
-        this.article = this.article.replace('{3}', result.data.phone)
         this.article = this.article.replace('{4}', this.canlendarBegin != '' ? moment(this.canlendarBegin).format('YYYY-MM-DD HH:mm:ss') : '')
         if(this.canlendarBegin != '' && this.timeradio != '' && this.payradio != '') {
           this.article = this.article.replace('{5}', moment(this.canlendarBegin).add(this.timeradio, 'd').format('YYYY-MM-DD HH:mm:ss'))
@@ -385,6 +386,14 @@ export default {
     },
     /** 保存入住人 */
     saveOccupant(result) {
+      console.log(result)
+      this.article = this.article.replace('{0}', result.name)
+      this.article = this.article.replace('{1}', result.gender === 1 ? '男' : '女')
+      this.article = this.article.replace('{2}', result.identityNumber)
+      this.article = this.article.replace('{3}', result.phoneNumber)
+      this.article = this.article.replace('乙方（签字）：', '乙方（签字）：'+result.name)
+      this.article = this.article.replace('电话：', '电话：'+result.phoneNumber)
+      this.article = this.article.replace('地址：', '地址：浙江省宁波市'+this.detailData.business+this.detailData.positionType)
       this.stayInfo = result
       this.stayShow = false
     }

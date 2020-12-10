@@ -388,10 +388,14 @@ const tokenAuth = {
    */
   GetWechatProfile() {
     GetWechatProfile().then((result) => {
-      store.dispatch('tokenAuth/setTokenId', result.result.userId)
-      if(window.localStorage.getItem('superior')) {
-        tokenAuth.addScanning()
-      }
+      store.dispatch('tokenAuth/setTokenId', result.result.userId).then(res => {
+        if(window.localStorage.getItem('superior')) {
+          tokenAuth.addScanning()
+        }
+      }).catch( err => {
+        console.log(err);
+      })
+      
     })
     .catch((err) => {
       Notify({ type: 'danger', message: err })

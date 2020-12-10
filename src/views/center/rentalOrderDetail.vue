@@ -62,6 +62,22 @@
             </div>
           </div>
         </van-tab>
+        <van-tab title="逾期未支付">
+          <div class="payList" v-for="item in billData3" :key="item">
+            <div class="payListTop">
+              <div class="payListTopL">
+                ￥{{ item.payAmount }}
+                <span>房屋租金</span>
+              </div>
+              <div class="payListTopR">
+                逾期未支付
+              </div>
+            </div>
+            <div class="payListBtm">
+              <span class="payListBtmL">{{ item.beginTime | timeFilter }}-{{ item.endTime | timeFilter }}</span>
+            </div>
+          </div>
+        </van-tab>
       </van-tabs>
       <!-- 提交订单兰 -->
       <van-submit-bar
@@ -109,6 +125,7 @@ export default {
       article: '',
       billData1: [],
       billData2: [],
+      billData3: [],
       payradio: [],
       totalAmount: ''
     }
@@ -151,11 +168,14 @@ export default {
       billList(params).then((result) => {
         this.billData1 = []
         this.billData2 = []
+        this.billData3 = []
         result.data.records.forEach(element => {
           if(element.payState === 0) {
             this.billData1.push(element)
-          } else {
+          } else if (element.payState === 1) {
             this.billData2.push(element)
+          } else if(element.payState === 3) {
+            this.billData3.push(element)
           }
         });
       }).catch((err) => {
