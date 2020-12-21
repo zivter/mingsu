@@ -70,7 +70,7 @@
           <van-button type="danger" class="confirmBtn" @click="payradioshow = false">确定</van-button>
         </van-popup>
 
-        <van-cell is-link @click="canlendarShow = true" :value="canlendarBegin" title='租约开始时间'/>
+        <van-cell is-link @click="canlendarShow = true" :value="canlendarBegin | canlendarBeginFilter" title='租约开始时间'/>
         <van-calendar v-model="canlendarShow"  @confirm="canlendarConfirm" />
 
         <van-cell is-link @click="stayShow = true" :value="stayInfo.name" title='入住人信息'/>
@@ -150,7 +150,7 @@ export default {
       article: '',
       firstFee:'',
       canlendarShow: false,
-      canlendarBegin: moment().format('YYYY-MM-DD'),
+      canlendarBegin: moment().format('YYYY-MM-DD HH:mm:ss'),
       cycleNum: 0,
       stayInfo: {
         gender: 1,
@@ -189,6 +189,9 @@ export default {
       if(payradio) {
         return '￥'+((timeradio/payradio)*detailData.thirtyAmount * (payradio/30) +detailData.deposit)
       }
+    },
+    canlendarBeginFilter(val) {
+      return moment().format('YYYY-MM-DD')
     }
   },
   created() {
@@ -207,9 +210,10 @@ export default {
         this.$notify({ type: 'danger', message: '请将选择支付周期,租赁时长和开始租赁日期' });
         return
       }
+      console.log(this.detailData.deposit,this.detailData.cycleNum)
       Dialog.confirm({
         title: '温馨提示',
-        message: '房屋租期为'+this.timeradio/30+'月份，押金'+this.detailData.deposit+'元，支付方式微信，请先支付押金与第一付款周期费用，合计'+(this.detailData.deposit+this.detailData.cycleNum)+'元',
+        message: '房屋租期为'+this.timeradio/30+'月份，押金'+this.detailData.deposit+'元，支付方式微信，请先支付押金与第一付款周期费用，合计'+(this.detailData.deposit+this.cycleNum)+'元',
       })
         .then(() => {
           // on confirm
