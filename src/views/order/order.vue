@@ -15,14 +15,14 @@
       <van-row gutter="10" class="dateBtm" @click="timePopupshow = true">
         <van-col span="9">
           <p class="dateTime dateStart">{{ timeRangeInfo.from }}</p>
-          <p class="dateExplain">{{ timeRangeInfo.fromWeek | weekFilter }}14:00后入住</p>
+          <p class="dateExplain">{{ timeRangeInfo.fromWeek | weekFilter }}15:00后入住</p>
         </van-col>
         <van-col span="6">
           <p class="dateTotal">共{{ timeRangeInfo.total }}晚</p>
         </van-col>
         <van-col span="9" class="right">
           <p class="dateTime dateEnd">{{ timeRangeInfo.to }}</p>
-          <p class="dateExplain">{{ timeRangeInfo.toWeek | weekFilter }}12:00后离店</p>
+          <p class="dateExplain">{{ timeRangeInfo.toWeek | weekFilter }}12:00前离店</p>
         </van-col>
       </van-row>
 

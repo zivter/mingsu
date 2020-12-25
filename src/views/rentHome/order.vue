@@ -225,6 +225,7 @@ export default {
             rentLength: this.timeradio,
             beginTime: this.canlendarBegin,
             peopleCount: 1,
+            ctag: this.$route.query.ctag != '' && this.$route.query.ctag ? this.$route.query.ctag : ''
           }
           //** 提交订单获取bid */
           addOrder(param).then((result) => {

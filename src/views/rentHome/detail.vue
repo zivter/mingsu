@@ -301,7 +301,7 @@ export default {
           }
           this.markers = [o]
           const title = `浙拾光-房屋租赁`;
-          share.share(result.data.title.split('】')[0].concat('】'), this.GLOBAL.imgSrc2+result.data.cover, title);
+          share.share2(result.data.title, this.GLOBAL.imgSrc2+result.data.cover, title);
         }
       }).catch((err) => {
         this.$notify({ type: 'danger', message: err });
@@ -331,10 +331,11 @@ export default {
      */
     skipToOrder(data){
       this.$router.push({
-        path:'rentOrder',
+        path: 'rentOrder',
         query:{
-          id:this.$route.query.id,
-          timeRange: this.timeRange
+          id: this.$route.query.id,
+          timeRange: this.timeRange,
+          ctag: this.$route.query.ctag ? this.$route.query.ctag : '',
         }
       })
     },

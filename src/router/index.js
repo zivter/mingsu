@@ -430,7 +430,7 @@ const tokenAuth = {
         if (to.query.encryptedCode) {
           tokenAuth.ExternalAuthenticate(to.query.encryptedCode)
         } else {
-          tokenAuth.getWechatH5Auth(to.path)
+          tokenAuth.getWechatH5Auth(to.fullPath)
         }
       }
     })
