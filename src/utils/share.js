@@ -27,7 +27,7 @@ let share = {
             wx.updateAppMessageShareData({
                 title: '浙拾光民宿预订-' + title, // 分享标题
                 desc: content ? content : '优质民宿，星级保洁，管家服务。', // 分享描述
-                link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                link: window.location.href+'&ctag='+tokenId, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                 imgUrl: pic ? pic : 'https://www.shigvg77.cn/h5/logo.png', // 分享图标
                 success: function() {
                     // 设置成功
@@ -35,7 +35,7 @@ let share = {
             })
             wx.updateTimelineShareData({
                     title: '浙拾光民宿预订-' + title, // 分享标题
-                    link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    link: window.location.href+'&ctag='+tokenId, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                     imgUrl: pic ? pic : 'https://www.shigvg77.cn/h5/logo.png', // 分享图标
                     success: function() {
                         // 设置成功

@@ -203,6 +203,7 @@ import { GetDetail, GetIdleDatesByDateRang, GetCommonSettings,GetIdleDatesByDate
 import { GetPrices } from '@/api/room'
 import tokenAuth from '@/utils/tokenAuth';
 import { Lazyload } from 'vant';
+import { addScanning } from '@/api/center';
 
 Vue.use(Lazyload);
 Vue.use(VueAMap);
@@ -275,6 +276,19 @@ export default {
     this.timeFomate()
     this.GetPrices(1)
     this.GetCommonSettings()
+    if (this.$route.query.ctag && this.$route.query.ctag != '') {
+      /** 调用营销中心的接口 */
+      const param = {
+        superior: this.$route.query.ctag
+      }
+      addScanning(param).then((result) => {
+        if(result.msg == '请不要尝试自己扫自己！') {
+          this.$notify({ type: 'danger', message: result.msg });
+        }
+      }).catch((err) => {
+        this.$notify({ type: 'danger', message: err });
+      });
+    }
   },
  mounted() {
   },
