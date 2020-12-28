@@ -28,8 +28,8 @@
     </van-list>
     <!-- 无线滚动 -->
     <infinite-loading @infinite="infiniteHandler">
-      <div slot="no-more" style='color:#999;font-size:13px;margin-top:10px;padding-bottom:20px;'>没有更多房源了...</div>
-      <div slot="no-results" style='color:#666;font-size:13px;margin-top:10px;'>暂无房源...</div>
+      <div slot="no-more" style='color:#999;font-size:13px;margin-top:10px;padding-bottom:20px;'>没有更多收益了...</div>
+      <div slot="no-results" style='color:#666;font-size:13px;margin-top:10px;'>暂无收益...</div>
     </infinite-loading>
   </div>
 </template>
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       form: {
-        page: 0,
+        page: 1,
         limit: 20
       },
       profit: []
