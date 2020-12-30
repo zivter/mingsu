@@ -28,9 +28,10 @@
           <p class="btn-number">{{ unified.extract }}</p>
         </li>
       </ul>
-      <ul class="detail-list">
-        <purseList></purseList>
-      </ul>
+      <van-tabs type="card">
+        <van-tab title="民宿"><purseList purseType='1'></purseList></van-tab>
+        <van-tab title="租房"><purseList purseType='2'></purseList></van-tab>
+      </van-tabs>
     </div>
   </div>
 </template>

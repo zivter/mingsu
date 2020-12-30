@@ -2,12 +2,12 @@
   <div class="profit">
     <van-list
       class="homeList"
-      :error.sync="error"
       error-text="请求失败，点击重新加载"
       finished-text="没有更多了">
         <div class="purseCard" v-for="(item,index) in profit" :key="index">
           <div class="purseT overflow">
-            <img :src="GLOBAL.imgSrc2+item.cover" alt="" class="purse-img">
+            <img v-if="purseType == 1" :src="item.cover" alt="" class="purse-img">
+            <img v-else :src="GLOBAL.imgSrc2+item.cover" alt="" class="purse-img">
             <div class="purseL float-left">
               <p class="title">{{ item.roomTitle }}</p>
               <p>创建时间：{{ item.createTime | timeFilter }}</p>
@@ -41,6 +41,10 @@ import moment from "moment";
 export default {
   name: "purseList",
   props: {
+    purseType: {
+      type: String,
+      required: true
+    }
   },
   components: {},
   data() {
@@ -65,6 +69,7 @@ export default {
   methods: {
     /**无线滚动 */
     infiniteHandler($state) {
+      this.form.type = this.purseType
       profitList(this.form).then((result) => {
         this.profit.push(...result.data.records)
         if (result.data.records.length > 0) {
