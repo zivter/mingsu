@@ -95,14 +95,15 @@ export default {
         accountNumber: '',
         realName: '',
         phone: '',
-        idCard: ''
+        idCard: '',
+        balance: 0
       },
       isTesting: false,
       params: {
         zfb: "",
       },
       extract: {
-        amount: ''
+        amount: null
       }
     };
   },
@@ -126,12 +127,20 @@ export default {
     },
     /** 提交 */
     submit() {
-      if(this.account.accountNumber === '' 
-      || this.account.realName === '' 
-      || this.account.phone === '' 
-      || this.account.idCard === '' 
-      || this.extract.amount === '') {
+      if(this.account.accountNumber == '' || this.account.accountNumber == null
+      || this.account.realName == '' || this.account.realName == null
+      || this.account.phone == ''  || this.account.phone == null
+      || this.account.idCard == ''  || this.account.idCard == null
+      || this.extract.amount == '' || this.account.amount == null) {
         this.$notify({ type: 'warning', message: '请将提现信息填写完整' })
+        return
+      }
+      if(this.extract.amount > this.account.balance) {
+        this.$notify({ type: 'warning', message: '请将提现金额填写正确' })
+        return
+      }
+      if(this.account.balance == 0) {
+        this.$notify({ type: 'warning', message: '暂无提现额度' })
         return
       }
       const params = {
